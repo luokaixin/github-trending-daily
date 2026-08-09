@@ -148,13 +148,16 @@ def fetch_readme_summary(repo_name, max_chars=400):
         # Skip license shields / CI badges
         if 'shields.io' in stripped or 'badge' in stripped.lower():
             continue
-        # Clean markdown inline formatting
+        # Clean markdown inline formatting and HTML tags
         clean = re.sub(r'!\[.*?\]\(.*?\)', '', stripped)
         clean = re.sub(r'\[([^\]]*)\]\([^\)]*\)', r'\1', clean)
+        clean = re.sub(r'<[^>]+>', '', clean)  # strip HTML tags
         clean = re.sub(r'`([^`]*)`', r'\1', clean)
         clean = re.sub(r'\*\*([^*]*)\*\*', r'\1', clean)
         clean = re.sub(r'\*([^*]*)\*', r'\1', clean)
-        clean = clean.strip(' >')
+        clean = re.sub(r'\[([^\]]*)\]\[[^\]]*\]', r'\1', clean)  # ref-style links
+        clean = re.sub(r'^\s*[-•]\s*', '', clean)  # strip leading list markers
+        clean = clean.strip(' >|')
         if len(clean) < 8:
             continue
         meaningful.append(clean)
