@@ -27,6 +27,7 @@ jobs:
         run: python scripts/generate_trending_report.py
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Commit and push
         run: |

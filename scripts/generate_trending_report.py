@@ -3,11 +3,13 @@
 GitHub Trending Daily Report Generator
 
 Fetches GitHub trending repositories, enriches with API data (README summary,
-topics, license, metrics), translates descriptions to Chinese, and generates
-an HTML report. Designed to run in GitHub Actions.
+topics, license, metrics), uses Gemini AI for Chinese summaries and core
+problem scenario analysis, and generates an HTML report.
+Designed to run in GitHub Actions.
 """
 
 import html
+import json
 import os
 import re
 import time
@@ -24,6 +26,7 @@ except ImportError:
 
 
 GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN', '')
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 GITHUB_API = 'https://api.github.com'
 
 
@@ -55,19 +58,19 @@ def is_chinese(text):
 
 
 def translate_to_chinese(text):
-    """Translate text to Chinese. Returns (chinese_text, original_text_or_None)."""
+    """Translate text to Chinese. Returns chinese_text."""
     if not text or is_chinese(text):
-        return text, None
+        return text
     if not HAS_TRANSLATOR:
-        return text, None
+        return text
     try:
         translated = GoogleTranslator(source='auto', target='zh-CN').translate(text)
         if translated and translated != text:
-            return translated, text
-        return text, None
+            return translated
+        return text
     except Exception as e:
         print(f'  Translation failed: {e}')
-        return text, None
+        return text
 
 
 # ─── GitHub API helpers ───
@@ -116,8 +119,8 @@ def fetch_repo_details(repo_name):
     }
 
 
-def fetch_readme_summary(repo_name, max_chars=400):
-    """Fetch README and extract a brief text summary."""
+def fetch_readme_raw(repo_name, max_chars=5000):
+    """Fetch README and return cleaned text for AI analysis."""
     raw = github_api_get(f'/repos/{repo_name}/readme', raw=True)
     if not raw:
         return ''
@@ -129,9 +132,6 @@ def fetch_readme_summary(repo_name, max_chars=400):
     for line in lines:
         stripped = line.strip()
         if not stripped:
-            if meaningful and char_count > 50:
-                # paragraph break — keep going to fill up to max_chars
-                pass
             continue
         # Skip headers, badges, images, HTML, tables, HR
         if stripped.startswith('#'):
@@ -146,7 +146,7 @@ def fetch_readme_summary(repo_name, max_chars=400):
             continue
         if stripped.startswith('<') and stripped.endswith('>'):
             continue
-        # Skip reference-style link definitions: [name]: url
+        # Skip reference-style link definitions
         if re.match(r'^\[[^\]]+\]:\s*https?://', stripped):
             continue
         # Skip ASCII art / box-drawing lines
@@ -158,26 +158,141 @@ def fetch_readme_summary(repo_name, max_chars=400):
         # Clean markdown inline formatting and HTML tags
         clean = re.sub(r'!\[.*?\]\(.*?\)', '', stripped)
         clean = re.sub(r'\[([^\]]*)\]\([^\)]*\)', r'\1', clean)
-        clean = re.sub(r'<[^>]+>', '', clean)  # strip HTML tags
-        clean = html.unescape(clean)  # decode HTML entities like &bull; &amp;
+        clean = re.sub(r'<[^>]+>', '', clean)
+        clean = html.unescape(clean)
         clean = re.sub(r'`([^`]*)`', r'\1', clean)
         clean = re.sub(r'\*\*([^*]*)\*\*', r'\1', clean)
         clean = re.sub(r'\*([^*]*)\*', r'\1', clean)
-        clean = re.sub(r'\[([^\]]*)\]\[[^\]]*\]', r'\1', clean)  # ref-style links
-        clean = re.sub(r'^\s*[-•]\s*', '', clean)  # strip leading list markers
-        clean = re.sub(r'#{2,}\s*', '', clean)  # strip remaining ## headers
+        clean = re.sub(r'\[([^\]]*)\]\[[^\]]*\]', r'\1', clean)
+        clean = re.sub(r'^\s*[-•]\s*', '', clean)
+        clean = re.sub(r'#{2,}\s*', '', clean)
         clean = clean.strip(' >|')
-        if len(clean) < 8:
+        if len(clean) < 5:
             continue
         meaningful.append(clean)
         char_count += len(clean)
         if char_count >= max_chars:
             break
 
-    summary = ' '.join(meaningful[:4])
-    if len(summary) > max_chars:
-        summary = summary[:max_chars].rsplit(' ', 1)[0] + '…'
-    return summary
+    return '\n'.join(meaningful)
+
+
+# ─── AI Analysis (Gemini) ───
+
+def analyze_with_gemini(readme_content, repo_name, description):
+    """Use Gemini API to generate Chinese summary and core problem scenarios.
+
+    Returns (chinese_summary, core_scenarios) or (None, None) on failure.
+    """
+    if not GEMINI_API_KEY:
+        return None, None
+    if not readme_content and not description:
+        return None, None
+
+    context = f"项目名称：{repo_name}\n项目描述：{description or '无'}\n\nREADME 内容：\n{readme_content[:4000]}"
+
+    prompt = f"""你是一位资深技术分析师。请分析以下 GitHub 项目，用中文输出两部分内容。
+
+{context}
+
+请严格按以下格式输出（不要使用 Markdown 标记，直接输出纯文本）：
+
+[简介]
+用1-2句话概括这个项目是什么、做什么。不要重复项目名称。
+
+[场景]
+列出这个项目解决的2-3个核心问题场景。每个场景单独一行，用"1. "、"2. "、"3. "开头。每句话描述一个具体的使用场景或痛点。"""
+
+    try:
+        url = f'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}'
+        payload = {
+            'contents': [{'parts': [{'text': prompt}]}],
+            'generationConfig': {'temperature': 0.3, 'maxOutputTokens': 600}
+        }
+        resp = requests.post(url, json=payload, timeout=30)
+
+        if resp.status_code == 429:
+            print(f'  Gemini rate limited, waiting 10s...')
+            time.sleep(10)
+            resp = requests.post(url, json=payload, timeout=30)
+
+        if resp.status_code != 200:
+            print(f'  Gemini API returned {resp.status_code}: {resp.text[:200]}')
+            return None, None
+
+        data = resp.json()
+        candidates = data.get('candidates', [])
+        if not candidates:
+            return None, None
+
+        text = candidates[0].get('content', {}).get('parts', [{}])[0].get('text', '')
+        if not text:
+            return None, None
+
+        # Parse the response
+        summary = ''
+        scenarios = ''
+
+        # Extract [简介] section
+        summary_match = re.search(r'\[简介\]\s*(.*?)(?=\[场景\]|$)', text, re.DOTALL)
+        if summary_match:
+            summary = summary_match.group(1).strip()
+
+        # Extract [场景] section
+        scenario_match = re.search(r'\[场景\]\s*(.*?)$', text, re.DOTALL)
+        if scenario_match:
+            scenarios = scenario_match.group(1).strip()
+
+        # Fallback parsing if markers not found
+        if not summary and not scenarios:
+            summary = text.strip()[:200]
+
+        return summary, scenarios
+
+    except Exception as e:
+        print(f'  Gemini API request failed: {e}')
+        return None, None
+
+
+def extract_scenarios_fallback(readme_content, description):
+    """Fallback: extract problem scenarios from README without AI.
+
+    Looks for sections like Features, Why, Use Cases, Motivation, etc.
+    """
+    if not readme_content:
+        return ''
+
+    # Look for common section keywords in README
+    scenario_keywords = [
+        r'(?:why|motivation|problem|pain\s*point)',
+        r'(?:use\s*case|usage|example)',
+        r'(?:feature|capabilit|what\s+it\s+do)',
+        r'(?:overview|about|introduction)',
+    ]
+
+    lines = readme_content.split('\n')
+    relevant = []
+
+    for i, line in enumerate(lines):
+        lower = line.lower()
+        for pattern in scenario_keywords:
+            if re.search(pattern, lower):
+                # Grab this line and the next 2-3 lines
+                chunk = lines[i:i + 4]
+                relevant.extend(chunk)
+                break
+
+    if not relevant:
+        # Just take first 3 meaningful lines
+        relevant = lines[:3]
+
+    text = ' '.join(relevant)
+    if len(text) > 300:
+        text = text[:300] + '…'
+
+    # Translate to Chinese
+    zh = translate_to_chinese(text)
+    return zh
 
 
 # ─── Analysis helpers ───
@@ -367,8 +482,11 @@ def parse_article(article):
 # ─── Enrichment ───
 
 def enrich_repos(repos):
-    """Fetch additional details and README summary for each repo."""
+    """Fetch additional details, AI summary, and core scenarios for each repo."""
     total = len(repos)
+    has_gemini = bool(GEMINI_API_KEY)
+    print(f'  AI Analysis: {"Gemini" if has_gemini else "Fallback (translation only)"}')
+
     for i, repo in enumerate(repos, 1):
         name = repo['repo_name']
         print(f'  [{i}/{total}] Enriching {name}...')
@@ -377,26 +495,40 @@ def enrich_repos(repos):
         details = fetch_repo_details(name)
         repo.update(details)
 
-        # README summary
-        readme_raw = fetch_readme_summary(name)
-        if readme_raw:
-            zh_summary, orig_summary = translate_to_chinese(readme_raw)
-            repo['readme_zh'] = zh_summary
-            repo['readme_orig'] = orig_summary
+        # Fetch README content
+        readme_raw = fetch_readme_raw(name)
+
+        # AI analysis: Chinese summary + core problem scenarios
+        ai_summary, ai_scenarios = analyze_with_gemini(
+            readme_raw, name, repo.get('description', '')
+        )
+
+        if ai_summary:
+            repo['readme_zh'] = ai_summary
+        elif readme_raw:
+            # Fallback: translate first few lines of README
+            first_lines = ' '.join(readme_raw.split('\n')[:4])
+            repo['readme_zh'] = translate_to_chinese(first_lines[:400])
         else:
             repo['readme_zh'] = ''
-            repo['readme_orig'] = None
 
-        # Translate description
-        zh_desc, orig_desc = translate_to_chinese(repo['description'])
-        repo['zh_description'] = zh_desc
-        repo['orig_description'] = orig_desc
+        if ai_scenarios:
+            repo['core_scenarios'] = ai_scenarios
+        elif readme_raw:
+            repo['core_scenarios'] = extract_scenarios_fallback(
+                readme_raw, repo.get('description', '')
+            )
+        else:
+            repo['core_scenarios'] = ''
+
+        # Translate description to Chinese only
+        repo['zh_description'] = translate_to_chinese(repo['description'])
 
         # Recommendation
         repo['recommendation'] = generate_recommendation(repo)
 
         # Be nice to the API
-        time.sleep(0.3)
+        time.sleep(0.5 if has_gemini else 0.3)
 
 
 # ─── HTML generation ───
@@ -440,14 +572,19 @@ CSS = """        * { margin: 0; padding: 0; box-sizing: border-box; }
         .card-title a { color: #0969da; text-decoration: none; }
         .card-title a:hover { text-decoration: underline; }
         .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
-        .description .original { color: #adbac7; font-size: 13px; font-style: italic; }
         .readme-summary {
             background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
             margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
             border-left: 3px solid #d0d7de; line-height: 1.7;
         }
         .readme-summary .label { font-weight: 600; color: #656d76; }
-        .readme-summary .orig { color: #adbac7; font-size: 12px; font-style: italic; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
         .recommendation {
             margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
         }
@@ -484,7 +621,7 @@ CSS = """        * { margin: 0; padding: 0; box-sizing: border-box; }
         @media (max-width: 600px) {
             .card-footer { gap: 10px; } .summary { gap: 12px; }
             .summary-item .value { font-size: 22px; }
-            .description, .readme-summary, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
         }"""
 
 
@@ -495,25 +632,50 @@ def _esc(text):
     return text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 
 
+def _format_scenarios(scenarios_text):
+    """Format scenarios text into HTML blocks."""
+    if not scenarios_text:
+        return ''
+    # Split by numbered items or newlines
+    lines = re.split(r'\n+', scenarios_text.strip())
+    items = []
+    for line in lines:
+        line = line.strip()
+        if not line:
+            continue
+        # Remove leading "1. " etc.
+        line = re.sub(r'^\d+\.\s*', '', line)
+        if line:
+            items.append(f'<span class="scenario-item">{_esc(line)}</span>')
+    return '\n                '.join(items) if items else _esc(scenarios_text)
+
+
 def generate_card_html(repo, rank):
     """Generate HTML for a single repo card."""
     lang = repo.get('language') or '未指定'
     lang_color = LANG_COLORS.get(repo.get('language'), '#848d97')
     top3_class = ' top3' if rank <= 3 else ''
 
-    # Description
+    # Description (Chinese only)
     desc = repo.get('zh_description') or '暂无描述'
-    orig = repo.get('orig_description')
-    desc_html = f'{_esc(desc)} <span class="original">({_esc(orig)})</span>' if orig else _esc(desc)
+    desc_html = _esc(desc)
 
-    # README summary
+    # README summary (Chinese only)
     readme_zh = repo.get('readme_zh', '')
-    readme_orig = repo.get('readme_orig')
     readme_html = ''
     if readme_zh:
-        orig_part = f' <span class="orig">{_esc(readme_orig)}</span>' if readme_orig else ''
         readme_html = f"""            <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：{_esc(readme_zh)}{orig_part}
+                <span class="label">📖 项目简介</span>：{_esc(readme_zh)}
+            </div>"""
+
+    # Core problem scenarios
+    scenarios = repo.get('core_scenarios', '')
+    scenarios_html = ''
+    if scenarios:
+        items_html = _format_scenarios(scenarios)
+        scenarios_html = f"""            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                {items_html}
             </div>"""
 
     # Recommendation
@@ -551,6 +713,7 @@ def generate_card_html(repo, rank):
                 {desc_html}
             </div>
 {readme_html}
+{scenarios_html}
 {rec_html}
 {topics_html}
             <div class="card-footer">
@@ -676,11 +839,11 @@ def main():
     if not repos:
         print('WARNING: No repos found! Generating empty report.')
 
-    print('Enriching repos with API data...')
+    print('Enriching repos with API data and AI analysis...')
     enrich_repos(repos)
 
     print('Generating report HTML...')
-    html = generate_report_html(repos, date_str)
+    html_content = generate_report_html(repos, date_str)
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     repo_root = os.path.dirname(script_dir)
@@ -691,7 +854,7 @@ def main():
     report_filename = f'github-trending-{date_str}.html'
     report_path = os.path.join(reports_dir, report_filename)
     with open(report_path, 'w', encoding='utf-8') as f:
-        f.write(html)
+        f.write(html_content)
     print(f'Report saved: {report_path}')
 
     existing_reports = sorted(
