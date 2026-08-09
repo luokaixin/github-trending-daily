@@ -25,6 +25,8 @@ jobs:
 
       - name: Generate report
         run: python scripts/generate_trending_report.py
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit and push
         run: |
