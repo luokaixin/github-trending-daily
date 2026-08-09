@@ -7,6 +7,7 @@ topics, license, metrics), translates descriptions to Chinese, and generates
 an HTML report. Designed to run in GitHub Actions.
 """
 
+import html
 import os
 import re
 import time
@@ -145,6 +146,12 @@ def fetch_readme_summary(repo_name, max_chars=400):
             continue
         if stripped.startswith('<') and stripped.endswith('>'):
             continue
+        # Skip reference-style link definitions: [name]: url
+        if re.match(r'^\[[^\]]+\]:\s*https?://', stripped):
+            continue
+        # Skip ASCII art / box-drawing lines
+        if sum(1 for c in stripped if c in '┌┐└┘│─├┤┬┴┼═║╔╗╚╝╠╣╦╩╬') > 3:
+            continue
         # Skip license shields / CI badges
         if 'shields.io' in stripped or 'badge' in stripped.lower():
             continue
@@ -152,11 +159,13 @@ def fetch_readme_summary(repo_name, max_chars=400):
         clean = re.sub(r'!\[.*?\]\(.*?\)', '', stripped)
         clean = re.sub(r'\[([^\]]*)\]\([^\)]*\)', r'\1', clean)
         clean = re.sub(r'<[^>]+>', '', clean)  # strip HTML tags
+        clean = html.unescape(clean)  # decode HTML entities like &bull; &amp;
         clean = re.sub(r'`([^`]*)`', r'\1', clean)
         clean = re.sub(r'\*\*([^*]*)\*\*', r'\1', clean)
         clean = re.sub(r'\*([^*]*)\*', r'\1', clean)
         clean = re.sub(r'\[([^\]]*)\]\[[^\]]*\]', r'\1', clean)  # ref-style links
         clean = re.sub(r'^\s*[-•]\s*', '', clean)  # strip leading list markers
+        clean = re.sub(r'#{2,}\s*', '', clean)  # strip remaining ## headers
         clean = clean.strip(' >|')
         if len(clean) < 8:
             continue
