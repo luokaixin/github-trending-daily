@@ -15,19 +15,80 @@
             color: white; padding: 48px 20px 40px; text-align: center;
         }
         .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
         .header .meta { font-size: 14px; opacity: 0.9; }
         .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 14px; padding-left: 40px; }
+        .description .original { color: #adbac7; font-size: 13px; font-style: italic; }
+        .card-footer {
+            display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+            font-size: 13px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 12px; border-radius: 20px; font-size: 12px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 4px; }
+        .stat-icon { font-size: 14px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
         .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
         .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 12px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .card-footer { padding-left: 0; }
+        }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>🔥 GitHub 趋势项目日报</h1>
-        <div class="meta">每日 09:00（北京时间）自动抓取 · 共 0 期报告</div>
+        <div class="meta">每日 09:00（北京时间）自动抓取 · 共 1 期报告</div>
     </div>
     <div class="container">
-        <p style="text-align:center;color:#848d97;padding:40px 0;">暂无报告，请等待首次自动生成。</p>
+        <div class="report-list">
+        <div class="report-item">
+            <a href="reports/github-trending-2026-08-09.html">📊 2026-08-09 GitHub 趋势日报</a>
+            <div class="date">2026-08-09（周日）</div>
+        </div>
+        </div>
         <div class="footer-note">
             数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 由 GitHub Actions 自动生成
         </div>
