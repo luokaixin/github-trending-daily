@@ -44,14 +44,19 @@
         .card-title a { color: #0969da; text-decoration: none; }
         .card-title a:hover { text-decoration: underline; }
         .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
-        .description .original { color: #adbac7; font-size: 13px; font-style: italic; }
         .readme-summary {
             background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
             margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
             border-left: 3px solid #d0d7de; line-height: 1.7;
         }
         .readme-summary .label { font-weight: 600; color: #656d76; }
-        .readme-summary .orig { color: #adbac7; font-size: 12px; font-style: italic; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
         .recommendation {
             margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
         }
@@ -88,7 +93,7 @@
         @media (max-width: 600px) {
             .card-footer { gap: 10px; } .summary { gap: 12px; }
             .summary-item .value { font-size: 22px; }
-            .description, .readme-summary, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
         }
     </style>
 </head>

@@ -44,14 +44,19 @@
         .card-title a { color: #0969da; text-decoration: none; }
         .card-title a:hover { text-decoration: underline; }
         .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
-        .description .original { color: #adbac7; font-size: 13px; font-style: italic; }
         .readme-summary {
             background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
             margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
             border-left: 3px solid #d0d7de; line-height: 1.7;
         }
         .readme-summary .label { font-weight: 600; color: #656d76; }
-        .readme-summary .orig { color: #adbac7; font-size: 12px; font-style: italic; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
         .recommendation {
             margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
         }
@@ -88,7 +93,7 @@
         @media (max-width: 600px) {
             .card-footer { gap: 10px; } .summary { gap: 12px; }
             .summary-item .value { font-size: 22px; }
-            .description, .readme-summary, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
         }
     </style>
 </head>
@@ -119,19 +124,23 @@
                 <div class="card-title"><a href="https://github.com/PrimeIntellect-ai/prime-agent">PrimeIntellect-ai / prime-agent</a></div>
             </div>
             <div class="description">
-                用于编码工作流程和长时间运行的自主任务的自我改进 RLM 代理。 <span class="original">(A self-improving RLM agent for coding workflows and long-running autonomous tasks.)</span>
+                一个自我改进的 RLM 代理，用于编码工作流程和长时间运行的自主任务。
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：Prime Agent：自我改进的 RLM Agent 文档 • 验证者 • PRIME-RL • <span class="orig">Prime Agent: A Self-Improving RLM Agent Documentation • Verifiers • PRIME-RL •</span>
+                <span class="label">📖 项目简介</span>：Prime Agent：自我改进的 RLM Agent 文档 • 验证者 • PRIME-RL •
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Prime Agent 专为长期运行的工作而设计，尤其是研究评估。这些功能在 TUI 中并且在自主运行时可用。持续利用：/refine 可以坚持重点突出、可复习的课程，作为补充提示、记忆、可重复使用的技能描述或子代理具体内容……</span>
             </div>
             <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
 
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 10,018</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 10,200</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +2,319 今日</span>
-                <span class="stat"><span class="stat-icon">🍴</span> 989</span>
-                <span class="stat"><span class="stat-icon">📋</span> 425 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,014</span>
+                <span class="stat"><span class="stat-icon">📋</span> 425 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于12小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
             </div>
         </div>
         <div class="card">
@@ -140,19 +149,23 @@
                 <div class="card-title"><a href="https://github.com/addyosmani/agent-skills">addyosmani / agent-skills</a></div>
             </div>
             <div class="description">
-                AI 编码代理的生产级工程技能。 <span class="original">(Production-grade engineering skills for AI coding agents.)</span>
+                AI 编码代理的生产级工程技能。
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：AI 编码代理的生产级工程技能。技能编码了高级工程师在构建软件时使用的工作流程、质量关卡和最佳实践。这些内容经过打包，以便人工智能代理在开发的每个阶段都能一致地遵循它们。定义计划构建验证审核船舶/规格/计划/构建/测试... <span class="orig">Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP /spec          /plan          /build        /test…</span>
+                <span class="label">📖 项目简介</span>：AI 编码代理的生产级工程技能。技能编码了高级工程师在构建软件时使用的工作流程、质量关卡和最佳实践。这些内容经过打包，以便人工智能代理在开发的每个阶段都能一致地遵循它们。定义计划构建验证审核船舶/spec/plan/build/test
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">AI 编码代理的生产级工程技能。技能编码了高级工程师在构建软件时使用的工作流程、质量关卡和最佳实践。这些内容经过打包，以便人工智能代理在开发的每个阶段都能一致地遵循它们。定义计划 B...</span>
             </div>
             <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
             <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">antigravity</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">cursor</span><span class="topic-badge">skills</span></div>
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 84,878</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 84,913</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +670 今日</span>
-                <span class="stat"><span class="stat-icon">🍴</span> 9,136</span>
-                <span class="stat"><span class="stat-icon">📋</span> 103 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于16小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://skills.addy.ie" style="color:#0969da;text-decoration:none;">主页</a></span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,142</span>
+                <span class="stat"><span class="stat-icon">📋</span> 103 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于17小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://skills.addy.ie" style="color:#0969da;text-decoration:none;">主页</a></span>
             </div>
         </div>
         <div class="card">
@@ -161,18 +174,22 @@
                 <div class="card-title"><a href="https://github.com/pranshuparmar/witr">pranshuparmar / witr</a></div>
             </div>
             <div class="description">
-                这是为什么运行？跟踪任何进程、端口、容器或文件到启动它的地方 - CLI + TUI。 <span class="original">(Why is this running? Trace any process, port, container, or file back to what started it - CLI + TUI.)</span>
+                这是为什么运行？跟踪任何进程、端口、容器或文件到启动它的地方 - CLI + TUI。
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：跟踪任何进程、端口、容器或文件到启动它的确切链——一条命令、机器可读的 JSON 或交互式 TUI。研究模拟 Linux 盒子 — 指导教程和免费沙箱，无需安装。目的 • 安装 • TUI • 标志 • 核心概念 • 示例 <span class="orig">Trace any process, port, container, or file back to the exact chain that started it — one command, machine-readable JSON, or an interactive TUI. Investigate a simulated Linux box — a guided tutorial and free-play sandbox, no install required. Purpose • Installation • TUI • Flags • Core Concept • Examples</span>
+                <span class="label">📖 项目简介</span>：跟踪任何进程、端口、容器或文件到启动它的确切链——一条命令、机器可读的 JSON 或交互式 TUI。研究模拟 Linux 盒子 — 指导教程和免费沙箱，无需安装。目的 • 安装 • TUI • 标志 • 核心概念 • 示例
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">目的• 安装• TUI• 标志• 核心概念• 示例输出行为• 平台• 成功标准• 赞助商witr 的存在是为了回答一个问题：为什么要运行此项目？这是为什么运行？当系统上运行某些东西时，无论是进程、服务还是绑定到的东西......</span>
             </div>
             <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
             <div class="topics"><span class="topic-badge">cli</span><span class="topic-badge">containers</span><span class="topic-badge">devops</span><span class="topic-badge">docker</span><span class="topic-badge">freebsd</span><span class="topic-badge">go</span><span class="topic-badge">golang</span><span class="topic-badge">incident-response</span></div>
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 20,278</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 20,331</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +556 今日</span>
-                <span class="stat"><span class="stat-icon">🍴</span> 680</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 688</span>
                 <span class="stat"><span class="stat-icon">📋</span> 7 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://pranshuparmar.github.io/witr/" style="color:#0969da;text-decoration:none;">主页</a></span>
             </div>
         </div>
@@ -182,18 +199,22 @@
                 <div class="card-title"><a href="https://github.com/google/skills">google / skills</a></div>
             </div>
             <div class="description">
-                Google 产品和技术的代理技能 <span class="original">(Agent Skills for Google products and technologies)</span>
+                Google 产品和技术的代理技能
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：此存储库包含 Google 产品和技术（包括 Google Cloud）的代理技能。该存储库正在积极开发中。 npx 技能添加 google/skills <span class="orig">This repository contains Agent Skills for Google products and technologies, including Google Cloud. This repository is under active development. npx skills add google/skills</span>
+                <span class="label">📖 项目简介</span>：此存储库包含 Google 产品和技术（包括 Google Cloud）的代理技能。 [!NOTE] 该存储库正在积极开发中。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">* 通过提交功能请求来建议添加到此存储库的新技能（例如，Google 技术或食谱）。您可以根据 Apache 2.0 许可证的条款自由复制、修改和分发这些技能。有关详细信息，请参阅许可证文件。技术或配方）通过提交 f...</span>
             </div>
             <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
             <div class="topics"><span class="topic-badge">google</span><span class="topic-badge">googlecloud</span><span class="topic-badge">skills</span></div>
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 17,007</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 17,043</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +532 今日</span>
-                <span class="stat"><span class="stat-icon">🍴</span> 1,385</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,387</span>
                 <span class="stat"><span class="stat-icon">📋</span> 32 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
             </div>
         </div>
@@ -203,19 +224,23 @@
                 <div class="card-title"><a href="https://github.com/msitarzewski/agency-agents">msitarzewski / agency-agents</a></div>
             </div>
             <div class="description">
-                触手可及的完整人工智能机构 - 从前端向导到 Reddit 社区忍者，从奇思妙想的注入者到现实检查者。每个代理都是一位具有个性、流程和经过验证的可交付成果的专业专家。 <span class="original">(A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each agent is a specialized expert with personality, processes, and proven deliverables.)</span>
+                触手可及的完整人工智能机构 - 从前端向导到 Reddit 社区忍者，从奇思妙想的注入者到现实检查者。每个代理都是一位具有个性、流程和经过验证的可交付成果的专业专家。
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：触手可及的完整人工智能机构 - 从前端向导到 Reddit 社区忍者，从奇思妙想的注入者到现实检查者。每个代理都是一位具有个性、流程和经过验证的可交付成果的专业专家。 🆕 现在有一个应用程序 Agency Agents 是一款适用于 macOS、Linux 和 Windows 的本机应用程序，可以浏览整个花名册并将其安装到 Claude Code、Cursor、Codex、Gemini、Osaurus 中…… <span class="orig">A complete AI agency at your fingertips - From frontend wizards to Reddit community ninjas, from whimsy injectors to reality checkers. Each agent is a specialized expert with personality, processes, and proven deliverables. 🆕 There's an app now Agency Agents is a native app for macOS, Linux &amp; Windows that browses the entire roster and installs it into Claude Code, Cursor, Codex, Gemini, Osaurus,…</span>
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
             </div>
             <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
 
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 140,127</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 140,230</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +446 今日</span>
-                <span class="stat"><span class="stat-icon">🍴</span> 22,875</span>
-                <span class="stat"><span class="stat-icon">📋</span> 110 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 22,896</span>
+                <span class="stat"><span class="stat-icon">📋</span> 110 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
             </div>
         </div>
         <div class="card">
@@ -224,19 +249,23 @@
                 <div class="card-title"><a href="https://github.com/Comfy-Org/ComfyUI">Comfy-Org / ComfyUI</a></div>
             </div>
             <div class="description">
-                最强大的模块化扩散模型 GUI、API 和带有图形/节点接口的后端。 <span class="original">(The most powerful and modular diffusion model GUI, api and backend with a graph/nodes interface.)</span>
+                最强大的模块化扩散模型 GUI、API 和带有图形/节点接口的后端。
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：用于内容创建的最强大、模块化的人工智能引擎。 ComfyUI 是一款 AI 创建引擎，适用于需要控制每个模型、每个参数和每个输出的视觉专业人士。其强大的模块化节点图界面使创意人员能够生成图像、视频、3D 模型、音频等……ComfyUI 本身支持最新的开源最先进的模型。 API节点... <span class="orig">The most powerful and modular AI engine for content creation. ComfyUI is the AI creation engine for visual professionals who demand control over every model, every parameter, and every output. Its powerful and modular node graph interface empowers creatives to generate images, videos, 3D models, audio, and more... ComfyUI natively supports the latest open-source state of the art models. API nodes…</span>
+                <span class="label">📖 项目简介</span>：用于内容创建的最强大、模块化的人工智能引擎。 ComfyUI 是一款 AI 创建引擎，适用于需要控制每个模型、每个参数和每个输出的视觉专业人士。其强大的模块化节点图界面使创意人员能够生成图像、视频、3D 模型、音频等……ComfyUI 本身支持最新的开源最先进的模型。 API节点
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">了解 ComfyUI 可以使用较新的模板工作流程或旧的示例工作流程执行哪些操作。无需代码即可构建和重用图像、视频、音频、3D 和文本工作流程的可视化节点图。可重用的子图、工作流模板、应用程序模式以及用于将工作流集成到应用程序中的本地 API。有效…</span>
             </div>
             <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
             <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">comfy</span><span class="topic-badge">comfyui</span><span class="topic-badge">python</span><span class="topic-badge">pytorch</span><span class="topic-badge">stable-diffusion</span></div>
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 125,156</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 125,227</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +333 今日</span>
-                <span class="stat"><span class="stat-icon">🍴</span> 14,819</span>
-                <span class="stat"><span class="stat-icon">📋</span> 4491 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.comfy.org/" style="color:#0969da;text-decoration:none;">主页</a></span>
+                <span class="stat"><span class="stat-icon">🍴</span> 14,825</span>
+                <span class="stat"><span class="stat-icon">📋</span> 4491 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.comfy.org/" style="color:#0969da;text-decoration:none;">主页</a></span>
             </div>
         </div>
         <div class="card">
@@ -245,19 +274,23 @@
                 <div class="card-title"><a href="https://github.com/goauthentik/authentik">goauthentik / authentik</a></div>
             </div>
             <div class="description">
-                您需要的认证胶水。 <span class="original">(The authentication glue you need.)</span>
+                您需要的认证胶水。
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：authentik 是现代 SSO 的开源身份提供商 (IdP)。它支持 SAML、OAuth2/OIDC、LDAP、RADIUS 等，专为从小型实验室到大型生产集群的自托管而设计。我们的企业产品可供组织安全地替换现有的 IdP，例如 Okta、Auth0、Entra ID 和 Ping Identity，以实现强大的大规模身份管理。 Docker 撰写：... <span class="orig">authentik is an open-source Identity Provider (IdP) for modern SSO. It supports SAML, OAuth2/OIDC, LDAP, RADIUS, and more, designed for self-hosting from small labs to large production clusters. Our enterprise offering is available for organizations to securely replace existing IdPs such as Okta, Auth0, Entra ID, and Ping Identity for robust, large-scale identity management. Docker Compose:…</span>
+                <span class="label">📖 项目简介</span>：authentik 是现代 SSO 的开源身份提供商 (IdP)。它支持 SAML、OAuth2/OIDC、LDAP、RADIUS 等，专为从小型实验室到大型生产集群的自托管而设计。我们的企业产品可供组织安全地替换现有的 IdP，例如 Okta、Auth0、Entra ID 和 Ping Identity，以实现强大的大规模身份管理。 Docker Compose：推荐
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">有关设置本地构建环境、测试您的贡献以及我们的贡献流程的信息，请参阅开发人员文档。当您贡献文档时，无论是伴随代码更改还是作为独立贡献，请务必遵循我们的文档风格……</span>
             </div>
             <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
             <div class="topics"><span class="topic-badge">authentication</span><span class="topic-badge">authentik</span><span class="topic-badge">authorization</span><span class="topic-badge">kubernetes</span><span class="topic-badge">oauth2</span><span class="topic-badge">oauth2-client</span><span class="topic-badge">oauth2-server</span><span class="topic-badge">oidc</span></div>
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 24,135</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 24,155</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +312 今日</span>
                 <span class="stat"><span class="stat-icon">🍴</span> 1,849</span>
-                <span class="stat"><span class="stat-icon">📋</span> 1151 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://goauthentik.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+                <span class="stat"><span class="stat-icon">📋</span> 1152 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://goauthentik.io" style="color:#0969da;text-decoration:none;">主页</a></span>
             </div>
         </div>
         <div class="card">
@@ -271,14 +304,18 @@
             <div class="readme-summary">
                 <span class="label">📖 项目简介</span>：🤖 基于 AI 大模型的 A股/港股/美股/日股/韩股/台股自选股智能分析系统，每日自动分析并推送「决策仪表盘」到企业微信/飞书/Telegram/Discord/Slack/邮箱 产品预览 · 功能特性 · 快速开始 · 推送效果 · 文档中心 · 完整指南 简体中文 | English | 繁體中文 功能细节、字段契约、基本面 P0 超时语义、交易纪律、数据源优先级、Web/API 行为请看 完整配置与部署指南。
             </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">cp .env.example .env &amp;&amp; vim .env python main.py 常用命令： `bash</span>
+            </div>
             <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
             <div class="topics"><span class="topic-badge">a-stock</span><span class="topic-badge">ai-agent</span><span class="topic-badge">aigc</span><span class="topic-badge">llm</span><span class="topic-badge">quant</span><span class="topic-badge">quantitative-finance</span><span class="topic-badge">quantitative-trading</span></div>
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 60,933</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 60,970</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +287 今日</span>
-                <span class="stat"><span class="stat-icon">🍴</span> 51,915</span>
-                <span class="stat"><span class="stat-icon">📋</span> 39 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://dsa.zhulinsen.tech" style="color:#0969da;text-decoration:none;">主页</a></span>
+                <span class="stat"><span class="stat-icon">🍴</span> 51,938</span>
+                <span class="stat"><span class="stat-icon">📋</span> 39 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://dsa.zhulinsen.tech" style="color:#0969da;text-decoration:none;">主页</a></span>
             </div>
         </div>
         <div class="card">
@@ -290,16 +327,20 @@
                 暂无描述
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：T3 Code 是一个“代理线束控制界面”。它可以通过一流的移动应用程序（iOS、Android）、Web 应用程序和基于 Electron 的桌面应用程序来控制机器上的代理。适用于您订阅的 Claude Code、Codex、Cursor、Grok Build 和 OpenCode。如果它们设置在您的计算机上，T3 Code 可以控制它们。没有什么。我们构建 T3 代码是因为我们想要尽可能最好的…… <span class="orig">T3 Code is an "agent harness control surface". It enables control of the agents on your machine with a best-in-class mobile app (iOS, Android), web app and Electron-based desktop app. Works with your subscriptions on Claude Code, Codex, Cursor, Grok Build, and OpenCode. If they're set up on your computer, T3 Code can control them. Nothing. We built T3 Code because we wanted the best possible…</span>
+                <span class="label">📖 项目简介</span>：T3 Code 是一个“代理线束控制界面”。它可以通过一流的移动应用程序（iOS、Android）、Web 应用程序和基于 Electron 的桌面应用程序来控制机器上的代理。适用于您订阅的 Claude Code、Codex、Cursor、Grok Build 和 OpenCode。如果它们设置在您的计算机上，T3 Code 可以控制它们。没有什么。我们构建 T3 代码是因为我们想要最好的开发
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">我们（大部分）尚未接受捐款。可以考虑进行小修复。大特征不会。完整的文档位于 docs/ 中。目前还没有文档站点。安装并首次运行 权限模式 从源代码构建？从 docs/internals/overview.md 开始。 T3 Code 使用 Vite+，因此您需要安装……</span>
             </div>
             <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
 
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 17,494</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 17,522</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +182 今日</span>
-                <span class="stat"><span class="stat-icon">🍴</span> 3,976</span>
-                <span class="stat"><span class="stat-icon">📋</span> 1357 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://t3.codes" style="color:#0969da;text-decoration:none;">主页</a></span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,981</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1359 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://t3.codes" style="color:#0969da;text-decoration:none;">主页</a></span>
             </div>
         </div>
         <div class="card">
@@ -308,19 +349,23 @@
                 <div class="card-title"><a href="https://github.com/vitali87/code-graph-rag">vitali87 / code-graph-rag</a></div>
             </div>
             <div class="description">
-                适合您的单一存储库的终极 RAG。借助人工智能和知识图的力量查询、理解和编辑多语言代码库 <span class="original">(The ultimate RAG for your monorepo. Query, understand, and edit multi-language codebases with the power of AI and knowledge graphs)</span>
+                适合您的单一存储库的终极 RAG。借助人工智能和知识图的力量查询、理解和编辑多语言代码库
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：/ 标签，所以我们使用单一的 light-mode 。当 GitHub 帐户恢复时，恢复下面的主题感知块：gitcgr：来自 GitHub 的索引（不可用时显示“未索引”）。 Code-Graph-RAG 使用 Tree-sitter 解析多语言代码库，在 Memgraph 中构建其结构的知识图，并允许您用简单的英语查询、编辑和优化该代码。它可以跨单一存储库运行...... <span class="orig">/ tags, so we use a single light-mode . Restore the theme-aware  block below when the GitHub account is reinstated: gitcgr: indexes from GitHub (shows "not indexed" while unavailable). Code-Graph-RAG parses a multi-language codebase with Tree-sitter, builds a knowledge graph of its structure in Memgraph, and lets you query, edit, and optimise that code in plain English. It works across a monorepo…</span>
+                <span class="label">📖 项目简介</span>：/ 标签，所以我们使用单一的 light-mode 。当 GitHub 帐户恢复时，恢复下面的主题感知块：gitcgr：来自 GitHub 的索引（不可用时显示“未索引”）。 Code-Graph-RAG 使用 Tree-sitter 解析多语言代码库，在 Memgraph 中构建其结构的知识图，并允许您用简单的英语查询、编辑和优化该代码。它可以跨单一存储库运行
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">用自然语言询问有关代码库的问题，并获得基于真实结构的答案。按名称或意图检索任何函数、类或方法的实际源。在进行任何更改之前，通过代理使用基于 AST 的外科修补和差异预览来编辑代码。优化合作…</span>
             </div>
             <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
             <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ast</span><span class="topic-badge">claude-code</span><span class="topic-badge">code-analysis</span><span class="topic-badge">code-understanding</span><span class="topic-badge">codebase-search</span><span class="topic-badge">developer-tools</span><span class="topic-badge">graph-database</span></div>
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 2,707</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,748</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +59 今日</span>
-                <span class="stat"><span class="stat-icon">🍴</span> 463</span>
-                <span class="stat"><span class="stat-icon">📋</span> 23 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://code-graph-rag.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+                <span class="stat"><span class="stat-icon">🍴</span> 472</span>
+                <span class="stat"><span class="stat-icon">📋</span> 23 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://code-graph-rag.com" style="color:#0969da;text-decoration:none;">主页</a></span>
             </div>
         </div>
         <div class="card">
@@ -332,15 +377,19 @@
                 暂无描述
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：此存储库包含 WeatherNext 2 (WN2) 的代码，WeatherNext 2 (WN2) 是由 Google DeepMind 和 Google Research 开发的全球中期大气和气旋预报模型。它还包含上一代模型的代码 <span class="orig">This repo contains the code for WeatherNext 2 (WN2), the global, medium-range atmospheric and cyclone forecasting model developed by Google DeepMind and Google Research. It also contains code for prior generation models</span>
+                <span class="label">📖 项目简介</span>：此存储库包含 WeatherNext 2 (WN2) 的代码，WeatherNext 2 (WN2) 是由 Google DeepMind 和 Google Research 开发的全球中期大气和气旋预报模型。它还包含上一代模型的代码
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">此存储库包含 WeatherNext 2 (WN2) 的代码，WeatherNext 2 (WN2) 是由 Google DeepMind 和 Google Research 开发的全球中期大气和气旋预报模型。</span>
             </div>
             <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
             <div class="topics"><span class="topic-badge">weather</span><span class="topic-badge">weather-forecast</span></div>
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 6,927</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,943</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +55 今日</span>
-                <span class="stat"><span class="stat-icon">🍴</span> 913</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 919</span>
                 <span class="stat"><span class="stat-icon">📋</span> 76 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
             </div>
         </div>
@@ -350,19 +399,23 @@
                 <div class="card-title"><a href="https://github.com/harveyai/harvey-labs">harveyai / harvey-labs</a></div>
             </div>
             <div class="description">
-                旨在评估和提高代理人支持法律工作的能力而建立的基准。 <span class="original">(A benchmark built to evaluate and improve agent capabilities for supporting legal work.)</span>
+                旨在评估和提高代理人支持法律工作的能力而建立的基准。
             </div>
             <div class="readme-summary">
-                <span class="label">📖 项目简介</span>：Harvey LAB 是一个开源项目，旨在对法学硕士代理人在现实环境中执行法律工作的能力进行基准测试。 LAB 由两部分组成：包含代理指令、文档和量规的任务数据集，以及用于针对这些任务运行和评估代理的执行工具。 LAB 是一个正在进行的项目，我们希望不断地添加和完善任务…… <span class="orig">Harvey LAB is an open-source project aimed at benchmarking LLM agents' abilities to perform legal work in realistic environments. LAB consists of two parts: a dataset of tasks containing agent instructions, documents, and rubrics as well as an execution harness for running and evaluating agents against those tasks. LAB is an ongoing project and we expect to consistently add to and refine the task…</span>
+                <span class="label">📖 项目简介</span>：Harvey LAB 是一个开源项目，旨在对法学硕士代理人在现实环境中执行法律工作的能力进行基准测试。 LAB 由两部分组成：包含代理指令、文档和量规的任务数据集，以及用于针对这些任务运行和评估代理的执行工具。 LAB 是一个正在进行的项目，我们希望不断地添加和完善任务
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Harvey LAB 是一个开源项目，旨在对法学硕士代理人在现实环境中执行法律工作的能力进行基准测试。 LAB 由两部分组成：包含代理指令、文档和量规的任务数据集，以及用于再次运行和评估代理的执行工具……</span>
             </div>
             <div class="recommendation">💡 推荐理由：活跃维护中</div>
 
             <div class="card-footer">
                 <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
-                <span class="stat"><span class="stat-icon">⭐</span> 699</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 718</span>
                 <span class="stat stars-today"><span class="stat-icon">📈</span> +47 今日</span>
                 <span class="stat"><span class="stat-icon">🍴</span> 170</span>
-                <span class="stat"><span class="stat-icon">📋</span> 46 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.harvey.ai/blog/introducing-harveys-legal-agent-benchmark" style="color:#0969da;text-decoration:none;">主页</a></span>
+                <span class="stat"><span class="stat-icon">📋</span> 45 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.harvey.ai/blog/introducing-harveys-legal-agent-benchmark" style="color:#0969da;text-decoration:none;">主页</a></span>
             </div>
         </div>
 
