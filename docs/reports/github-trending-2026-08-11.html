@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-08-11</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-08-11 · 共 16 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">16</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">7</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">10,043</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/PrimeIntellect-ai/prime-agent">PrimeIntellect-ai / prime-agent</a></div>
+            </div>
+            <div class="description">
+                用于编码工作流程和长时间运行的自主任务的自我改进 RLM 代理。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Prime Agent：自我改进的 RLM Agent 文档 • 验证者 • PRIME-RL •
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Prime Agent 专为长期运行的工作而设计，尤其是研究评估。这些功能在 TUI 中并且在自主运行时可用。持续利用：/refine 可以坚持重点突出、可复习的课程，作为补充提示、记忆、可重复使用的技能描述或子代理具体内容……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 13,194</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,642 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,341</span>
+                <span class="stat"><span class="stat-icon">📋</span> 486 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/msitarzewski/agency-agents">msitarzewski / agency-agents</a></div>
+            </div>
+            <div class="description">
+                触手可及的完整人工智能机构 - 从前端向导到 Reddit 社区忍者，从奇思妙想的注入者到现实检查者。每个代理都是一位具有个性、流程和经过验证的可交付成果的专业专家。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：触手可及的完整人工智能机构 - 从前端向导到 Reddit 社区忍者，从奇思妙想的注入者到现实检查者。每个代理都是一位具有个性、流程和经过验证的可交付成果的专业专家。 🆕 现在有一个应用程序 Agency Agents 是一款适用于 macOS、Linux 和 Windows 的本机应用程序，可以浏览整个花名册并将其安装到 Claude Code、Cursor、Codex、Gemini、Osaurus、a
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">带有代码示例的技术交付成果 成功指标和沟通风格 浏览下面的代理并复制/改编您需要的代理！ `bash</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；本周有更新；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 141,903</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,349 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 23,145</span>
+                <span class="stat"><span class="stat-icon">📋</span> 111 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/semantica-agi/semantica">semantica-agi / semantica</a></div>
+            </div>
+            <div class="description">
+                用于上下文和负责任的人工智能系统的图本机基础设施
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：摄取您的企业数据，提取重要内容，构建上下文图和知识图 (KG)，并对所有数据运行图分析和因果推理，并内置完整的决策来源。设计可解释、可追踪且值得信赖。决策智能 上下文管理 确定性推理 本体管理 知识建模 端到端可追溯性
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">大多数人工智能代理的行动都是没有踪迹的。它们存储嵌入，而不是意义：无法解释的上下文，无法审核的决策。在贷款方面，这种差距是合规风险，而不是不便：承销代理的批准必须在监管机构几个月后的“原因”之后继续存在。语义学…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-memory</span><span class="topic-badge">ai</span><span class="topic-badge">ai-governance</span><span class="topic-badge">ai-infrastructure</span><span class="topic-badge">artificial-intelligence</span><span class="topic-badge">context-engineering</span><span class="topic-badge">context-graphs</span><span class="topic-badge">data-engineering</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 4,220</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +970 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 485</span>
+                <span class="stat"><span class="stat-icon">📋</span> 57 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://getsemantica.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/Comfy-Org/ComfyUI">Comfy-Org / ComfyUI</a></div>
+            </div>
+            <div class="description">
+                最强大的模块化扩散模型 GUI、API 和带有图形/节点接口的后端。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">了解 ComfyUI 可以使用较新的模板工作流程或旧的示例工作流程执行哪些操作。无需代码即可构建和重用图像、视频、音频、3D 和文本工作流程的可视化节点图。可重用的子图、工作流模板、应用程序模式以及用于将工作流集成到应用程序中的本地 API。有效…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">comfy</span><span class="topic-badge">comfyui</span><span class="topic-badge">python</span><span class="topic-badge">pytorch</span><span class="topic-badge">stable-diffusion</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 126,392</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +922 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 14,905</span>
+                <span class="stat"><span class="stat-icon">📋</span> 4510 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.comfy.org/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/firecrawl/firecrawl">firecrawl / firecrawl</a></div>
+            </div>
+            <div class="description">
+                用于大规模搜索、抓取和与网络交互的上下文 API。 🔥
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：src="https://raw.githubusercontent.com/firecrawl/firecrawl/main/img/firecrawl_logo.png" height="200" 用于大规模搜索、抓取和与网络交互的 API。 🔥 Web 上下文 API，用于查找来源、提取内容并将其转换为代理可以附带的干净 Markdown 或结构化数据。开源并可作为托管服务使用。 _太平洋标准时间。嘿，你，加入我们的观星者吧:)_
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">src="https://raw.githubusercontent.com/firecrawl/firecrawl/main/img/firecrawl_logo.png" height="200" 用于大规模搜索、抓取和与网络交互的 API。 🔥 Web 上下文 API，用于查找来源、提取内容并将其转换为代理可以附带的干净 Markdown 或结构化数据。欧…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-crawler</span><span class="topic-badge">ai-scraping</span><span class="topic-badge">ai-search</span><span class="topic-badge">crawler</span><span class="topic-badge">data-extraction</span><span class="topic-badge">html-to-markdown</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 165,171</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +835 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,293</span>
+                <span class="stat"><span class="stat-icon">📋</span> 497 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://firecrawl.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/vitali87/code-graph-rag">vitali87 / code-graph-rag</a></div>
+            </div>
+            <div class="description">
+                适合您的单一存储库的终极 RAG。借助人工智能和知识图的力量查询、理解和编辑多语言代码库
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：gitcgr：来自 GitHub 的索引（不可用时显示“未索引”）。 Code-Graph-RAG 使用 Tree-sitter 解析多语言代码库，在 Memgraph 中构建其结构的知识图，并允许您用简单的英语查询、编辑和优化该代码。它在一个统一的图形模式下跨混合语言的单一存储库工作。 Ruby 支持：Ruby 通过新的可插入 ast-gr 加入图表
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">用自然语言询问有关代码库的问题，并获得基于真实结构的答案。按名称或意图检索任何函数、类或方法的实际源。在进行任何更改之前，通过代理使用基于 AST 的外科修补和差异预览来编辑代码。优化合作…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ast</span><span class="topic-badge">claude-code</span><span class="topic-badge">code-analysis</span><span class="topic-badge">code-understanding</span><span class="topic-badge">codebase-search</span><span class="topic-badge">developer-tools</span><span class="topic-badge">graph-database</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,569</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +682 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 549</span>
+                <span class="stat"><span class="stat-icon">📋</span> 45 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://code-graph-rag.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/addyosmani/agent-skills">addyosmani / agent-skills</a></div>
+            </div>
+            <div class="description">
+                AI 编码代理的生产级工程技能。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：AI 编码代理的生产级工程技能。技能编码了高级工程师在构建软件时使用的工作流程、质量关卡和最佳实践。这些内容经过打包，以便人工智能代理在开发的每个阶段都能一致地遵循它们。定义计划构建验证审核船舶/spec/plan/build/test
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">AI 编码代理的生产级工程技能。技能编码了高级工程师在构建软件时使用的工作流程、质量关卡和最佳实践。这些内容经过打包，以便人工智能代理在开发的每个阶段都能一致地遵循它们。定义计划 B...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">antigravity</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">cursor</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 85,805</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +659 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,236</span>
+                <span class="stat"><span class="stat-icon">📋</span> 107 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://skills.addy.ie" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/pingdotgg/t3code">pingdotgg / t3code</a></div>
+            </div>
+            <div class="description">
+                暂无描述
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：T3 Code 是一个“代理线束控制界面”。它可以通过一流的移动应用程序（iOS、Android）、Web 应用程序和基于 Electron 的桌面应用程序来控制机器上的代理。适用于您订阅的 Claude Code、Codex、Cursor、Grok Build 和 OpenCode。如果它们设置在您的计算机上，T3 Code 可以控制它们。没有什么。我们构建 T3 代码是因为我们想要最好的开发
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">我们（大部分）尚未接受捐款。可以考虑进行小修复。大特征不会。完整的文档位于 docs/ 中。目前还没有文档站点。安装并首次运行 权限模式 从源代码构建？从 docs/internals/overview.md 开始。 T3 Code 使用 Vite+，因此您需要安装……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 18,053</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +389 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,077</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1498 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://t3.codes" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/google-deepmind/weathernext">google-deepmind / weathernext</a></div>
+            </div>
+            <div class="description">
+                暂无描述
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：此存储库包含 WeatherNext 2 (WN2) 的代码，WeatherNext 2 (WN2) 是由 Google DeepMind 和 Google Research 开发的全球中期大气和气旋预报模型。它还包含上一代模型的代码
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">此存储库包含 WeatherNext 2 (WN2) 的代码，WeatherNext 2 (WN2) 是由 Google DeepMind 和 Google Research 开发的全球中期大气和气旋预报模型。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">weather</span><span class="topic-badge">weather-forecast</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 7,375</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +325 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 954</span>
+                <span class="stat"><span class="stat-icon">📋</span> 76 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/danielmiessler/LifeOS">danielmiessler / LifeOS</a></div>
+            </div>
+            <div class="description">
+                ⛰️一款通用爬山AI安全带，帮助您从生活和工作的现状迈向理想状态。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：AI 支持的生活操作系统网站 · 安装 · 演练 · 文档 · 发布 https://github.com/user-attachments/assets/329897f5-828b-4c23-b607-1cf9c71cb4ec LifeOS 是一款通用 AI 工具，可用于使用 AI 完成您在生活和工作中想做的任何事情。它捕捉到你是谁、你关心什么以及你想去哪里，然后使用了解你的人工智能来帮助你到达目的地。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">LifeOS 是一款通用 AI 工具，可以使用 AI 完成您在生活和工作中想做的任何事情。它捕捉到你是谁、你关心什么以及你想去哪里，然后使用了解你的人工智能来帮助你到达目的地。而且因为它具有您的完整背景，所以它使您所做的一切变得更加有效......</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-harness</span><span class="topic-badge">augmentation</span><span class="topic-badge">coding</span><span class="topic-badge">humans</span><span class="topic-badge">intent-engineering</span><span class="topic-badge">lifeos</span><span class="topic-badge">personal-ai</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 17,978</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +315 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,368</span>
+                <span class="stat"><span class="stat-icon">📋</span> 43 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ourlifeos.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/NanmiCoder/MediaCrawler">NanmiCoder / MediaCrawler</a></div>
+            </div>
+            <div class="description">
+                小红书笔记 | 评论爬虫、抖音视频 | 评论爬虫、快手视频 | 评论爬虫、B 站视频 ｜ 评论爬虫、微博帖子 ｜ 评论爬虫、百度贴吧帖子 ｜ 百度贴吧评论回复爬虫 | 知乎问答文章｜评论爬虫
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：免责声明： 大家请以学习为目的使用本仓库⚠️⚠️⚠️⚠️，爬虫违法违规的案件 本仓库的所有内容仅供学习和参考之用，禁止用于商业用途。任何人或组织不得将本仓库的内容用于非法用途或侵犯他人合法权益。本仓库所涉及的爬虫技术仅用于学习和研究，不得用于对其他平台进行大规模爬虫或其他非法行为。对于因使用本仓库内容而引起的任何法律责任，本仓库不承担任何责任。使用本仓库的内容即表示您同意本免责声明的所有条款和条件。 点击查看更为详细的免责声明。点击跳转
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">免责声明： 大家请以学习为目的使用本仓库⚠️⚠️⚠️⚠️，爬虫违法违规的案件 本仓库的所有内容仅供学习和参考之用，禁止用于商业用途。任何人或组织不得将本仓库的内容用于非法用途或侵犯他人合法权益。本仓库所涉及的爬虫技术仅用于学习和研究，不得用于对其他平台进行大规模爬虫或其他非法行为。对于因使用本仓库内容而引起的任何法律责任，本仓库不承担任何责任。使用本仓库的内容即表示您同意本免责声明的所有条款和条件。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；本周有更新；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 61,175</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +259 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 12,027</span>
+                <span class="stat"><span class="stat-icon">📋</span> 187 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5天前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://nanmicoder.github.io/MediaCrawler/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/paperclipai/paperclip">paperclipai / paperclip</a></div>
+            </div>
+            <div class="description">
+                每个人都用它来管理工作中的座席的开源应用程序
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：快速入门 · 文档 · GitHub · Discord ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">每项任务都可以追溯到公司使命。代理知道该做什么以及为什么。特工按计划起床，检查工作，然后采取行动。委派在组织结构图中上下流动。每个代理的每月预算。当他们达到极限时，他们就会停下来。没有失控成本。一次部署，多家公司。完整数据是...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 76,584</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +198 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 14,212</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5086 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://paperclip.ing" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/TauricResearch/TradingAgents">TauricResearch / TradingAgents</a></div>
+            </div>
+            <div class="description">
+                TradingAgents：多代理LLM金融交易框架
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：德语 西班牙语 法语 葡萄牙语
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">🚀 贸易代理 | ⚡ 安装和 CLI | 🎬 演示 | 📦 套餐使用 | 🤝 贡献 | 📄 嘉奖 🎉 TradingAgents 正式发布！我们收到了许多有关这项工作的询问，我们对社区的热情表示感谢。所以我们决定完全开源......</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">finance</span><span class="topic-badge">llm</span><span class="topic-badge">multiagent</span><span class="topic-badge">trading</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 97,276</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +177 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 18,740</span>
+                <span class="stat"><span class="stat-icon">📋</span> 351 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于23天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://arxiv.org/pdf/2412.20138" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/ruvnet/RuView">ruvnet / RuView</a></div>
+            </div>
+            <div class="description">
+                π RuView 将商用 WiFi 信号转化为实时空间智能、生命体征监测和存在检测 - 所有这些都无需视频像素。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：将普通 WiFi 变成空间智能/传感系统。检测人员、测量呼吸和心率、跟踪运动并监控房间 - 在黑暗中穿过墙壁，无需摄像头或可穿戴设备。只是物理。原生与四大智能家居生态系统配合使用：通过 HA-DISCO MQTT 发布者提供的 Home Assistant、Apple Home 和 HomePod 作为可发现的 HAP-1.1 桥接器、Google Home + Ama
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">将普通 WiFi 变成空间智能/传感系统。检测人员、测量呼吸和心率、跟踪运动并监控房间 - 在黑暗中穿过墙壁，无需摄像头或可穿戴设备。只是物理。与四大智能家居生态系统本地配合使用：Home Assistant via t...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">awesome</span><span class="topic-badge">claude</span><span class="topic-badge">densepose</span><span class="topic-badge">esp32</span><span class="topic-badge">firmware</span><span class="topic-badge">home-assistant</span><span class="topic-badge">home-automation</span><span class="topic-badge">iot</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 89,403</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +154 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 11,898</span>
+                <span class="stat"><span class="stat-icon">📋</span> 489 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://Cognitum.One/RuView" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/opa334/Dopamine">opa334 / Dopamine</a></div>
+            </div>
+            <div class="description">
+                Dopamine 是一款针对 iOS 15 至 26(.0.1) 的半自由越狱工具
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：适用于 iOS 15.0 - 17.3.1 (arm64e)、iOS 15.0 - 18.7.1、26.0 - 26.0.1 (A12/A13) 和 iOS 15.0 - 18.7.1 (arm64) 的无根半无限制越狱。更多详细信息将很快发布。请注意，所有与版本支持相关的问题将被删除，恕不回复。官网/下载：https://ellekit.space/dopamine/
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,061</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +111 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,195</span>
+                <span class="stat"><span class="stat-icon">📋</span> 84 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/LadybirdBrowser/ladybird">LadybirdBrowser / ladybird</a></div>
+            </div>
+            <div class="description">
+                真正独立的网络浏览器
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Ladybird 是一款真正独立的网络浏览器，使用基于网络标准的新颖引擎。 [!重要] Ladybird 处于 pre-alpha 状态，仅适合开发人员使用。我们的目标是为现代网络构建一个完整、可用的浏览器。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Ladybird 是一款真正独立的网络浏览器，使用基于网络标准的新颖引擎。 [!IMPORTANT] Ladybird 处于 pre-alpha 状态，仅适合开发人员使用</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">browser</span><span class="topic-badge">browser-engine</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f34b7d"></span>C++</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 65,284</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +56 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,121</span>
+                <span class="stat"><span class="stat-icon">📋</span> 538 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> BSD-2-Clause</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ladybird.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
