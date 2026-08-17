@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-08-17</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-08-17 · 共 7 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">7</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">4</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">4,195</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/public-apis/public-apis">public-apis / public-apis</a></div>
+            </div>
+            <div class="description">
+                免费 API 集合列表
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">APILayer 统一套件允许您使用一个帐户、一个仪表板和一个 API 密钥集成生产级 REST API。无论您需要对地址进行地理编码、验证电子邮件、获取航班、提取股票市场数据还是抓取搜索结果。立即注册并开始构建！叉我们的官方…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">api</span><span class="topic-badge">apis</span><span class="topic-badge">dataset</span><span class="topic-badge">development</span><span class="topic-badge">free</span><span class="topic-badge">list</span><span class="topic-badge">lists</span><span class="topic-badge">open-source</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 461,878</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,588 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 51,018</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1678 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://APILayer.com/?utm_source=Github&utm_medium=Referral&utm_campaign=Public-apis-repo" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/cordiverse/cordis">cordiverse / cordis</a></div>
+            </div>
+            <div class="description">
+                时空可组合性元框架
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：时空可组合性元框架。 Cordis 正在积极开发中。该 API 尚未稳定，可能会发生更改，恕不另行通知。论文：_时空可组合性编程范式_文档：cordis-primer
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">effect</span><span class="topic-badge">framework</span><span class="topic-badge">nodejs</span><span class="topic-badge">plugin</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 4,833</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +720 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 262</span>
+                <span class="stat"><span class="stat-icon">📋</span> 42 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://deepseek-harness.github.io/deepseek-harness/reference/cordis-primer" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/unslothai/unsloth">unslothai / unsloth</a></div>
+            </div>
+            <div class="description">
+                用于运行和训练 LLM 和扩散模型的本地 UI，包括 Qwen3.8、Kimi K3、MiniMax-H3、Gemma 4、DeepSeek-V4、FLUX 等。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Unsloth 是第一个运行和训练模型的桌面应用程序。功能 • 快速入门 • 笔记本电脑 •
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">功能 • 快速入门 • 笔记本 • 下载适合您操作系统的本机 Unsloth Desktop 应用程序：</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">ai</span><span class="topic-badge">chatgpt</span><span class="topic-badge">deepseek</span><span class="topic-badge">fine-tuning</span><span class="topic-badge">gemma</span><span class="topic-badge">image-generation</span><span class="topic-badge">llama</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 72,648</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +572 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,551</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1267 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://unsloth.ai/docs" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/ToolJet/ToolJet">ToolJet / ToolJet</a></div>
+            </div>
+            <div class="description">
+                ToolJet 是 ToolJet AI 的开源基础 - ToolJet AI 是用于构建内部工具、仪表板、业务应用程序、工作流程和 AI 代理的企业应用程序生成平台 🚀
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：ToolJet 是 ToolJet AI 的开源基础，ToolJet AI 是用于构建和部署内部工具、工作流程和 AI 代理的 AI 原生平台。社区版提供了强大的可视化构建器、拖放式 UI 以及与数据库、API、SaaS 应用程序和对象存储的集成。有关 AI 支持的 UI 生成、查询构建、调试和企业功能，请参阅 ToolJet AI。 :star: 如果是的话
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai-app-builder</span><span class="topic-badge">docker</span><span class="topic-badge">hacktoberfest</span><span class="topic-badge">internal-applications</span><span class="topic-badge">internal-project</span><span class="topic-badge">internal-tool</span><span class="topic-badge">internal-tools</span><span class="topic-badge">javascript</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 40,082</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +452 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,331</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1131 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tooljet.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/cactus-compute/needle">cactus-compute / needle</a></div>
+            </div>
+            <div class="description">
+                适用于微型设备的 14MB 基础模型；手机、可穿戴设备、智能家居和机器人。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">cactus</span><span class="topic-badge">gemini</span><span class="topic-badge">gemma</span><span class="topic-badge">llm</span><span class="topic-badge">on-device-ai</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,632</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +443 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 435</span>
+                <span class="stat"><span class="stat-icon">📋</span> 27 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://cactuscompute.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/basecamp/omarchy">basecamp / omarchy</a></div>
+            </div>
+            <div class="description">
+                美丽、现代、有主见的 Linux
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Omarchy 是 DHH 推出的一款美观、现代且固执己见的 Linux 发行版。欲了解更多信息，请访问 omarchy.org。该手册位于manual/中，这是其权威来源。它被镜像到 learn.omacom.io，其中
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Omarchy 是 DHH 推出的一款美观、现代且固执己见的 Linux 发行版。欲了解更多信息，请访问 omarchy.org。该手册位于manual/中，这是其权威来源。它是</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 25,442</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +270 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,596</span>
+                <span class="stat"><span class="stat-icon">📋</span> 748 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://omarchy.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/OpenCut-app/OpenCut">OpenCut-app / OpenCut</a></div>
+            </div>
+            <div class="description">
+                开源 CapCut 替代方案
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：OpenCut 正在从头开始重写。即将推出的内容： 编辑器 API 一流的第三方插件（通过插件优先架构实现） 来自一个代码库的桌面、移动设备和浏览器（Rust 核心）
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenCut 正在从头开始重写。即将推出：编辑器 API 一流的第三方插件（通过插件优先架构实现）</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；本周有更新</div>
+            <div class="topics"><span class="topic-badge">editor</span><span class="topic-badge">oss</span><span class="topic-badge">videoeditor</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 83,950</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +150 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,290</span>
+                <span class="stat"><span class="stat-icon">📋</span> 369 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://opencut.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
