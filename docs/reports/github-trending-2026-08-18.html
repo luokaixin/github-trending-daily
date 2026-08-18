@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-08-18</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-08-18 · 共 11 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">11</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">4</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">4,282</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/harry0703/MoneyPrinterTurbo">harry0703 / MoneyPrinterTurbo</a></div>
+            </div>
+            <div class="description">
+                利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：只需提供视频主题或关键词，即可自动生成视频脚本、匹配素材、生成字幕和背景音乐，并合成高清短视频。 简体中文 | English | 版本发布 | 问题反馈 感谢 Kimi 赞助本项目！Kimi K3 是 Moonshot AI 迄今能力最强的模型，也是全球首个开源 3T 级模型，拥有原生视觉能力与 100 万 Token 上下文，在知识工作、推理和长周期任务中展现前沿性能。在 MoneyPrinterTurbo 中，K3 能直接驱动视频创作，不仅撰写视频文案，还会提炼素材搜索关键词、决定成片画面；对内容理解越准确，匹配到的素材就越贴题。 MoneyPrinterTurbo 用户专属优惠：新用户通过专属链接注册，首次成功充值可获充值金额 10% 的 API 额度，最高赠送 ¥1000。活动截至 2026 年 9 月 30 日。前往 Kimi 开放平台（中文站｜Global）体验 API。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">首次启动时，项目会根据 config.example.toml 自动创建 config.toml。大模型 Provider、素材来源和相关 API Key 可以直接在 WebUI 的基础设置中配置。 如果未安装 Docker，请先安装 https://www.docker.com/products/docker-desktop/ Windows 用户可以参考微软的文档： 1. https://learn.microsoft.com/zh-cn/windows/wsl/install 首次启动前，请将 config.example.toml 复制为 config.toml，供容器挂载使用。 打开…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai-video-generator</span><span class="topic-badge">content-creation</span><span class="topic-badge">ffmpeg</span><span class="topic-badge">instagram-reels</span><span class="topic-badge">llm</span><span class="topic-badge">python</span><span class="topic-badge">short-video</span><span class="topic-badge">subtitles</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 106,212</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,189 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 16,134</span>
+                <span class="stat"><span class="stat-icon">📋</span> 23 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于14小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/cordiverse/cordis">cordiverse / cordis</a></div>
+            </div>
+            <div class="description">
+                时空可组合性元框架
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">时空可组合性元框架。 Cordis 正在积极开发中。该 API 尚未稳定，可能会发生更改，恕不另行通知。论文：_时空可组合性编程范式_</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；本周有更新</div>
+            <div class="topics"><span class="topic-badge">effect</span><span class="topic-badge">framework</span><span class="topic-badge">nodejs</span><span class="topic-badge">plugin</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,644</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +957 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 301</span>
+                <span class="stat"><span class="stat-icon">📋</span> 42 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://deepseek-harness.github.io/deepseek-harness/reference/cordis-primer" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/usestrix/strix">usestrix / strix</a></div>
+            </div>
+            <div class="description">
+                开源人工智能渗透测试工具，用于查找并修复应用程序的漏洞。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!提示] 新！ Strix 与 GitHub Actions 和 CI/CD 管道无缝集成。自动扫描每个拉取请求中的漏洞，并在不安全的代码到达生产环境之前阻止它 - 无需设置即可开始使用。 Strix 是自主的 AI 渗透测试代理，其行为就像真正的黑客一样 - 他们动态运行您的代码，查找漏洞并通过 ac 验证它们
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">主要功能： 完整的渗透测试工具包 - 开箱即用的侦察、利用和验证 多代理编排 - 协作和扩展的 AI 渗透测试人员团队 真正的漏洞验证 - 有效的 PoC，而不是像传统漏洞扫描器那样的误报 静态和动态代码 A...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai-hacking</span><span class="topic-badge">ai-penetration-testing</span><span class="topic-badge">ai-pentesting</span><span class="topic-badge">ai-security</span><span class="topic-badge">artificial-intelligence</span><span class="topic-badge">bug-bounty</span><span class="topic-badge">code-quality</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 54,256</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +598 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,804</span>
+                <span class="stat"><span class="stat-icon">📋</span> 295 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://strix.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/agalwood/Motrix">agalwood / Motrix</a></div>
+            </div>
+            <div class="description">
+                功能齐全的下载管理器。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 简体中文 Motrix is a clean, full-featured desktop download manager for HTTP, FTP, BitTorrent, magnet links, and more. Motrix Turbo is Motrix v2, rebuilt from the ground up with Electron, React, and TypeScript while keeping the clean, straightforward experience of v1. The download core is independent of the UI. Browser extensions and command-line tools communicate with the app over MDXP (Motr
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Motrix 是一款干净、功能齐全的桌面下载管理器，适用于 HTTP、FTP、BitTorrent、磁力链接等。 Motrix Turbo 是 Motrix v2，使用 Electron、React 和 TypeScript 从头开始​​重建，同时保持 v1 干净、简单的体验。下载核心独立于U…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">aria2</span><span class="topic-badge">bittorrent</span><span class="topic-badge">bt</span><span class="topic-badge">download</span><span class="topic-badge">download-manager</span><span class="topic-badge">electron</span><span class="topic-badge">linux</span><span class="topic-badge">mac</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 53,125</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +344 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,930</span>
+                <span class="stat"><span class="stat-icon">📋</span> 776 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://motrix.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/santifer/career-ops">santifer / career-ops</a></div>
+            </div>
+            <div class="description">
+                开源 AI 职位搜索：扫描职位门户，使用结构化 A-F 评分标准将列表评估为 1.0-5.0 分，定制您的简历，跟踪应用程序 — 在您的 AI 编码 CLI 中本地运行（Claude Code、Codex、OpenCode、Antigravity...）
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | Español | Deutsch | Français | Português (Brasil) | 한국어 | 日本語 | 简体中文 | 繁體中文 | Українська | Русский | Polski | Dansk | தமிழ் | العربية | हिन्दी | Türkçe Companies use AI to filter candidates. I just gave candidates AI to choose companies.       career-ops (career-ops.org, also known as careerops) turns any AI coding CLI into a full job search command center. Instead of manually tracking a
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Career-ops 是代理的：无论您选择哪种 AI 编码 CLI，都会使用 Playwright 导航职业页面，通过推理您的简历与职位描述（而不是关键字匹配）来评估适合性，并根据列表调整您的简历。注意：第一次评估不会很好。系统不认识你啊…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agent</span><span class="topic-badge">anthropic</span><span class="topic-badge">ats</span><span class="topic-badge">automation</span><span class="topic-badge">beginner-friendly</span><span class="topic-badge">career</span><span class="topic-badge">careerops</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 64,735</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +218 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 12,654</span>
+                <span class="stat"><span class="stat-icon">📋</span> 336 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://career-ops.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/akitaonrails/ai-memory">akitaonrails / ai-memory</a></div>
+            </div>
+            <div class="description">
+                用于代理编码 CLI 的长期记忆解决方案，并促进不同代理供应商之间的切换
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：AI 编码代理的长期记忆。中途退出 Claude Code，在同一目录中启动 OpenAI Codex，继续，无需重新解释架构、失败的方法或未解决的问题。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">AI 编码代理的长期记忆。中途退出 Claude Code，在同一目录中启动 OpenAI Codex，继续，无需重新解释架构、失败的方法或开放</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,123</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +207 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 198</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/mukul975/Anthropic-Cybersecurity-Skills">mukul975 / Anthropic-Cybersecurity-Skills</a></div>
+            </div>
+            <div class="description">
+                AI 代理的 817 项结构化网络安全技能 · 映射到 6 个框架：MITRE ATT&amp;CK、NIST CSF 2.0、MITRE ATLAS、D3FEND、NIST AI RMF 和 MITRE F3（打击欺诈） · Agentskills.io 标准 · 可与 Claude Code、GitHub Copilot、Codex CLI、Cursor、Gemini CLI 和 20 多个平台配合使用 · 29 个安全域 · Apache 2.0
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：817 项生产级网络安全技能 · 29 个安全域 · 6 个框架映射 · 26 个以上人工智能平台入门 · 内部内容 · 框架 · 平台 · 贡献 ⚠️ 社区项目 — 这是一个独立的社区创建的项目。不隶属于 Anthropic PBC。 🔐 仅限授权且合法使用。该库包括攻击性和双重用途技术（例如红队 C2、网络钓鱼
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">示例 - 每种技能仅映射到与之相关的框架（一个可能涉及全部六个，另一个可能涉及几个）：MITRE 威胁信息防御中心 (CTID) 于 2026 年 4 月 9 日发布了 MITRE 打击欺诈框架 (F3)，该框架与摩根大通、花旗集团、劳埃德银行集团、Standa 共同开发。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">claude-code</span><span class="topic-badge">cloud-security</span><span class="topic-badge">cybersecurity</span><span class="topic-badge">devsecops</span><span class="topic-badge">ethical-hacking</span><span class="topic-badge">incident-response</span><span class="topic-badge">infosec</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 28,479</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +198 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,451</span>
+                <span class="stat"><span class="stat-icon">📋</span> 47 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://mahipal.engineer/Anthropic-Cybersecurity-Skills/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/AlexsJones/llmfit">AlexsJones / llmfit</a></div>
+            </div>
+            <div class="description">
+                数百个模型和提供商。一个命令即可查找您的硬件上运行的内容。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：中文 · 📊 新功能：基准测试和共享 — 来自您机器的真实数据，为每个人提供更好的估计。下载模型，提供服务，并在硬件上测量真实的 tok/s — 然后将结果作为 PR 直接从 TUI 贡献回项目。没有 gh CLI，没有第三方帐户。每次运行都会首先保存在本地，您自己的测量值会替换拟合表中的估计值，然后每次合并提交
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">中文 · 📊 新功能：基准测试和共享 — 来自您机器的真实数据，为每个人提供更好的估计。下载模型，提供服务，并在硬件上测量真实的 tok/s — 然后将结果作为 PR 直接从 TUI 贡献回项目。没有 gh CLI，没有第三方帐户。每次跑步都是...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">gguf</span><span class="topic-badge">llm</span><span class="topic-badge">localai</span><span class="topic-badge">mlx</span><span class="topic-badge">skill</span><span class="topic-badge">unsloth</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 32,330</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +198 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,002</span>
+                <span class="stat"><span class="stat-icon">📋</span> 63 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于18小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/immich-app/immich">immich-app / immich</a></div>
+            </div>
+            <div class="description">
+                高性能自托管照片和视频管理解决方案。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[！警告] ⚠️ 始终遵循 3-2-1 备份计划来保护您珍贵的照片和视频！ [!注意] 您可以在 https://immich.app/ 找到主要文档，包括安装指南。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">backup-tool</span><span class="topic-badge">flutter</span><span class="topic-badge">google-photos</span><span class="topic-badge">google-photos-alternative</span><span class="topic-badge">javascript</span><span class="topic-badge">mobile-app</span><span class="topic-badge">nestjs</span><span class="topic-badge">nodejs</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 111,205</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +175 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,579</span>
+                <span class="stat"><span class="stat-icon">📋</span> 742 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://immich.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/nautechsystems/nautilus_trader">nautechsystems / nautilus_trader</a></div>
+            </div>
+            <div class="description">
+                具有确定性事件驱动架构的生产级 Rust 原生交易引擎
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：文档： 网站： 支持：support@nautilustrader.io NautilusTrader 是一个开源、生产级、Rust 原生的多资产引擎，
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">stable：稳定的功能集和API，集成已经过开发人员和用户的测试，达到合理的水平（一些错误可能仍然存在）。有关更多详细信息，请参阅集成文档。该路线图概述了 NautilusTrader 的战略方向。当前的优先事项包括稳定……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">algorithmic-trading-engine</span><span class="topic-badge">artificial-intelligence</span><span class="topic-badge">crypto-trading</span><span class="topic-badge">equity-trading</span><span class="topic-badge">forex</span><span class="topic-badge">futures-trading</span><span class="topic-badge">machine-learning</span><span class="topic-badge">options-trading</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 25,964</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +120 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,375</span>
+                <span class="stat"><span class="stat-icon">📋</span> 110 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> LGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://nautilustrader.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/jundot/omlx">jundot / omlx</a></div>
+            </div>
+            <div class="description">
+                LLM 推理服务器，具有适用于 Apple Silicon 的连续批处理和 SSD 缓存 - 从 macOS 菜单栏进行管理
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：安装 · 快速入门 · 功能 · 型号 ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">特性 · 模型 · CLI 配置 · 基准 · oMLX 在热内存层和冷 SSD 层上持久保留 KV 缓存 - 即使上下文在对话中发生变化，所有过去的上下文也会保持缓存并可跨请求重用，使本地 LLM 适合使用 Claude 等工具进行实际编码工作......</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">apple-silicon</span><span class="topic-badge">inference-server</span><span class="topic-badge">llm</span><span class="topic-badge">macos</span><span class="topic-badge">mlx</span><span class="topic-badge">openai-api</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 19,016</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +78 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,645</span>
+                <span class="stat"><span class="stat-icon">📋</span> 905 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://omlx.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
