@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-08-20</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-08-20 · 共 13 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">13</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">5</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">9,805</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/harry0703/MoneyPrinterTurbo">harry0703 / MoneyPrinterTurbo</a></div>
+            </div>
+            <div class="description">
+                利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：只需提供视频主题或关键词，即可自动生成视频脚本、匹配素材、生成字幕和背景音乐，并合成高清短视频。 简体中文 | English | 版本发布 | 问题反馈 感谢 Kimi 赞助本项目！Kimi K3 是 Moonshot AI 迄今能力最强的模型，也是全球首个开源 3T 级模型，拥有原生视觉能力与 100 万 Token 上下文，在知识工作、推理和长周期任务中展现前沿性能。在 MoneyPrinterTurbo 中，K3 能直接驱动视频创作，不仅撰写视频文案，还会提炼素材搜索关键词、决定成片画面；对内容理解越准确，匹配到的素材就越贴题。 MoneyPrinterTurbo 用户专属优惠：新用户通过专属链接注册，首次成功充值可获充值金额 10% 的 API 额度，最高赠送 ¥1000。活动截至 2026 年 9 月 30 日。前往 Kimi 开放平台（中文站｜Global）体验 API。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">首次启动时，项目会根据 config.example.toml 自动创建 config.toml。大模型 Provider、素材来源和相关 API Key 可以直接在 WebUI 的基础设置中配置。 如果未安装 Docker，请先安装 https://www.docker.com/products/docker-desktop/ Windows 用户可以参考微软的文档： 1. https://learn.microsoft.com/zh-cn/windows/wsl/install 首次启动前，请将 config.example.toml 复制为 config.toml，供容器挂载使用。 打开…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai-video-generator</span><span class="topic-badge">content-creation</span><span class="topic-badge">ffmpeg</span><span class="topic-badge">instagram-reels</span><span class="topic-badge">llm</span><span class="topic-badge">python</span><span class="topic-badge">short-video</span><span class="topic-badge">subtitles</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 110,875</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,221 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 16,803</span>
+                <span class="stat"><span class="stat-icon">📋</span> 31 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于17小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/mattpocock/skills">mattpocock / skills</a></div>
+            </div>
+            <div class="description">
+                真正工程师的技能。直接来自我的 .agents 目录。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：我每天用我的代理技能来做真正的工程——而不是氛围编码。开发真正的应用程序很困难。 GSD、BMAD 和 Spec-Kit 等方法试图通过拥有流程来提供帮助。但这样做时，它们会夺走您的控制权，并使流程中的错误难以解决。这些技能被设计得很小、易于适应且可组合。它们适用于任何模型。它们基于 d
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">问题。软件开发中最常见的故障模式是未对准。你认为开发人员知道你想要什么。然后你看到他们建造的东西 - 你意识到它根本不理解你。这在人工智能时代也是如此。您和代理之间存在沟通障碍。特…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 223,911</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,894 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 19,259</span>
+                <span class="stat"><span class="stat-icon">📋</span> 371 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于12小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aihero.dev/skills" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/amadeusprotocol/node">amadeusprotocol / node</a></div>
+            </div>
+            <div class="description">
+                暂无描述
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Linux Kernel 6.8 Ubuntu 24.04 使用 podman 或 docker podman build --tag erlang_builder -f build.Dockerfile
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Linux 内核 6.8 Ubuntu 24.04 使用 podman 或 docker</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 4,580</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,397 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 85</span>
+                <span class="stat"><span class="stat-icon">📋</span> 9 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/volcengine/OpenViking">volcengine / OpenViking</a></div>
+            </div>
+            <div class="description">
+                人工智能代理的自我进化上下文数据库。统一代理记忆、知识 RAG 和技能。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English / 中文 / 日本語 👋 Join our Community 📱 Lark Group · WeChat · Discord · X OpenViking is an open-source context database for AI agents. It stores memories, resources, and skills as one virtual filesystem under the viking:// protocol, so an agent browses its own context with ls, tree, and find instead of querying a black-box vector store. Content is processed into three tiers — L0 abstract, L1 ove
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenViking 是一个用于 AI 代理的开源上下文数据库。它将记忆、资源和技能存储为 viking:// 协议下的一个虚拟文件系统，因此代理可以使用 ls、tree 和 find 浏览自己的上下文，而不是查询黑盒向量存储。内容被处理成三个领带......</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-memory</span><span class="topic-badge">agent-plugins</span><span class="topic-badge">agentic-rag</span><span class="topic-badge">context-database</span><span class="topic-badge">dsh-plugin</span><span class="topic-badge">self-evolving</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 30,263</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +804 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,339</span>
+                <span class="stat"><span class="stat-icon">📋</span> 459 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于10小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openviking.ai/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/chaitanyagiri/munder-difflin">chaitanyagiri / munder-difflin</a></div>
+            </div>
+            <div class="description">
+                本地多智能体利用
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：免费、开源且高性能——一种多代理工具，可与您已付费的订阅一起使用，但按小时限制。它将您已经运行的终端编码 CLI 变成您的克隆，在您离开时继续工作并在您自己的计算机上协调整个办公室的代理。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">功能 入门架构 项目结构</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；近期新项目；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">claude-code</span><span class="topic-badge">free</span><span class="topic-badge">harness</span><span class="topic-badge">harness-engineering</span><span class="topic-badge">memory</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,723</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +795 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 322</span>
+                <span class="stat"><span class="stat-icon">📋</span> 56 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://munderdiffl.in" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/mukul975/Anthropic-Cybersecurity-Skills">mukul975 / Anthropic-Cybersecurity-Skills</a></div>
+            </div>
+            <div class="description">
+                AI 代理的 817 项结构化网络安全技能 · 映射到 6 个框架：MITRE ATT&amp;CK、NIST CSF 2.0、MITRE ATLAS、D3FEND、NIST AI RMF 和 MITRE F3（打击欺诈） · Agentskills.io 标准 · 可与 Claude Code、GitHub Copilot、Codex CLI、Cursor、Gemini CLI 和 20 多个平台配合使用 · 29 个安全域 · Apache 2.0
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：817 项生产级网络安全技能 · 29 个安全域 · 6 个框架映射 · 26 个以上人工智能平台入门 · 内部内容 · 框架 · 平台 · 贡献 ⚠️ 社区项目 — 这是一个独立的社区创建的项目。不隶属于 Anthropic PBC。 🔐 仅限授权且合法使用。该库包括攻击性和双重用途技术（例如红队 C2、网络钓鱼
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">claude-code</span><span class="topic-badge">cloud-security</span><span class="topic-badge">cybersecurity</span><span class="topic-badge">devsecops</span><span class="topic-badge">ethical-hacking</span><span class="topic-badge">incident-response</span><span class="topic-badge">infosec</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 29,875</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +766 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,541</span>
+                <span class="stat"><span class="stat-icon">📋</span> 48 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://mahipal.engineer/Anthropic-Cybersecurity-Skills/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/obra/superpowers">obra / superpowers</a></div>
+            </div>
+            <div class="description">
+                有效的代理技能框架和软件开发方法。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Superpowers 是一种适用于编码代理的完整软件开发方法，建立在一组可组合技能和一些确保您的代理使用它们的初始指令之上。商业服务如何运作</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">brainstorming</span><span class="topic-badge">coding</span><span class="topic-badge">obra</span><span class="topic-badge">sdlc</span><span class="topic-badge">skills</span><span class="topic-badge">subagent-driven-development</span><span class="topic-badge">superpowers</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 274,317</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +557 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 24,559</span>
+                <span class="stat"><span class="stat-icon">📋</span> 291 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/jundot/omlx">jundot / omlx</a></div>
+            </div>
+            <div class="description">
+                LLM 推理服务器，具有适用于 Apple Silicon 的连续批处理和 SSD 缓存 - 从 macOS 菜单栏进行管理
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：安装 · 快速入门 · 功能 · 型号 ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">特性 · 模型 · CLI 配置 · 基准 · oMLX 在热内存层和冷 SSD 层上持久保留 KV 缓存 - 即使上下文在对话中发生变化，所有过去的上下文也会保持缓存并可跨请求重用，使本地 LLM 适合使用 Claude 等工具进行实际编码工作......</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">apple-silicon</span><span class="topic-badge">inference-server</span><span class="topic-badge">llm</span><span class="topic-badge">macos</span><span class="topic-badge">mlx</span><span class="topic-badge">openai-api</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 19,855</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +472 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,693</span>
+                <span class="stat"><span class="stat-icon">📋</span> 963 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://omlx.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/genlayerlabs/genlayer-project-boilerplate">genlayerlabs / genlayer-project-boilerplate</a></div>
+            </div>
+            <div class="description">
+                暂无描述
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：该项目包括 GenLayer 用例实现的样板代码，特别是足球投注游戏。具有 Web 访问和 LLM 集成的智能合约示例（Football Bets） 直接模式测试 — 具有 Web/LLM 模拟的快速内存单元测试（每个测试约毫秒） 集成测试 — 针对 GenLayer Studio 的完整端到端测试
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">该项目包括 GenLayer 用例实现的样板代码，特别是足球投注游戏。具有 Web 访问和 LLM 集成的示例智能合约（足球投注） 直接模式测试 - 具有 Web/LLM 模拟的快速内存单元测试（每次测试约毫秒）集成测试...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 16,227</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +430 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 810</span>
+                <span class="stat"><span class="stat-icon">📋</span> 25 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于24天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/santifer/career-ops">santifer / career-ops</a></div>
+            </div>
+            <div class="description">
+                开源 AI 职位搜索：扫描职位门户，使用结构化 A-F 评分标准将列表评估为 1.0-5.0 分，定制您的简历，跟踪应用程序 — 在您的 AI 编码 CLI 中本地运行（Claude Code、Codex、OpenCode、Antigravity...）
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | Español | Deutsch | Français | Português (Brasil) | 한국어 | 日本語 | 简体中文 | 繁體中文 | Українська | Русский | Polski | Dansk | தமிழ் | العربية | हिन्दी | Türkçe Companies use AI to filter candidates. I just gave candidates AI to choose companies.       career-ops (career-ops.org, also known as careerops) turns any AI coding CLI into a full job search command center. Instead of manually tracking a
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agent</span><span class="topic-badge">anthropic</span><span class="topic-badge">ats</span><span class="topic-badge">automation</span><span class="topic-badge">beginner-friendly</span><span class="topic-badge">career</span><span class="topic-badge">careerops</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 65,833</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +198 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 12,746</span>
+                <span class="stat"><span class="stat-icon">📋</span> 352 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://career-ops.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/immich-app/immich">immich-app / immich</a></div>
+            </div>
+            <div class="description">
+                高性能自托管照片和视频管理解决方案。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[！警告] ⚠️ 始终遵循 3-2-1 备份计划来保护您珍贵的照片和视频！ [!注意] 您可以在 https://immich.app/ 找到主要文档，包括安装指南。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">关于安装路线图 功能 功能 翻译 贡献 在此处访问演示。对于移动应用程序，您可以使用 https://demo.immich.app 作为服务器端点 URL。在这里阅读有关翻译的更多信息。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">backup-tool</span><span class="topic-badge">flutter</span><span class="topic-badge">google-photos</span><span class="topic-badge">google-photos-alternative</span><span class="topic-badge">javascript</span><span class="topic-badge">mobile-app</span><span class="topic-badge">nestjs</span><span class="topic-badge">nodejs</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 111,897</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +128 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,632</span>
+                <span class="stat"><span class="stat-icon">📋</span> 720 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://immich.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/nautechsystems/nautilus_trader">nautechsystems / nautilus_trader</a></div>
+            </div>
+            <div class="description">
+                具有确定性事件驱动架构的生产级 Rust 原生交易引擎
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">stable：稳定的功能集和API，集成已经过开发人员和用户的测试，达到合理的水平（一些错误可能仍然存在）。有关更多详细信息，请参阅集成文档。该路线图概述了 NautilusTrader 的战略方向。当前的优先事项包括稳定……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">algorithmic-trading-engine</span><span class="topic-badge">artificial-intelligence</span><span class="topic-badge">crypto-trading</span><span class="topic-badge">equity-trading</span><span class="topic-badge">forex</span><span class="topic-badge">futures-trading</span><span class="topic-badge">machine-learning</span><span class="topic-badge">options-trading</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 26,461</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +80 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,422</span>
+                <span class="stat"><span class="stat-icon">📋</span> 105 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> LGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://nautilustrader.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/marceloprates/prettymaps">marceloprates / prettymaps</a></div>
+            </div>
+            <div class="description">
+                从 OpenStreetMap 数据绘制漂亮的地图！使用 osmnx +matplotlib + shapely 构建
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：一个最小的 Python 库，用于从使用 osmnx、matplotlib、shapely 和 vsketch 包创建的 OpenStreetMap 绘制自定义地图。本作品根据 GNU Affero 通用公共许可证 v3.0 获得许可（您可以进行商业用途、分发和修改本项目，但必须公开带有许可证和版权声明的源代码）请保留出处的数字上的打印消息
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">请参阅 docs/tutorial.md 以获取完整的示例集（Macau、Bom Fim、mosaic、Barcelona 绘图仪、Tijuca、multiplot、hillshade、Garopaba 关键点）。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+            <div class="topics"><span class="topic-badge">cartography</span><span class="topic-badge">generative-art</span><span class="topic-badge">jupyter-notebook</span><span class="topic-badge">maps</span><span class="topic-badge">matplotlib</span><span class="topic-badge">openstreetmap</span><span class="topic-badge">python</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 13,169</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +63 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 659</span>
+                <span class="stat"><span class="stat-icon">📋</span> 14 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于20天前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://prettymaps.streamlit.app/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
