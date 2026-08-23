@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-08-23</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-08-23 · 共 17 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">17</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">9</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">9,812</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/mattpocock/skills">mattpocock / skills</a></div>
+            </div>
+            <div class="description">
+                真正工程师的技能。直接来自我的 .agents 目录。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：我每天用我的代理技能来做真正的工程——而不是氛围编码。开发真正的应用程序很困难。 GSD、BMAD 和 Spec-Kit 等方法试图通过拥有流程来提供帮助。但这样做时，它们会夺走您的控制权，并使流程中的错误难以解决。这些技能被设计得很小、易于适应且可组合。它们适用于任何模型。它们基于 d
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">问题。软件开发中最常见的故障模式是未对准。你认为开发人员知道你想要什么。然后你看到他们建造的东西 - 你意识到它根本不理解你。这在人工智能时代也是如此。您和代理之间存在沟通障碍。特…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 232,171</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,683 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 19,813</span>
+                <span class="stat"><span class="stat-icon">📋</span> 385 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aihero.dev/skills" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/openai/codex">openai / codex</a></div>
+            </div>
+            <div class="description">
+                在您的终端中运行的轻量级编码代理
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：如果您希望在代码编辑器（VS Code、Cursor、Windsurf）中使用 Codex，请在 IDE 中安装。如果您想要桌面应用程序体验，请运行 Codex 应用程序或访问 Codex 应用程序页面。在 Mac 或 Linux 上运行以下命令来安装 Codex CLI：`shell
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">运行 codex 并选择使用 ChatGPT 登录。我们建议登录您的 ChatGPT 帐户，将 Codex 用作您的 Plus、Pro、Business、Edu 或 Enterprise 计划的一部分。详细了解您的 ChatGPT 计划中包含的内容。您还可以通过 API 密钥使用 Codex，但这需要额外的设置。代码…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 113,533</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,544 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 17,377</span>
+                <span class="stat"><span class="stat-icon">📋</span> 13495 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/AprilNEA/OpenLogi">AprilNEA / OpenLogi</a></div>
+            </div>
+            <div class="description">
+                ⚡️Logitech Options+ 的原生、本地优先替代方案，用 Rust 编写 - 重新映射按钮、DPI 和 HID++ 上的 SmartShift。没有帐户，没有遥测。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!警告] OpenLogi 正在积极开发中，尚未稳定 - 功能和配置可能仍会发生变化。给该存储库一个 Star ⭐ 并观看 👀，以便在新版本发布时收到通知。厌倦了Options+？尝试 OpenLogi。在 macOS、Linux 和 Windows 上运行。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenLogi 正在积极开发中，尚未稳定 - 功能和配置可能仍会发生变化。给该存储库一个 Star ⭐ 并观看 👀，以便在新版本发布时收到通知。厌倦了Options+？尝试 OpenLogi。在 macOS、Linux 和 Windows 上运行。 OpenLogi 可以做而 Options+ 不会做的事情：</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">dpi</span><span class="topic-badge">gpui</span><span class="topic-badge">hid</span><span class="topic-badge">hidpp</span><span class="topic-badge">local-first</span><span class="topic-badge">logitech</span><span class="topic-badge">logitech-mouse</span><span class="topic-badge">logitech-options</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 13,988</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +959 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 375</span>
+                <span class="stat"><span class="stat-icon">📋</span> 260 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openlogi.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/ripienaar/free-for-dev">ripienaar / free-for-dev</a></div>
+            </div>
+            <div class="description">
+                具有 devops 和 infradev 感兴趣的免费级别的 SaaS、PaaS 和 IaaS 产品列表
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：开发人员和开源作者现在有许多提供免费套餐的服务，但找到所有这些服务需要时间才能做出明智的决定。这是具有免费开发者级别的软件（SaaS、PaaS、IaaS 等）和其他产品的列表。此特定列表的范围仅限于基础设施开发人员（系统管理员、DevOps 从业者等）可能会发现有用的内容
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">* 功能切换管理平台 * 字体 * 表单 * 生成人工智能 * Kaggle - Jupyter 笔记本电脑，具有 4 个 CPU 核心和 30 GB RAM 计算环境，没有任何每周使用限制。通过电话号码验证，可以添加 1 个 Nvidia Tesla P100 GPU 或 2 个 Nvidia Tesla T4 GPU，但有使用限制……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">awesome-list</span><span class="topic-badge">free-for-developers</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#e34c26"></span>HTML</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 133,938</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +829 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 14,029</span>
+                <span class="stat"><span class="stat-icon">📋</span> 13 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于10小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://free-for.dev/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/obra/superpowers">obra / superpowers</a></div>
+            </div>
+            <div class="description">
+                有效的代理技能框架和软件开发方法。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Superpowers 是一种适用于编码代理的完整软件开发方法，建立在一组可组合技能和一些确保您的代理使用它们的初始指令之上。如何运作 商业服务入门
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Superpowers 是一种适用于编码代理的完整软件开发方法，建立在一组可组合技能和一些确保您的代理使用它们的初始指令之上。商业服务如何运作</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">brainstorming</span><span class="topic-badge">coding</span><span class="topic-badge">obra</span><span class="topic-badge">sdlc</span><span class="topic-badge">skills</span><span class="topic-badge">subagent-driven-development</span><span class="topic-badge">superpowers</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 276,210</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +592 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 24,704</span>
+                <span class="stat"><span class="stat-icon">📋</span> 308 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/mahlernim/google-timeline-visualizer">mahlernim / google-timeline-visualizer</a></div>
+            </div>
+            <div class="description">
+                使用您的 Google 位置记录（时间轴）数据可视化您这一年的旅行情况
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：한국어 안내 · 日本語 Turn your Timeline file into an animated travel video on your Android phone. Choose exact dates, preview the Journey, and create an MP4 ready to watch or share. Open the iPhone web app
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">您可以选择保存或共享 1080 × 1080 旅程概览，或创建另一个视频。成功加载时间轴后，应用程序会记住其文档引用，并在新视频打开时重新打开它，并且存储提供商保留访问权限。它不复制时间线数据。如果文件被移动...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#A97BFF"></span>Kotlin</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,577</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +441 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 303</span>
+                <span class="stat"><span class="stat-icon">📋</span> 8 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于10小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a></div>
+            </div>
+            <div class="description">
+                代理利用性能优化系统。 Claude Code、Codex、Opencode、Cursor 等的技能、直觉、记忆、安全性和研究优先的开发。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：英语 葡萄牙语（巴西） Türkçe
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">ECC 是 MIT 许可的开源软件。它目前与 Claude Code 配合得最好，具有受支持的 Codex 同步路径，并为 Cursor、OpenCode、Gemini、Zed、GitHub Copilot、Antigravity、Qwen 和其他工具提供功能有限的适配器。在假设功能奇偶校验之前，请参阅支持状态矩阵。空调…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">anthropic</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span><span class="topic-badge">mcp</span><span class="topic-badge">productivity</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 242,192</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +411 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 36,702</span>
+                <span class="stat"><span class="stat-icon">📋</span> 148 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ecc.tools" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/modular/modular">modular / modular</a></div>
+            </div>
+            <div class="description">
+                模块化平台（包括 MAX 和 Mojo）
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[关于模块化] | [最大文档] | [Mojo 文档] | [贡献] 此存储库托管模块化平台的开源组件，模块化平台是用于人工智能开发和部署的统一平台，包括 MAX 框架🧑‍🚀 和 Mojo 语言🔥。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">[关于模块化] | [最大文档] | [Mojo 文档] | [贡献] 此存储库托管模块化平台的开源组件，模块化平台是用于人工智能开发和部署的统一平台，包括 MAX 框架🧑‍🚀 和 Mojo 语言🔥。代码示例：/max/examples + /mojo/examples 我们接受贡献...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">language</span><span class="topic-badge">machine-learning</span><span class="topic-badge">max</span><span class="topic-badge">modular</span><span class="topic-badge">mojo</span><span class="topic-badge">programming-language</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>Mojo</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 28,853</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +395 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,066</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1112 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.modular.com/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/multica-ai/andrej-karpathy-skills">multica-ai / andrej-karpathy-skills</a></div>
+            </div>
+            <div class="description">
+                用于改进 Claude 代码行为的单个 CLAUDE.md 文件，源自 Andrej Karpathy 对 LLM 编码陷阱的观察。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Check out my new project Multica — an open-source platform for running and managing coding agents with reusable skills. Follow me on X: https://x.com/jiayuan_jy A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls. English | 简体中文
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">解决问题的最少代码。没什么投机的。对抗过度设计的趋势：没有超出要求的功能没有对一次性代码的抽象没有超出要求的功能没有对一次性代码的抽象没有不要求的“灵活性”或“可配置性”......</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>未指定</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 205,335</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +315 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 21,008</span>
+                <span class="stat"><span class="stat-icon">📋</span> 126 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4个月前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/cursor/plugins">cursor / plugins</a></div>
+            </div>
+            <div class="description">
+                光标插件规范和官方插件
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：适用于流行的开发人员工具、框架和 SaaS 产品的官方 Cursor 插件。每个插件都是存储库根目录中的独立目录，具有自己的 .cursor-plugin/plugin.json 清单。作者值与每个插件的plugin.jsonauthor.name相匹配（光标在清单中列出了plugins@cursor.com）。这是一个多插件市场存储库。根 .cursor-plugin/marketplace.json 列出了所有
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">适用于流行的开发人员工具、框架和 SaaS 产品的官方 Cursor 插件。每个插件都是存储库根目录中的独立目录，具有自己的 .cursor-plugin/plugin.json 清单。作者值与每个插件的plugin.jsonauthor.name相匹配（光标在清单中列出了plugins@cursor.com...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 4,679</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +286 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 382</span>
+                <span class="stat"><span class="stat-icon">📋</span> 53 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/PostHog/posthog">PostHog / posthog</a></div>
+            </div>
+            <div class="description">
+                🦔 PostHog 是构建自动驾驶产品的领先平台。我们的开发工具——人工智能可观测性、分析、会话重放、标记、实验、错误跟踪、日志等——捕获代理诊断问题、发现机会和发布修复所需的所有上下文。从 Slack、Web、桌面或 MCP 掌控一切。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：PostHog 提供构建成功产品所需的所有工具，并捕获代理主动诊断问题、发现机会和发布修复所需的所有上下文： 自动驾驶模式：将产品数据中的信号（错误、愤怒的点击、失败的查询等）转化为研究报告以及您审查和合并的拉取请求。产品分析：自动捕获或手动检测
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">PostHog 提供构建成功产品所需的所有工具，并捕获代理主动诊断问题、发现机会和修复问题所需的所有上下文： 自动驾驶模式：将产品数据中的信号（错误、愤怒的点击、失败的查询等）转化为研究的结果……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ab-testing</span><span class="topic-badge">ai-analytics</span><span class="topic-badge">analytics</span><span class="topic-badge">cdp</span><span class="topic-badge">data-warehouse</span><span class="topic-badge">experiments</span><span class="topic-badge">feature-flags</span><span class="topic-badge">javascript</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 38,628</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +286 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,244</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5195 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://posthog.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/Wei-Shaw/sub2api">Wei-Shaw / sub2api</a></div>
+            </div>
+            <div class="description">
+                Sub2API 一站式开源中转服务，让 Claude、Openai 、Gemini、Grok订阅统一接入，支持拼车共享，更高效分摊成本，原生工具无缝使用。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：AI API Gateway Platform for Subscription Quota Distribution English | 中文 | 日本語 Please read the following carefully before using this project: 🚨 Terms of Service Risk: Using this project may violate the terms of service of Anthropic and other upstream providers. Please review the relevant providers' user agreements before use; all risks arising from such use are borne solely by the user.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">感谢PPToken.cc对本项目的赞助！ PPToken.cc 专注于 GPT 模型 API 中继服务，支持 Codex、Claude Code、OpenAI 兼容客户端和 Gemini CLI 集成。充值比例为 1:1（1 日元 = 1 美元积分）； GPT 模型的起始速率为 0.16 倍，总体成本约为 2...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">2api</span><span class="topic-badge">antigravity2api</span><span class="topic-badge">cc2api</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">crs</span><span class="topic-badge">crs2</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 38,803</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +278 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,039</span>
+                <span class="stat"><span class="stat-icon">📋</span> 2800 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8小时前</span><span class="stat"><span class="stat-icon">📄</span> LGPL-3.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/makeplane/plane">makeplane / plane</a></div>
+            </div>
+            <div class="description">
+                🔥🔥🔥 开源 Jira、Linear、Monday 和 ClickUp 替代方案。 Plane 是一个现代项目管理平台，用于管理任务、冲刺、文档和分类。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：网站 • 论坛 • src="https://media.docs.plane.so/GitHub-readme/github-top.webp" alt="平面屏幕"
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">在 Plane Cloud 上注册免费帐户 - 这是启动和运行的最快方式，无需担心基础设施。自托管平面 想要完全控制您的数据和基础设施？在您自己的服务器上安装并运行 Plane。请按照我们详细的部署指南开始。实例…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">boards</span><span class="topic-badge">bug-tracker</span><span class="topic-badge">django</span><span class="topic-badge">docker</span><span class="topic-badge">gantt</span><span class="topic-badge">issue-tracker</span><span class="topic-badge">jira</span><span class="topic-badge">jira-alternative</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 57,241</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +263 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,446</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1081 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="http://plane.so" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/Tencent/AI-Infra-Guard">Tencent / AI-Infra-Guard</a></div>
+            </div>
+            <div class="description">
+                全栈 AI 红队平台通过代理扫描、技能扫描、MCP 扫描、AI 基础设施扫描和 LLM 越狱评估来保护 AI 生态系统。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：📖 Documentation  |  🌐 🇨🇳 中文 · 🇯🇵 日本語 · 🇪🇸 Español · 🇩🇪 Deutsch · 🇫🇷 Français · 🇰🇷 한국어 · 🇧🇷 Português · 🇷🇺 Русский A.I.G (AI-Infra-Guard) integrates capabilities such as ClawScan(OpenClaw Security Scan), Agent Scan，AI infra vulnerability scan, MCP Server &amp; Agent Skills scan, and Jailbreak Evaluation, aiming to provide users with the most comprehensive, intelligent, and user-friendly solution for AI
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A.I.G（AI-Infra-Guard）集成了ClawScan（OpenClaw安全扫描）、Agent Scan、AI基础设施漏洞扫描、MCP服务器和Agent技能扫描、越狱评估等功能，旨在为用户提供最全面、智能、人性化的AI安全风险解决方案……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agent-security</span><span class="topic-badge">ai-infra</span><span class="topic-badge">ai-red-teaming</span><span class="topic-badge">ai-security</span><span class="topic-badge">llm</span><span class="topic-badge">llm-evaluation</span><span class="topic-badge">llm-jailbreak</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,517</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +150 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 521</span>
+                <span class="stat"><span class="stat-icon">📋</span> 26 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tencent.github.io/AI-Infra-Guard/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/n8n-io/n8n">n8n-io / n8n</a></div>
+            </div>
+            <div class="description">
+                具有原生 AI 功能的公平代码工作流程自动化平台。将可视化构建与自定义代码、自托管或云、400 多个集成相结合。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：用于构建和部署人工智能代理和工作流程的公平代码平台。将可视化画布与自定义代码相结合，自行托管或在云中运行，并连接到 1500 多个集成。从原型到生产的实际工作中，您可以信赖人工智能自动化。 AI 原生自动化平台：使用您自己的数据、模型和工具构建和操作 AI 工作流程和多步骤代理。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">💡 示例工作流程 🤖 AI 和 LangChain 指南 👥 社区论坛 📖 社区教程 企业许可证可用于附加功能和支持。有关许可模型的其他信息可以在文档中找到。发现错误🐛或有功能想法✨？查看我们的贡献指南以了解…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">apis</span><span class="topic-badge">automation</span><span class="topic-badge">cli</span><span class="topic-badge">data-flow</span><span class="topic-badge">development</span><span class="topic-badge">integration-framework</span><span class="topic-badge">integrations</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 201,841</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +149 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 60,307</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1069 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://n8n.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/anthropics/claude-code">anthropics / claude-code</a></div>
+            </div>
+            <div class="description">
+                Claude Code 是一种代理编码工具，位于您的终端中，了解您的代码库，并通过执行例行任务、解释复杂代码和处理 git 工作流程来帮助您更快地编码 - 所有这些都通过自然语言命令进行。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Claude Code 是一种代理编码工具，它位于您的终端中，了解您的代码库，并通过执行例行任务、解释复杂代码和处理 git 工作流程来帮助您更快地编码 - 所有这些都通过自然语言命令进行。在您的终端、IDE 或 Github 上的标签 @claude 中使用它。在官方文档中了解更多信息。 [!NOTE] 不推荐通过 npm 安装。使用其中之一
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">当您使用 Claude Code 时，我们会收集反馈，其中包括使用数据（例如代码接受或拒绝）、相关对话数据以及通过 /bug 命令提交的用户反馈。请参阅我们的数据使用政策。我们实施了多项保护措施来保护您的数据，包括限制……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 142,558</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +127 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 22,838</span>
+                <span class="stat"><span class="stat-icon">📋</span> 15081 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://code.claude.com/docs/en/overview" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">17</div>
+                <div class="card-title"><a href="https://github.com/microsoft/TypeScript">microsoft / TypeScript</a></div>
+            </div>
+            <div class="description">
+                TypeScript 是 JavaScript 的超集，可编译为干净的 JavaScript 输出。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：TypeScript 是一种用于应用程序规模的 JavaScript 语言。 TypeScript 向 JavaScript 添加了可选类型，支持用于任何浏览器、任何主机、任何操作系统的大规模 JavaScript 应用程序的工具。 TypeScript 编译为可读的、基于标准的 JavaScript。在游乐场尝试一下，并通过我们的博客和 Twitter 帐户了解最新动态。在我们的社区查找其他正在使用 TypeScript 的人
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">有关我们计划的功能和未来方向的详细信息，请参阅我们的路线图。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">javascript</span><span class="topic-badge">language</span><span class="topic-badge">typechecker</span><span class="topic-badge">typescript</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 110,546</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +104 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 13,745</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5203 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.typescriptlang.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
