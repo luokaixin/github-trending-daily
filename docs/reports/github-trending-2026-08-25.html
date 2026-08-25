@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-08-25</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-08-25 · 共 19 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">19</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">5</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">12,929</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/freestylefly/awesome-gpt-image-2">freestylefly / awesome-gpt-image-2</a></div>
+            </div>
+            <div class="description">
+                Prompt as Code | GPT-Image2 工业级提示词引擎与模板库，530+ 个案例逆向工程，20+ 套工业级模板，并提炼出Skills，持续更新中
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai-image-generation</span><span class="topic-badge">chatgpt</span><span class="topic-badge">dsh-plugin</span><span class="topic-badge">gpt-image-2</span><span class="topic-badge">image-prompts</span><span class="topic-badge">prompt-as-code</span><span class="topic-badge">prompt-engineering</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 15,651</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,449 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,655</span>
+                <span class="stat"><span class="stat-icon">📋</span> 12 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于15小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://gpt-image2.canghe.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/openai/codex">openai / codex</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 117,155</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,994 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 17,863</span>
+                <span class="stat"><span class="stat-icon">📋</span> 13701 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/AprilNEA/OpenLogi">AprilNEA / OpenLogi</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">dpi</span><span class="topic-badge">gpui</span><span class="topic-badge">hid</span><span class="topic-badge">hidpp</span><span class="topic-badge">local-first</span><span class="topic-badge">logitech</span><span class="topic-badge">logitech-mouse</span><span class="topic-badge">logitech-options</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 15,915</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,097 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 432</span>
+                <span class="stat"><span class="stat-icon">📋</span> 282 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openlogi.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/basecamp/omarchy">basecamp / omarchy</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 30,214</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,056 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,064</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1462 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://omarchy.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/NousResearch/hermes-agent">NousResearch / hermes-agent</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agent</span><span class="topic-badge">ai-agents</span><span class="topic-badge">anthropic</span><span class="topic-badge">chatgpt</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 235,850</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +896 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 47,589</span>
+                <span class="stat"><span class="stat-icon">📋</span> 35480 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://hermes-agent.nousresearch.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/Alishahryar1/free-claude-code">Alishahryar1 / free-claude-code</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 49,051</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +891 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,006</span>
+                <span class="stat"><span class="stat-icon">📋</span> 346 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/VoltAgent/awesome-agent-skills">VoltAgent / awesome-agent-skills</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-agents</span><span class="topic-badge">awesome</span><span class="topic-badge">awesome-list</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-skills</span><span class="topic-badge">claude-skills</span><span class="topic-badge">codex-skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>未指定</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 31,919</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +602 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,400</span>
+                <span class="stat"><span class="stat-icon">📋</span> 15 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于19小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://officialskills.sh/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/multica-ai/andrej-karpathy-skills">multica-ai / andrej-karpathy-skills</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Check out my new project Multica — an open-source platform for running and managing coding agents with reusable skills. Follow me on X: https://x.com/jiayuan_jy A single CLAUDE.md file to improve Claude Code behavior, derived from Andrej Karpathy's observations on LLM coding pitfalls. English | 简体中文
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>未指定</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 206,572</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +588 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 21,092</span>
+                <span class="stat"><span class="stat-icon">📋</span> 129 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4个月前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/tinyhumansai/openhuman">tinyhumansai / openhuman</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 37,295</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +515 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,701</span>
+                <span class="stat"><span class="stat-icon">📋</span> 290 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tinyhumans.ai/openhuman" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/anthropics/claude-plugins-community">anthropics / claude-plugins-community</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 1,377</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +489 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 155</span>
+                <span class="stat"><span class="stat-icon">📋</span> 39 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/MadsLorentzen/ai-job-search">MadsLorentzen / ai-job-search</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">career</span><span class="topic-badge">claude-code</span><span class="topic-badge">cover-letter</span><span class="topic-badge">cv</span><span class="topic-badge">interview-preparation</span><span class="topic-badge">job-application</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 34,130</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +434 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 11,909</span>
+                <span class="stat"><span class="stat-icon">📋</span> 6 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/apache/maka">apache / maka</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；近期新项目；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-runtime</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agent</span><span class="topic-badge">apache</span><span class="topic-badge">cli</span><span class="topic-badge">desktop</span><span class="topic-badge">electron</span><span class="topic-badge">event-sourcing</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,941</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +411 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 307</span>
+                <span class="stat"><span class="stat-icon">📋</span> 249 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/rohitg00/ai-engineering-from-scratch">rohitg00 / ai-engineering-from-scratch</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-engineering</span><span class="topic-badge">computer-vision</span><span class="topic-badge">course</span><span class="topic-badge">deep-learning</span><span class="topic-badge">from-scratch</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 48,324</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +349 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,506</span>
+                <span class="stat"><span class="stat-icon">📋</span> 94 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aiengineeringfromscratch.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/AgriciDaniel/claude-obsidian">AgriciDaniel / claude-obsidian</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-note-taking</span><span class="topic-badge">ai-second-brain</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-skill</span><span class="topic-badge">claude-memory</span><span class="topic-badge">claude-plugin</span><span class="topic-badge">karpathy-llm-wiki</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,949</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +310 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,338</span>
+                <span class="stat"><span class="stat-icon">📋</span> 133 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于23天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://agricidaniel.com/blog/claude-obsidian-ai-second-brain" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/makeplane/plane">makeplane / plane</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">boards</span><span class="topic-badge">bug-tracker</span><span class="topic-badge">django</span><span class="topic-badge">docker</span><span class="topic-badge">gantt</span><span class="topic-badge">issue-tracker</span><span class="topic-badge">jira</span><span class="topic-badge">jira-alternative</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 57,967</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +243 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,492</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1083 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="http://plane.so" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/dani-garcia/vaultwarden">dani-garcia / vaultwarden</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">bitwarden</span><span class="topic-badge">bitwarden-rs</span><span class="topic-badge">docker</span><span class="topic-badge">rocket</span><span class="topic-badge">rust</span><span class="topic-badge">vaultwarden</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 66,132</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +175 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,140</span>
+                <span class="stat"><span class="stat-icon">📋</span> 85 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">17</div>
+                <div class="card-title"><a href="https://github.com/tashfeenahmed/freellmapi">tashfeenahmed / freellmapi</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 19,812</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +174 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,883</span>
+                <span class="stat"><span class="stat-icon">📋</span> 58 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://freellmapi.co" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">18</div>
+                <div class="card-title"><a href="https://github.com/openclaw/openclaw">openclaw / openclaw</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">assistant</span><span class="topic-badge">crustacean</span><span class="topic-badge">molty</span><span class="topic-badge">openclaw</span><span class="topic-badge">own-your-data</span><span class="topic-badge">personal</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 387,439</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +173 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 81,349</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5921 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openclaw.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">19</div>
+                <div class="card-title"><a href="https://github.com/PostHog/posthog">PostHog / posthog</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ab-testing</span><span class="topic-badge">ai-analytics</span><span class="topic-badge">analytics</span><span class="topic-badge">cdp</span><span class="topic-badge">data-warehouse</span><span class="topic-badge">experiments</span><span class="topic-badge">feature-flags</span><span class="topic-badge">javascript</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 39,012</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +83 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,275</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5145 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://posthog.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
