@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-08-28</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-08-28 · 共 19 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">19</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">6</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">15,956</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/tt-a1i/archify">tt-a1i / archify</a></div>
+            </div>
+            <div class="description">
+                具有漂亮、可验证的架构、工作流程、序列、数据流和生命周期图的代理技能——具有动态和清晰导出功能的独立 HTML。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：将代码库或系统描述直接在聊天中转变为精美的交互式系统图。 Archify 是一个适用于 Cursor、Claude Code、Codex CLI 和 OpenCode 的 Node.js 渲染和验证系统。代理生成类型化的 JSON IR； Archify 确定地将其编译为 HTML/SVG。打开它并呈现 — 五种图表类型、四种预设、深色/浅色主题、内置品牌标记和有限运动 R
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">在本地打开 example/web-app.html 以尝试完整的查看器。 `bash npx 技能 add tt-a1i/archify -g 对于显式、非交互式光标安装：架构示例：Web 应用程序 · Archify 管道 · 网格放置 · 桌面代理 布局判断对通用自动布局 - 代理选择 hiera...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">architecture-as-code</span><span class="topic-badge">architecture-diagram</span><span class="topic-badge">claude-skill</span><span class="topic-badge">code-visualization</span><span class="topic-badge">codex</span><span class="topic-badge">coding-agents</span><span class="topic-badge">data-flow-diagram</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 25,471</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +4,561 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,636</span>
+                <span class="stat"><span class="stat-icon">📋</span> 53 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tt-a1i.github.io/archify/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/bilawalsidhu/gods-eye-view">bilawalsidhu / gods-eye-view</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">复制 .​​env.example → .env 并设置 GOOGLE_MAPS_API_KEY。 2. 安装并运行：`bash npm install 帮助我在 Google 密钥上设置计费警报和使用配额，这样我就不会超支。然后启动开发服务器并在浏览器中打开它。我不是开发人员 - 解释一下你在做什么，并询问......</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日爆发式增长；近期新项目；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">3d-globe</span><span class="topic-badge">cesium</span><span class="topic-badge">flight-tracking</span><span class="topic-badge">geospatial</span><span class="topic-badge">geospatial-intelligence</span><span class="topic-badge">gis</span><span class="topic-badge">osint</span><span class="topic-badge">photogrammetry</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 9,995</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,984 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,071</span>
+                <span class="stat"><span class="stat-icon">📋</span> 87 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://maptheworld.ai/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/freestylefly/awesome-gpt-image-2">freestylefly / awesome-gpt-image-2</a></div>
+            </div>
+            <div class="description">
+                Prompt as Code | GPT-Image2 工业级提示词引擎与模板库，530+ 个案例逆向工程，20+ 套工业级模板，并提炼出Skills，持续更新中
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：使用 gpt-image2.canghe.ai 上的实时站点将浏览图库作为产品体验：打开大型预览、复制完整提示、按样式或场景过滤、Google 登录后测试生成，以及跳回到 GitHub 上的源案例。加入 GPT-Image2 讨论组，与其他用户交流提示、工作流程和创意。访问社区页面即可加入。关注微信
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">GPT-Image2广泛应用后，AI图像生成从“它能生成图像吗？”转变为“它能生成图像吗？”到“能否制作出稳定、可控、可重复使用的图像？”该项目将分散的社区示例转变为“提示即代码”资产，更易于代理和自动化工作流程重用。核心...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai-image-generation</span><span class="topic-badge">chatgpt</span><span class="topic-badge">dsh-plugin</span><span class="topic-badge">gpt-image-2</span><span class="topic-badge">image-prompts</span><span class="topic-badge">prompt-as-code</span><span class="topic-badge">prompt-engineering</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 23,960</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,687 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,371</span>
+                <span class="stat"><span class="stat-icon">📋</span> 17 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://gpt-image2.canghe.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/DietrichGebert/ponytail">DietrichGebert / ponytail</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">您需要一个日期选择器。您的代理安装 flatpickr，编写包装器组件，添加样式表，并开始有关时区的讨论。马尾辫：`html 更多幸存者在示例/中。示例/中有更多幸存者。诚实的衡量标准是一个真正的代理人在做真正的工作：一个无头的克劳德·C……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；近期新项目</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-agents</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-plugin</span><span class="topic-badge">cursor-rules</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 114,796</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,396 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,269</span>
+                <span class="stat"><span class="stat-icon">📋</span> 177 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于20天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ponytail.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/calesthio/OpenMontage">calesthio / OpenMontage</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：粘贴视频  ·  快速入门  ·  尝试这些提示  ·  管道  ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；本周有更新</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agentic-ai</span><span class="topic-badge">ai</span><span class="topic-badge">claude</span><span class="topic-badge">copilot</span><span class="topic-badge">cursor</span><span class="topic-badge">elevenlabs</span><span class="topic-badge">ffmpeg</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 52,903</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,144 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,602</span>
+                <span class="stat"><span class="stat-icon">📋</span> 253 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5天前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.openmontage.video/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/tailscale/tailcat">tailscale / tailcat</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Tailcat 是 Tailscale 开源部分的混合版，其行为类似于 netcat，但在 Tailscale 的数据平面上，没有 Tailscale 的控制平面。 Tailscale 的数据平面（magicsock，内部）为您提供两个之间的点对点 WireGuard® 加密隧道
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Tailcat 是 Tailscale 开源部分的混合版，其行为类似于 netcat，但在 Tailscale 的数据平面上，没有 Tailscale 的控制平面。 Tailscale 的数据平面（magicsock、</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,287</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +986 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 63</span>
+                <span class="stat"><span class="stat-icon">📋</span> 9 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> BSD-3-Clause</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tailscale.com/tailcat" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/K-Dense-AI/scientific-agent-skills">K-Dense-AI / scientific-agent-skills</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🔔 克劳德科学技能现在是科学特工技能。相同的技能，更广泛的兼容性——现在可以与任何支持开放代理技能标准的人工智能代理一起使用，而不仅仅是克劳德。新功能：K-Dense BYOK — 一个免费的开源 AI 联合科学家，在您的桌面上运行，由 Scientific Agent Skills 提供支持。携带您自己的 API 密钥，从 40 多个模型中进行选择，并通过网络搜索获得完整的研究工作区
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">保持最新动态：在 X、LinkedIn、YouTube 和 Reddit 上关注 K-Dense，了解新技能、发布公告、演练、研究工作流程演示以及可与您自己的 AI 代理一起使用的示例。全面收集 163 种即用型科学研究技能（涵盖癌症基因组学、……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；本周有更新</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-scientist</span><span class="topic-badge">bioinformatics</span><span class="topic-badge">chemoinformatics</span><span class="topic-badge">claude</span><span class="topic-badge">claude-skills</span><span class="topic-badge">claudecode</span><span class="topic-badge">clinical-research</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 35,741</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +720 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,434</span>
+                <span class="stat"><span class="stat-icon">📋</span> 11 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://k-dense.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/rohitg00/ai-engineering-from-scratch">rohitg00 / ai-engineering-from-scratch</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；本周有更新</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-engineering</span><span class="topic-badge">computer-vision</span><span class="topic-badge">course</span><span class="topic-badge">deep-learning</span><span class="topic-badge">from-scratch</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 50,452</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +703 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,762</span>
+                <span class="stat"><span class="stat-icon">📋</span> 97 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aiengineeringfromscratch.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/JetBrains/go-modern-guidelines">JetBrains / go-modern-guidelines</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">例如，遵循这些准则的代理使用 max(a, b) 代替 if-else 块，使用 slices.Contains 代替手动循环，使用 cmp.Or(a, b, c) 代替 nil 检查链。它还知道最近添加的内容，例如 new(42) 来获取指向值的指针和 error.AsTypeT 用于类型安全错误垫...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">coding-agent</span><span class="topic-badge">developer-tools</span><span class="topic-badge">go</span><span class="topic-badge">golang</span><span class="topic-badge">guidelines</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,428</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +574 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 74</span>
+                <span class="stat"><span class="stat-icon">📋</span> 9 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/anthropics/claude-plugins-official">anthropics / claude-plugins-official</a></div>
+            </div>
+            <div class="description">
+                由 Anthropic 管理的官方高品质 Claude 代码插件目录。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Claude Code 的高质量插件精选目录。 ⚠️ 重要提示：在安装、更新或使用插件之前，请确保您信任该插件。 Anthropic 无法控制插件中包含哪些 MCP 服务器、文件或其他软件，也无法验证它们是否会按预期工作或不会更改。请参阅每个插件的主页以获取更多信息。 /plugins - 内部插件开发
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">claude-code</span><span class="topic-badge">mcp</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 34,850</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +457 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,924</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1050 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://code.claude.com/docs/en/plugins" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/tashfeenahmed/freellmapi">tashfeenahmed / freellmapi</a></div>
+            </div>
+            <div class="description">
+                每月 74 亿个代币。 34 个免费的法学硕士提供商。 635 个免费模型端点。所有这些都位于一个 /v1 端点以及任何自定义 OpenAI 兼容端点之后。智能路由、自动故障转移、加密密钥。仅个人实验。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 21,312</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +405 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,034</span>
+                <span class="stat"><span class="stat-icon">📋</span> 65 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于12小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://freellmapi.co" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/abi/screenshot-to-code">abi / screenshot-to-code</a></div>
+            </div>
+            <div class="description">
+                放入屏幕截图并将其转换为干净的代码（HTML/Tailwind/React/Vue）
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：使用 AI 将屏幕截图、模型、Figma 设计和屏幕录制转换为干净、实用的代码。最简单的尝试方法是使用 Screenshottocode.com 上的官方托管产品 → https://github.com/user-attachments/assets/ec08a5e6-9606-41c5-b03a-1bf47dfeba75 支持的堆栈：HTML + Tailwind
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">有关更多演示，请参阅下面的示例部分。屏幕截图到代码还支持对正在运行的网站进行屏幕录制，并将其转化为功能原型。选择适合您想要执行的操作的路径： 本地运行：如果您想要自定义、自托管或贡献，则最好。怎样才能……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 75,263</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +309 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,201</span>
+                <span class="stat"><span class="stat-icon">📋</span> 130 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于13天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://screenshottocode.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/cursor/plugins">cursor / plugins</a></div>
+            </div>
+            <div class="description">
+                光标插件规范和官方插件
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,826</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +257 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 472</span>
+                <span class="stat"><span class="stat-icon">📋</span> 80 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于13小时前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/marin-community/marin">marin-community / marin</a></div>
+            </div>
+            <div class="description">
+                用于基础模型研究和开发的开源框架。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：“我不怕暴风雨，因为我正在学习如何驾驶我的船。” – Louisa May Alcott Marin 是一个用于基础模型研究和开发的研究程序、软件平台和社区。马林关心的是训练大型语言模型。这包括数据管理、转换、过滤、标记化、预训练、后训练和评估。除了文物、软件之外，
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">作为如何使用 Marin 的简单示例，这里有一个用于在 TinyStories 上训练微型模型的完整脚本。您可以查看完整的脚本以了解更多详细信息。 `python from fray.cluster import ResourceConfig 有关可加载代理技能，请参阅 .agents/skills/ （也可参见 .claude/skills/）。例如，.age...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,796</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +236 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 233</span>
+                <span class="stat"><span class="stat-icon">📋</span> 581 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://marin.community" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/abhigyanpatwari/GitNexus">abhigyanpatwari / GitNexus</a></div>
+            </div>
+            <div class="description">
+                GitNexus：零服务器代码智能引擎 - GitNexus 是一个完全在浏览器中运行的客户端知识图创建器。放入 git 存储库（Github、Gitlab、Azure、本地）或 ZIP 文件，并获取带有内置 Graph RAG 代理的交互式知识图。非常适合代码探索
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 46,022</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +189 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,088</span>
+                <span class="stat"><span class="stat-icon">📋</span> 335 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于13小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://gitnexus.vercel.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/google/googletest">google / googletest</a></div>
+            </div>
+            <div class="description">
+                GoogleTest - Google 测试和模拟框架
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：我们的文档现已发布在 GitHub Pages 上：https://google.github.io/googletest/。我们建议浏览 GitHub Pages 上的文档，而不是直接在存储库中浏览。版本 1.18.0 是
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f34b7d"></span>C++</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 39,110</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +156 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,868</span>
+                <span class="stat"><span class="stat-icon">📋</span> 491 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> BSD-3-Clause</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://google.github.io/googletest/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">17</div>
+                <div class="card-title"><a href="https://github.com/NationalSecurityAgency/ghidra">NationalSecurityAgency / ghidra</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Ghidra 是一个由国家安全局研究局创建和维护的软件逆向工程 (SRE) 框架。该框架包括一套功能齐全的高端软件分析工具，使用户能够在包括 Windows、macOS 和 Linux 在内的各种平台上分析编译的代码。能力包括拆卸、
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">功能齐全的高端软件分析工具，使用户能够在各种平台（包括 Windows、macOS 和 Linux）上分析编译的代码。功能包括反汇编、汇编、反编译、绘图和脚本编写，以及数百种其他功能。 Ghidra 支持广泛...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">disassembler</span><span class="topic-badge">reverse-engineering</span><span class="topic-badge">software-analysis</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#b07219"></span>Java</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 73,117</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +117 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,003</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1923 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.nsa.gov/ghidra" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">18</div>
+                <div class="card-title"><a href="https://github.com/ChromeDevTools/chrome-devtools-mcp">ChromeDevTools / chrome-devtools-mcp</a></div>
+            </div>
+            <div class="description">
+                用于编码代理的 Chrome DevTools
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：适用于代理的 Chrome DevTools (chrome-devtools-mcp) 可让您的编码代理（例如 Antigravity、Claude、Cursor 或 Copilot）控制和检查实时 Chrome 浏览器。它充当模型上下文协议 (MCP) 服务器，使您的 AI 编码助手能够访问 Chrome DevTools 的全部功能，以实现可靠的自动化、深入调试和性能分析。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">browser</span><span class="topic-badge">chrome</span><span class="topic-badge">chrome-devtools</span><span class="topic-badge">debugging</span><span class="topic-badge">devtools</span><span class="topic-badge">mcp</span><span class="topic-badge">mcp-server</span><span class="topic-badge">puppeteer</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 49,861</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +61 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,497</span>
+                <span class="stat"><span class="stat-icon">📋</span> 95 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://npmjs.org/package/chrome-devtools-mcp" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">19</div>
+                <div class="card-title"><a href="https://github.com/livekit/agents">livekit / agents</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">openai</span><span class="topic-badge">real-time</span><span class="topic-badge">video</span><span class="topic-badge">voice</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 13,211</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +14 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,625</span>
+                <span class="stat"><span class="stat-icon">📋</span> 794 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.livekit.io/agents" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
