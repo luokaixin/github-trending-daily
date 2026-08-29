@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-08-29</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-08-29 · 共 20 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">20</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">7</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">18,104</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/tt-a1i/archify">tt-a1i / archify</a></div>
+            </div>
+            <div class="description">
+                具有漂亮、可验证的架构、工作流程、序列、数据流和生命周期图的代理技能——具有动态和清晰导出功能的独立 HTML。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：将代码库或系统描述直接在聊天中转变为精美的交互式系统图。 Archify 是一个适用于 Cursor、Claude Code、Codex CLI 和 OpenCode 的 Node.js 渲染和验证系统。代理生成类型化的 JSON IR； Archify 确定地将其编译为 HTML/SVG。打开它并呈现 — 五种图表类型、四种预设、深色/浅色主题、内置品牌标记和有限运动 R
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">在本地打开 example/web-app.html 以尝试完整的查看器。 `bash npx 技能 add tt-a1i/archify -g 对于显式、非交互式光标安装：架构示例：Web 应用程序 · Archify 管道 · 网格放置 · 桌面代理 布局判断对通用自动布局 - 代理选择 hiera...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">architecture-as-code</span><span class="topic-badge">architecture-diagram</span><span class="topic-badge">claude-skill</span><span class="topic-badge">code-visualization</span><span class="topic-badge">codex</span><span class="topic-badge">coding-agents</span><span class="topic-badge">data-flow-diagram</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 28,530</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +4,562 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,791</span>
+                <span class="stat"><span class="stat-icon">📋</span> 63 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于12小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tt-a1i.github.io/archify/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/bilawalsidhu/gods-eye-view">bilawalsidhu / gods-eye-view</a></div>
+            </div>
+            <div class="description">
+                浏览器中的间谍卫星模拟器，只不过数据是真实的。在逼真的 3D 地球仪上实时呈现开源空间智能。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：逼真的 3D 地球仪。实时飞机、船舶、卫星、地震、交通和公共摄像机，在无法实时传输的情况下具有清晰标记的建模视图。由实时人工智能代理提供支持的免提语音控制。没有留下任何地方。 ▶️ 来自风靡一时的 God's Eye View 系列（以前称为 WorldView）背后的项目 — YouTube 上 5M+ 快速入门 · 前五分钟 · 与它交谈 · 什么
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">复制 .​​env.example → .env 并设置 GOOGLE_MAPS_API_KEY。 2. 安装并运行：`bash npm install 帮助我在 Google 密钥上设置计费警报和使用配额，这样我就不会超支。然后启动开发服务器并在浏览器中打开它。我不是开发人员 - 解释一下你在做什么，并询问......</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；近期新项目；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">3d-globe</span><span class="topic-badge">cesium</span><span class="topic-badge">flight-tracking</span><span class="topic-badge">geospatial</span><span class="topic-badge">geospatial-intelligence</span><span class="topic-badge">gis</span><span class="topic-badge">osint</span><span class="topic-badge">photogrammetry</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,484</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +3,829 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,314</span>
+                <span class="stat"><span class="stat-icon">📋</span> 88 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://maptheworld.ai/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/freestylefly/awesome-gpt-image-2">freestylefly / awesome-gpt-image-2</a></div>
+            </div>
+            <div class="description">
+                Prompt as Code | GPT-Image2 工业级提示词引擎与模板库，530+ 个案例逆向工程，20+ 套工业级模板，并提炼出Skills，持续更新中
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：使用 gpt-image2.canghe.ai 的实时站点将浏览库作为产品体验：打开大型预览、复制完整提示、按样式或场景过滤、Google 登录后测试生成，以及跳回到 GitHub 上的源案例。加入 GPT-Image2 讨论组，与其他用户交流提示、工作流程和创意。访问社区页面即可加入。关注微信
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">GPT-Image2广泛使用后，AI图像生成从“它能生成图像吗？”转变为“它能生成图像吗？”到“能否制作出稳定、可控、可重复使用的图像？”该项目将分散的社区示例转变为提示即代码资产，更易于代理和自动化工作流程重用。核心...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai-image-generation</span><span class="topic-badge">chatgpt</span><span class="topic-badge">dsh-plugin</span><span class="topic-badge">gpt-image-2</span><span class="topic-badge">image-prompts</span><span class="topic-badge">prompt-as-code</span><span class="topic-badge">prompt-engineering</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 24,501</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,687 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,420</span>
+                <span class="stat"><span class="stat-icon">📋</span> 17 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于21小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://gpt-image2.canghe.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/DietrichGebert/ponytail">DietrichGebert / ponytail</a></div>
+            </div>
+            <div class="description">
+                让你的人工智能代理像房间里最懒的高级开发人员一样思考。最好的代码是你从未编写过的代码。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：你认识他。长马尾辫。椭圆形眼镜。在公司工作的时间比版本控制还要长。你给他看五十行；他看了看它们，什么也没说，然后用一张代替了它们。马尾辫把他放入你的人工智能代理中。您需要一个日期选择器。您的代理安装 flatpickr，编写包装器组件，添加样式表，并开始有关时区的讨论。扎马尾辫：
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">您需要一个日期选择器。您的代理安装 flatpickr，编写包装器组件，添加样式表，并开始有关时区的讨论。马尾辫：`html 更多幸存者在示例/中。示例/中有更多幸存者。诚实的衡量标准是一个真正的代理人在做真正的工作：一个无头的克劳德·C……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；近期新项目</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-agents</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-plugin</span><span class="topic-badge">cursor-rules</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 115,692</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,396 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,322</span>
+                <span class="stat"><span class="stat-icon">📋</span> 180 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于21天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ponytail.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/calesthio/OpenMontage">calesthio / OpenMontage</a></div>
+            </div>
+            <div class="description">
+                世界上第一个开源的代理视频制作系统。 12 条生产管道、100 多种工具、700 多个代理技能和生产知识文件。将您的人工智能编码助手变成一个完整的视频制作工作室。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：粘贴视频  ·  快速入门  ·  尝试这些提示  ·  管道  ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">《最后的香蕉》——一部 60 秒的皮克斯风格动画短片，讲述了一只孤独的香蕉与猕猴桃建立友谊的故事。 6 个 Kling v3 生成的动作剪辑（来自 fal.ai）、Google Chirp3-HD 旁白、免版税钢琴音乐、TikTok 风格的文字级字幕和 Remotion 合成。总成本：1.33 美元。 “雷……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；本周有更新</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agentic-ai</span><span class="topic-badge">ai</span><span class="topic-badge">claude</span><span class="topic-badge">copilot</span><span class="topic-badge">cursor</span><span class="topic-badge">elevenlabs</span><span class="topic-badge">ffmpeg</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 53,506</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,144 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,670</span>
+                <span class="stat"><span class="stat-icon">📋</span> 259 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6天前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.openmontage.video/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/tailscale/tailcat">tailscale / tailcat</a></div>
+            </div>
+            <div class="description">
+                类似于 netcat，但通过 Tailscale 的数据平面，没有 Tailscale 的控制平面
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Tailcat 是 Tailscale 开源部分的混合版，其行为类似于 netcat，但在 Tailscale 的数据平面上，没有 Tailscale 的控制平面。 Tailscale 的数据平面（magicsock，内部）为您提供两个之间的点对点 WireGuard® 加密隧道
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Tailcat 是 Tailscale 开源部分的混合版，其行为类似于 netcat，但在 Tailscale 的数据平面上，没有 Tailscale 的控制平面。 Tailscale 的数据平面（magicsock、</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,961</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +965 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 82</span>
+                <span class="stat"><span class="stat-icon">📋</span> 11 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> BSD-3-Clause</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tailscale.com/tailcat" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/K-Dense-AI/scientific-agent-skills">K-Dense-AI / scientific-agent-skills</a></div>
+            </div>
+            <div class="description">
+                将任何人工智能代理变成人工智能科学家。排名第一的科学代理技能库，全球有 175,000 多名科学家使用。 163 种经过验证的现成技能以及 100 多个涵盖生物学、化学、医学和药物发现的科学数据库。与 Cursor、Claude Code、Codex、Pi、Antigravity 和开放代理技能标准兼容。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🔔 克劳德科学技能现在是科学特工技能。相同的技能，更广泛的兼容性——现在可以与任何支持开放代理技能标准的人工智能代理一起使用，而不仅仅是克劳德。新功能：K-Dense BYOK — 一个免费的开源 AI 联合科学家，在您的桌面上运行，由 Scientific Agent Skills 提供支持。携带您自己的 API 密钥，从 40 多个模型中进行选择，并通过网络搜索获得完整的研究工作区
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">保持最新动态：在 X、LinkedIn、YouTube 和 Reddit 上关注 K-Dense，了解新技能、发布公告、演练、研究工作流程演示以及可与您自己的 AI 代理一起使用的示例。全面收集 163 种即用型科学研究技能（涵盖癌症基因组学、……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-scientist</span><span class="topic-badge">bioinformatics</span><span class="topic-badge">chemoinformatics</span><span class="topic-badge">claude</span><span class="topic-badge">claude-skills</span><span class="topic-badge">claudecode</span><span class="topic-badge">clinical-research</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 37,000</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +720 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,512</span>
+                <span class="stat"><span class="stat-icon">📋</span> 18 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://k-dense.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/rohitg00/ai-engineering-from-scratch">rohitg00 / ai-engineering-from-scratch</a></div>
+            </div>
+            <div class="description">
+                学习它。建造它。寄给别人。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：西班牙语 · 法语 · 葡萄牙语 · 德语 ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">每节课都运行相同的循环：阅读问题、推导数学、编写代码、运行测试、保留工件。没有五分钟的视频，没有复制粘贴部署，没有手持操作。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；本周有更新</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-engineering</span><span class="topic-badge">computer-vision</span><span class="topic-badge">course</span><span class="topic-badge">deep-learning</span><span class="topic-badge">from-scratch</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 50,722</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +703 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,791</span>
+                <span class="stat"><span class="stat-icon">📋</span> 98 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aiengineeringfromscratch.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/JetBrains/go-modern-guidelines">JetBrains / go-modern-guidelines</a></div>
+            </div>
+            <div class="description">
+                帮助 AI 编码代理编写现代 Go
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：该存储库包含代码代理指南，可帮助他们编写现代 Go 代码。例如，遵循这些准则的代理使用 max(a, b) 代替 if-else 块，使用 slices.Contains 代替手动循环，使用 cmp.Or(a, b, c) 代替 nil 检查链。它还知道最近添加的内容，例如用于获取指向值的指针的 new(42) 和用于类型安全错误匹配的Errors.AsTypeT - 两者
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">例如，遵循这些准则的代理使用 max(a, b) 代替 if-else 块，使用 slices.Contains 代替手动循环，使用 cmp.Or(a, b, c) 代替 nil 检查链。它还知道最近添加的内容，例如 new(42) 来获取指向值的指针和 error.AsTypeT 用于类型安全错误垫...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">coding-agent</span><span class="topic-badge">developer-tools</span><span class="topic-badge">go</span><span class="topic-badge">golang</span><span class="topic-badge">guidelines</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,676</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +574 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 79</span>
+                <span class="stat"><span class="stat-icon">📋</span> 8 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/anthropics/claude-plugins-official">anthropics / claude-plugins-official</a></div>
+            </div>
+            <div class="description">
+                由 Anthropic 管理的官方高品质 Claude 代码插件目录。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Claude Code 的高质量插件精选目录。 ⚠️ 重要提示：在安装、更新或使用插件之前，请确保您信任该插件。 Anthropic 无法控制插件中包含哪些 MCP 服务器、文件或其他软件，也无法验证它们是否会按预期工作或不会更改。请参阅每个插件的主页以获取更多信息。 /plugins - 内部插件开发
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">内部插件由 Anthropic 团队成员开发。请参阅 /plugins/example-plugin 以获取参考实现。第三方合作伙伴可以提交插件以纳入市场。外部插件必须符合质量和安全标准才能获得批准。要提交新插件，请使用插件...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">claude-code</span><span class="topic-badge">mcp</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 35,132</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +457 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,940</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1049 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于12小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://code.claude.com/docs/en/plugins" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/tashfeenahmed/freellmapi">tashfeenahmed / freellmapi</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：每月 74 亿个代币。  34 个免费的法学硕士提供商。 635 个免费模型端点。一个 OpenAI 兼容端点。在单个 /v1 API 后面聚合来自数十家提供商的免费套餐，以及与 OpenAI 兼容的自定义聊天、嵌入、图像和音频端点。密钥以加密方式存储。路由器为每个请求选择最佳可用模型，当一个提供者受到速率限制时，将其移交给下一个提供者
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 21,761</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +433 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,076</span>
+                <span class="stat"><span class="stat-icon">📋</span> 67 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://freellmapi.co" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/abi/screenshot-to-code">abi / screenshot-to-code</a></div>
+            </div>
+            <div class="description">
+                放入屏幕截图并将其转换为干净的代码（HTML/Tailwind/React/Vue）
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：使用 AI 将屏幕截图、模型、Figma 设计和屏幕录制转换为干净、实用的代码。最简单的尝试方法是使用 Screenshottocode.com 上的官方托管产品 → https://github.com/user-attachments/assets/ec08a5e6-9606-41c5-b03a-1bf47dfeba75 支持的堆栈：HTML + Tailwind
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">有关更多演示，请参阅下面的示例部分。屏幕截图到代码还支持对正在运行的网站进行屏幕录制，并将其转化为功能原型。选择适合您想要执行的操作的路径： 本地运行：如果您想要自定义、自托管或贡献，则最好。怎样才能……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 75,698</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +326 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,224</span>
+                <span class="stat"><span class="stat-icon">📋</span> 131 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于14天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://screenshottocode.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/cursor/plugins">cursor / plugins</a></div>
+            </div>
+            <div class="description">
+                光标插件规范和官方插件
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：适用于流行开发人员工具、框架和 SaaS 产品的官方 Cursor 插件。每个插件都是存储库根目录中的独立目录，具有自己的 .cursor-plugin/plugin.json 清单。作者值与每个插件的plugin.jsonauthor.name相匹配（光标在清单中列出了plugins@cursor.com）。这是一个多插件市场存储库。根 .cursor-plugin/marketplace.json 列出了所有
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">适用于流行开发人员工具、框架和 SaaS 产品的官方 Cursor 插件。每个插件都是存储库根目录中的独立目录，具有自己的 .cursor-plugin/plugin.json 清单。作者值与每个插件的plugin.jsonauthor.name相匹配（光标在清单中列出了plugins@cursor.com...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,026</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +246 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 480</span>
+                <span class="stat"><span class="stat-icon">📋</span> 84 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于14小时前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/marin-community/marin">marin-community / marin</a></div>
+            </div>
+            <div class="description">
+                用于基础模型研究和开发的开源框架。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,930</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +236 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 241</span>
+                <span class="stat"><span class="stat-icon">📋</span> 567 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://marin.community" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/abhigyanpatwari/GitNexus">abhigyanpatwari / GitNexus</a></div>
+            </div>
+            <div class="description">
+                GitNexus：零服务器代码智能引擎 - GitNexus 是一个完全在浏览器中运行的客户端知识图创建器。放入 git 存储库（Github、Gitlab、Azure、本地）或 ZIP 文件，并获取带有内置 Graph RAG 代理的交互式知识图。非常适合代码探索
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：⚠️ 重要通知：GitNexus 没有官方加密货币、代币或硬币。 Pump.fun 或任何其他平台上使用 GitNexus 名称的任何代币/代币均不隶属于本项目或其维护者，也不由本项目或其维护者认可或创建。不要购买任何声称与 GitNexus 关联的加密货币。将任何代码库索引到知识图谱中 - 每个依赖项、调用链、集群和执行
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">关于 tree-sitter-kotlin：与 Dart/Proto/Swift 一样，Kotlin 是一种供应语法（位于 gitnexus/vendor/tree-sitter-kotlin 下）。上游仅提供源代码（没有预构建的二进制文件），因此 GitNexus 交叉构建平台预构建本身（通过 build-tree-sitter-prebuilds GitHub Actions 工作流程）和供应商……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 46,235</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +202 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,107</span>
+                <span class="stat"><span class="stat-icon">📋</span> 346 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://gitnexus.vercel.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/NationalSecurityAgency/ghidra">NationalSecurityAgency / ghidra</a></div>
+            </div>
+            <div class="description">
+                Ghidra 是一个软件逆向工程 (SRE) 框架
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Ghidra is a software reverse engineering (SRE) framework created and maintained by the National Security Agency Research Directorate.该框架包括一套功能齐全的高端软件分析工具，使用户能够在 Windows、macOS 和 Linux 等各种平台上分析编译的代码。能力包括拆卸、
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">功能齐全的高端软件分析工具，使用户能够在各种平台（包括 Windows、macOS 和 Linux）上分析编译的代码。功能包括反汇编、汇编、反编译、绘图和脚本编写，以及数百种其他功能。 Ghidra 支持广泛...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">disassembler</span><span class="topic-badge">reverse-engineering</span><span class="topic-badge">software-analysis</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#b07219"></span>Java</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 73,417</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +191 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,015</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1921 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于17小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.nsa.gov/ghidra" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">17</div>
+                <div class="card-title"><a href="https://github.com/swoole/typephp">swoole / typephp</a></div>
+            </div>
+            <div class="description">
+                将 PHP 编译为本机二进制文件
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 简体中文 A native AOT compiler for PHP Compile PHP source code into native machine code ahead of time — producing native executables, PHP extensions, and shared libraries — while keeping
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#4F5D95"></span>PHP</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 854</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +188 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 40</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于18小时前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://swoole.com/aot/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">18</div>
+                <div class="card-title"><a href="https://github.com/google/googletest">google / googletest</a></div>
+            </div>
+            <div class="description">
+                GoogleTest - Google 测试和模拟框架
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：我们的文档现已发布在 GitHub Pages 上：https://google.github.io/googletest/。我们建议浏览 GitHub Pages 上的文档，而不是直接在存储库中浏览。版本 1.18.0 是
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">有关构建 GoogleTest 的更多信息可以在 googletest/README.md 中找到。 * xUnit 测试框架： \ Googletest 基于 xUnit 自动测试运行器和图形用户界面，具有适用于 Windows 和 Linux 平台的强大功能。 GoogleTest UI 是一个测试运行器，可以运行您的测试......</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f34b7d"></span>C++</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 39,212</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +156 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,874</span>
+                <span class="stat"><span class="stat-icon">📋</span> 493 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> BSD-3-Clause</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://google.github.io/googletest/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">19</div>
+                <div class="card-title"><a href="https://github.com/ChromeDevTools/chrome-devtools-mcp">ChromeDevTools / chrome-devtools-mcp</a></div>
+            </div>
+            <div class="description">
+                用于编码代理的 Chrome DevTools
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：适用于代理的 Chrome DevTools (chrome-devtools-mcp) 可让您的编码代理（例如 Antigravity、Claude、Cursor 或 Copilot）控制和检查实时 Chrome 浏览器。它充当模型上下文协议 (MCP) 服务器，使您的 AI 编码助手能够访问 Chrome DevTools 的全部功能，以实现可靠的自动化、深入调试和性能分析。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Google 收集使用情况统计信息（例如工具调用成功率、延迟和环境信息），以提高 Chrome DevTools MCP 的可靠性和性能。默认情况下启用数据收集。您可以在启动服务器时通过传递 --no-usage-statistics 标志来选择退出：...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">browser</span><span class="topic-badge">chrome</span><span class="topic-badge">chrome-devtools</span><span class="topic-badge">debugging</span><span class="topic-badge">devtools</span><span class="topic-badge">mcp</span><span class="topic-badge">mcp-server</span><span class="topic-badge">puppeteer</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 50,027</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +67 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,505</span>
+                <span class="stat"><span class="stat-icon">📋</span> 94 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于19小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://npmjs.org/package/chrome-devtools-mcp" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">20</div>
+                <div class="card-title"><a href="https://github.com/livekit/agents">livekit / agents</a></div>
+            </div>
+            <div class="description">
+                用于构建实时语音 AI 代理的框架🤖🎙️📹
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：正在寻找 JS/TS 库？查看 AgentsJS 代理框架旨在构建在服务器上运行的实时、可编程参与者。使用它来创建可以看到、听到和理解的会话式多模式语音代理。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">灵活的集成：一个全面的生态系统，可混合和匹配正确的 STT、LLM、TTS 和实时 API，以满足您的使用案例。集成作业调度：内置任务调度和分配，通过调度 API 将最终用户连接到代理。广泛的 WebRTC 客户端：构建客户端应用程序...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">openai</span><span class="topic-badge">real-time</span><span class="topic-badge">video</span><span class="topic-badge">voice</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 13,412</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +22 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,634</span>
+                <span class="stat"><span class="stat-icon">📋</span> 798 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.livekit.io/agents" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
