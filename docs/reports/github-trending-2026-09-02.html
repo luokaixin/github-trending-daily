@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-09-02</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-09-02 · 共 14 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">14</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">6</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8,642</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/THU-MAIC/OpenMAIC">THU-MAIC / OpenMAIC</a></div>
+            </div>
+            <div class="description">
+                开放式多智能体互动课堂——一键获得沉浸式多智能体学习体验
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：只需单击一次即可获得身临其境的多代理学习体验一次提示，整个课程结束 - 现在您可以驾驶。 OpenMAIC v1.0.0 于 2026 年 8 月 27 日发布，在经典的一键式生成器旁边添加了 Pro 工作台：与规划您的课程、构建和修改每个页面并直接根据您的材料工作的代理聊天。 🤖 代理工作台 — 聊天优先的工作区
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">完整浏览功能，然后使用代理工作台和运行时进行设置。 2026-08-27 — OpenMAIC v1.0.0：代理工作台、持久的课程构建会话、可重用技能、会话材料、提供商中立的服务器功能和可插入的持久性堆栈。 2026-08-14 — v0.3.2 发布...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 29,773</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +3,128 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,001</span>
+                <span class="stat"><span class="stat-icon">📋</span> 237 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/jingyaogong/minimind">jingyaogong / minimind</a></div>
+            </div>
+            <div class="description">
+                🧠 只需 2 小时从头开始训练 64M 参数的 LLM！
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：中文 | English * 此开源项目旨在完全从 0 开始，仅用 3 块钱成本与 2 小时训练时间，即可训练出规模约为 64M 的超小语言模型 MiniMind。 * MiniMind 系列极其轻量，主线最小版本体积约为 GPT-3 的 $\frac{1}{2700}$，力求让普通个人 GPU 也能快速完成训练与复现。 * 项目同时开源了大模型的极简结构与完整训练链路，覆盖 MoE、数据清洗、预训练（Pretrain）、监督微调（SFT）、LoRA、RLHF（DPO）、RLAIF（PPO / GRPO / CISPO）、Tool Use、Agentic RL、自适应思考与模型蒸馏等全过程代码。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">中文 | English * 此开源项目旨在完全从 0 开始，仅用 3 块钱成本与 2 小时训练时间，即可训练出规模约为 64M 的超小语言模型 MiniMind。 * MiniMind 系列极其轻量，主线最小版本体积约为 GPT-3 的 $\frac{1}{2700}$，力求让普通个人 GPU 也能快速完成训练与复现。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">artificial-intelligence</span><span class="topic-badge">large-language-model</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 57,281</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,005 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 7,445</span>
+                <span class="stat"><span class="stat-icon">📋</span> 59 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://jingyaogong.github.io/minimind" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/K-Dense-AI/scientific-agent-skills">K-Dense-AI / scientific-agent-skills</a></div>
+            </div>
+            <div class="description">
+                将任何人工智能代理变成人工智能科学家。排名第一的科学代理技能库，全球有 190,000 多名科学家使用。 165 种经过验证的现成技能以及 100 多个涵盖生物学、化学、医学和药物发现的科学数据库。与 Cursor、Claude Code、Codex、Pi、Antigravity 和开放代理技能标准兼容。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🔔 克劳德科学技能现在是科学特工技能。相同的技能，更广泛的兼容性——现在可以与任何支持开放代理技能标准的人工智能代理一起使用，而不仅仅是克劳德。新功能：K-Dense BYOK — 一个免费的开源 AI 联合科学家，在您的桌面上运行，由 Scientific Agent Skills 提供支持。携带您自己的 API 密钥，从 40 多个模型中进行选择，并通过网络搜索获得完整的研究工作区
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">保持最新动态：在 X、LinkedIn、YouTube 和 Reddit 上关注 K-Dense，了解新技能、发布公告、演练、研究工作流程演示以及可与您自己的 AI 代理一起使用的示例。全面收集 163 种即用型科学研究技能（涵盖癌症基因组学、……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-scientist</span><span class="topic-badge">bioinformatics</span><span class="topic-badge">chemoinformatics</span><span class="topic-badge">claude</span><span class="topic-badge">claude-skills</span><span class="topic-badge">claudecode</span><span class="topic-badge">clinical-research</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 41,699</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +912 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,833</span>
+                <span class="stat"><span class="stat-icon">📋</span> 28 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://k-dense.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">anthropic</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span><span class="topic-badge">mcp</span><span class="topic-badge">productivity</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 245,841</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +623 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 37,096</span>
+                <span class="stat"><span class="stat-icon">📋</span> 130 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ecc.tools" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/iv-org/invidious">iv-org / invidious</a></div>
+            </div>
+            <div class="description">
+                Invidious 是 YouTube 的替代前端
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：用户特性 轻量级 无广告 无跟踪
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">用户功能 轻量级 无广告 无跟踪 技术功能 嵌入式视频支持 开发者 API 不使用官方 YouTube API 1. 创建您的功能分支 (git checkout -b my-new-feature)。 1. 暂存文件 (git add .)。 1. 提交您的更改（git commit -m '添加一些功能'）。 1.P…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；本周有更新</div>
+            <div class="topics"><span class="topic-badge">agplv3</span><span class="topic-badge">hacktoberfest</span><span class="topic-badge">invidious</span><span class="topic-badge">libre</span><span class="topic-badge">video</span><span class="topic-badge">watch</span><span class="topic-badge">youtube</span><span class="topic-badge">youtube-video</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#000100"></span>Crystal</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 23,834</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +577 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,676</span>
+                <span class="stat"><span class="stat-icon">📋</span> 475 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4天前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://invidious.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/firecrawl/pdf-inspector">firecrawl / pdf-inspector</a></div>
+            </div>
+            <div class="description">
+                用于 PDF 检查、分类和文本提取的快速 Rust 库。智能检测扫描 PDF 与基于文本的 PDF，以实现智能路由决策。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：用于 PDF 分类和文本提取的快速 Rust 库。默认情况下，它会检测 PDF 是基于文本的还是扫描的，通过位置感知提取文本，并转换为干净的 Markdown（无需 OCR）。本机 Rust 和 CLI 消费者可以选择选择性 OCR。包括 Python、Node.js 和浏览器 WebAssembly 的绑定。由 Firecrawl 构建，可在 200 毫秒内本地处理基于文本的 PDF，sk
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">用于 PDF 分类和文本提取的快速 Rust 库。默认情况下，它会检测 PDF 是基于文本的还是扫描的，通过位置感知提取文本，并转换为干净的 Markdown（无需 OCR）。本机 Rust 和 CLI 消费者可以选择选择性 OCR。包括 Python、Node.... 的绑定</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">markdown</span><span class="topic-badge">nodejs</span><span class="topic-badge">ocr-routing</span><span class="topic-badge">pdf</span><span class="topic-badge">pdf-classification</span><span class="topic-badge">pdf-extraction</span><span class="topic-badge">pdf-parser</span><span class="topic-badge">python</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 18,068</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +541 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,230</span>
+                <span class="stat"><span class="stat-icon">📋</span> 198 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://firecrawl.github.io/pdf-inspector/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/handsomestWei/patent-disclosure-skill">handsomestWei / patent-disclosure-skill</a></div>
+            </div>
+            <div class="description">
+                中国专利.skill：专利点挖掘与交底书（发明/实用/外观）编写，通俗解读专利，嗅探政策动向，辅助审查答复。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：按发明人/申请人检索公开专利清单，专利点挖掘与交底书（发明/实用/外观）编写，通俗解读专利，嗅探政策动向，辅助审查答复。 有设计文档和代码，但专利点还没梳？交底书要框图 + 可改 Word？ 定稿后还要多轮补材料、纠错并留下修改追溯？ 公开专利晦涩难懂，想快速看懂权要与落地语境？
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">索引见 examples/README.md。完整产物落在 outputs/ 或 Obsidian 库。 如果这个 Skill 对您有帮助，可以请我喝杯咖啡☕随缘支持，感谢感谢🙏🙏 技能入口与 Agent 流程（交底 / 解读 / 进化 / 审查答复） 详细安装说明</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">chinese</span><span class="topic-badge">disclosure</span><span class="topic-badge">obsidian</span><span class="topic-badge">patent</span><span class="topic-badge">skill</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,844</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +501 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 766</span>
+                <span class="stat"><span class="stat-icon">📋</span> 6 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于20小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://skillhub.cn/skills/patent-disclosure-skill" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/browser-use/video-use">browser-use / video-use</a></div>
+            </div>
+            <div class="description">
+                使用编码代理编辑视频
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：介绍视频使用 — 使用 Claude Code 编辑视频。 100% 开源。将原始素材放入文件夹中，与 Claude Code 聊天，获取 Final.mp4。适用于任何内容 - 人物特写、蒙太奇、教程、旅行、采访 - 无需预设或菜单。尝试在浏览器使用云中使用视频。删除填充词（嗯，呃，错误的开始）和镜头之间的死角
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">首先阅读 install.md 以安装此存储库，连接 ffmpeg，向您运行的任何代理注册技能，并设置 ElevenLabs API 密钥 - 让我在您需要时粘贴它。然后阅读 SKILL.md 进行日常使用，并始终阅读 helpers/ 因为那是编辑脚本的所在...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 23,113</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +472 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,823</span>
+                <span class="stat"><span class="stat-icon">📋</span> 81 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/VoltAgent/awesome-design-md">VoltAgent / awesome-design-md</a></div>
+            </div>
+            <div class="description">
+                流行品牌设计系统的 DESIGN.md 文件分析集合。将一个项目放入您的项目中，让编码代理生成匹配的 UI。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：将 DESIGN.md 复制到您的项目中，告诉您的 AI 代理“为我构建一个看起来像这样的页面”，并生成在视觉上与设计语言保持一致的高质量 UI。采用真正的设计深度（包括分析的模式、标记和规则）构建，以生成高质量的 UI，而不是表面级输出。 DESIGN.md 是 Google Stitch 引入的一个新概念。纯文本设计系统
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">你用人工智能来发布产品，但每次发布仍然悄然结束，因为没有人发布相关信息。 EveryFeed 将您的 AI 助手插入社交工作区，可在 35 多个渠道上起草、安排和发布 — 无需代理机构，无需营销人员。停止从空白页开始构建。 LaunchKit 为您的 AI 提供...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">awesome-list</span><span class="topic-badge">design-md</span><span class="topic-badge">design-system</span><span class="topic-badge">design-tokens</span><span class="topic-badge">figma</span><span class="topic-badge">google-stitch</span><span class="topic-badge">landing-page</span><span class="topic-badge">vibe-coding</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>未指定</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 113,029</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +323 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 12,796</span>
+                <span class="stat"><span class="stat-icon">📋</span> 320 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1个月前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://getdesign.md/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/Imbad0202/academic-research-skills">Imbad0202 / academic-research-skills</a></div>
+            </div>
+            <div class="description">
+                克劳德·代码的学术研究技巧：研究→写作→审阅→修改→定稿
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：简体中文版 | 繁體中文版 | 日本語版 | 한국어 A comprehensive suite of Claude Code skills for academic research, covering the full pipeline from research to publication. Install in 30 seconds (Claude Code CLI / VS Code / JetBrains, v3.7.0+): `text
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">简体中文版 | 繁體中文版 | 日本語版 | 한국어 A comprehensive suite of Claude Code skills for academic research, covering the full pipeline from research to publication. Install in 30 seconds (Claude Code CLI / VS Code / JetBrains, v3.7.0+):</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">academic-pipeline</span><span class="topic-badge">academic-writing</span><span class="topic-badge">ai-research</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">literature-review</span><span class="topic-badge">peer-review</span><span class="topic-badge">prompt-engineering</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 45,082</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +193 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,557</span>
+                <span class="stat"><span class="stat-icon">📋</span> 19 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://buymeacoffee.com/crucify020v" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/unclecode/crawl4ai">unclecode / crawl4ai</a></div>
+            </div>
+            <div class="description">
+                Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Error 500 (Server Error)!!1500.That’s an error.There was an error. Please try again later.That’s all we know.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 80,940</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +145 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,362</span>
+                <span class="stat"><span class="stat-icon">📋</span> 171 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于21小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://crawl4ai.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/3b1b/manim">3b1b / manim</a></div>
+            </div>
+            <div class="description">
+                用于解释数学视频的动画引擎
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Manim 是一个用于精确编程动画的引擎，专为创建解释性数学视频而设计。请注意，manim 有两个版本。  该存储库最初是 3Blue1Brown 作者的个人项目，旨在为这些视频制作动画，此处提供了视频特定的代码。  2020 年，一群开发人员将其分叉为现在的社区版，目标是
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">警告：这些说明仅适用于 ManimGL。尝试使用这些说明来安装 Manim Community/manim 或那里的说明来安装此版本将导致问题。您应该首先决定要安装哪个版本，然后仅按照您想要的版本的说明进行操作...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">3b1b-videos</span><span class="topic-badge">animation</span><span class="topic-badge">explanatory-math-videos</span><span class="topic-badge">python</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 92,655</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +86 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 7,625</span>
+                <span class="stat"><span class="stat-icon">📋</span> 492 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/Gitlawb/openclaude">Gitlawb / openclaude</a></div>
+            </div>
+            <div class="description">
+                跑到任何地方。使用任何东西
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：OpenClaude 是一个面向云和本地模型提供商的开源编码代理 CLI。使用 OpenAI 兼容的 API、Gemini、GitHub 模型、Codex OAuth、Codex、Ollama、Atomic Chat 和其他支持的后端，同时保持终端优先的工作流程：提示、工具、代理、MCP、斜线命令和流输出。 OpenClaude 也镜像到 GitLawb：gitlawb.com/node/repos/z6MkqDnb/openclaude
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenClaude 是一个面向云和本地模型提供商的开源编码代理 CLI。使用 OpenAI 兼容的 API、Gemini、GitHub 模型、Codex OAuth、Codex、Ollama、Atomic Chat 和其他支持的后端，同时保持终端优先的工作流程：提示、工具、代理、MCP、斜杠命令和 str…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agent</span><span class="topic-badge">ai-tools</span><span class="topic-badge">cli</span><span class="topic-badge">coding</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 31,484</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +80 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,962</span>
+                <span class="stat"><span class="stat-icon">📋</span> 72 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openclaude.gitlawb.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/averygan/reclip">averygan / reclip</a></div>
+            </div>
+            <div class="description">
+                从几乎任何网站下载视频。轻量级、自托管媒体下载器，具有干净的 Web UI。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：一个自托管的开源视频和音频下载器，具有干净的 Web UI。粘贴来自 YouTube、TikTok、Instagram、Twitter/X 和 1000 多个其他网站的链接 - 下载为 MP4 或 MP3。 https://github.com/user-attachments/assets/419d3e50-c933-444b-8cab-a9724986ba05 从 1000 多个支持的网站下载视频（通过 yt-dlp） MP4 视频或 MP3 音频提取
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">一个自托管的开源视频和音频下载器，具有干净的 Web UI。粘贴来自 YouTube、TikTok、Instagram、Twitter/X 和 1000 多个其他网站的链接 - 下载为 MP4 或 MP3。 https://github.com/user-attachments/assets/419d3e50-c933-444b-8cab-a9724986ba05 从 1000 多个支持的网站下载视频...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#e34c26"></span>HTML</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 7,823</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +56 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,326</span>
+                <span class="stat"><span class="stat-icon">📋</span> 47 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1个月前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
