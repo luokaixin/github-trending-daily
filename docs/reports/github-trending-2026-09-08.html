@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-09-08</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-09-08 · 共 14 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">14</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">4</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">6,449</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a></div>
+            </div>
+            <div class="description">
+                代理利用性能优化系统。 Claude Code、Codex、Opencode、Cursor 等的技能、直觉、记忆、安全性和研究优先的开发。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：英语 葡萄牙语（巴西） Türkçe
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">ECC 是 MIT 许可的开源软件。它目前与 Claude Code 配合得最好，具有受支持的 Codex 同步路径，并为 Cursor、OpenCode、Gemini、Zed、GitHub Copilot、Antigravity、Qwen 和其他工具提供功能有限的适配器。在假设功能奇偶校验之前，请参阅支持状态矩阵。空调…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">anthropic</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span><span class="topic-badge">mcp</span><span class="topic-badge">productivity</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 253,106</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,897 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 37,969</span>
+                <span class="stat"><span class="stat-icon">📋</span> 169 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ecc.tools" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/microsoft/markitdown">microsoft / markitdown</a></div>
+            </div>
+            <div class="description">
+                用于将文件和 Office 文档转换为 Markdown 的 Python 工具。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!重要] MarkItDown 使用当前进程的权限执行 I/O。与 open() 或 requests.get() 一样，它将访问进程本身可以访问的资源。在不受信任的环境中清理您的输入，并调用您的用例所需的最窄的convert_*函数（例如convert_stream()或convert_local()）。请参阅 m 文档的安全注意事项部分
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">MarkItDown 使用当前进程的权限执行 I/O。与 open() 或 requests.get() 一样，它将访问进程本身可以访问的资源。在不受信任的环境中清理您的输入，并调用您的用例所需的最窄的convert_*函数（例如，convert_stream()，...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">autogen</span><span class="topic-badge">autogen-extension</span><span class="topic-badge">langchain</span><span class="topic-badge">markdown</span><span class="topic-badge">microsoft-office</span><span class="topic-badge">openai</span><span class="topic-badge">pdf</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 180,688</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +886 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 13,277</span>
+                <span class="stat"><span class="stat-icon">📋</span> 625 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/coreyhaines31/marketingskills">coreyhaines31 / marketingskills</a></div>
+            </div>
+            <div class="description">
+                Claude Code 和 AI 代理的营销技巧。 CRO、文案、SEO、分析和增长工程。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：专注于营销任务的人工智能代理技能集合。专为希望 AI 编码代理帮助进行转化优化、文案、SEO、分析和增长工程的技术营销人员和创始人而打造。可与 Claude Code、OpenAI Codex、Cursor、Windsurf 以及任何支持代理技能规范的代理配合使用。由科里·海恩斯建造。需要实际帮助吗？查看转换工厂 —
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">由科里·海恩斯建造。需要实际帮助吗？查看 Conversion Factory——Corey 负责转化优化、登陆页面和增长策略的机构。想了解更多营销知识吗？订阅滑动文件。想要擅长使用人工智能进行营销吗？查看人工智能营销培训……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">claude</span><span class="topic-badge">codex</span><span class="topic-badge">marketing</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 48,284</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +580 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 7,453</span>
+                <span class="stat"><span class="stat-icon">📋</span> 106 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://marketing-skills.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/The-Swarm-Corporation/AutoHedge">The-Swarm-Corporation / AutoHedge</a></div>
+            </div>
+            <div class="description">
+                在几分钟内建立您的自主对冲基金。 AutoHedge 利用群体智能和人工智能代理的力量来自动化市场分析、风险管理和交易执行。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：AutoHedge 是代表您进行交易的企业级自主代理对冲基金。它结合了群体智能和专门的人工智能代理，以最少的人工干预执行端到端市场分析、风险管理和执行。目前支持：Solana 上的完全自主交易。即将推出：Coinbase 和其他交易所。 AutoHedge 旨在成为世界上最强大的
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">请参阅 .env.example 获取完整参考。 `python autohedge AutoHedge 使用多代理管道，其中每个代理都有明确的职责： 2. 创建功能分支 (git checkout -b feature/AmazingFeature) 3. 提交更改 (git commit -m 'Add some AmazingFeature') 4. 推送到分支 (git pus…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">blackrock</span><span class="topic-badge">finance</span><span class="topic-badge">goldmansachs</span><span class="topic-badge">hedgefund</span><span class="topic-badge">jpmorgan</span><span class="topic-badge">ml</span><span class="topic-badge">quant</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,352</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +517 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 818</span>
+                <span class="stat"><span class="stat-icon">📋</span> 19 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3个月前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://swarms.xyz/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/BraveOPotato/FckSignups">BraveOPotato / FckSignups</a></div>
+            </div>
+            <div class="description">
+                开源、浏览器内且无需注册的工具列表！
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：开源工具。零废话。* 精选的开源工具集合，您可以在浏览器中立即使用。没有帐户，没有电子邮件，没有跟踪。只是有效的工具。 NoSignups 是一个 React + TypeScript 项目。如果您想在本地运行它，只需克隆存储库，安装依赖项，然后运行服务器即可。这是一个可以一次性完成前面所有步骤的命令：
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">为什么某些工具具有特色？这很简单。我们有 200 多种工具，其中很多都是相似的。为了打破同质性，我将独特的标记到顶部。这是有偏见的，因为“什么是独特性？”我只是将其定义为一种与其他工具不同的工具。无论是优秀的品质...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,917</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +501 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 230</span>
+                <span class="stat"><span class="stat-icon">📋</span> 499 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://nosignups.net" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/heygen-com/hyperframes">heygen-com / hyperframes</a></div>
+            </div>
+            <div class="description">
+                编写 HTML。渲染视频。专为代理商打造。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：快速入门展示游乐场目录
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">HyperFrames 提供 20 个按需加载的技能代理。首先阅读/hyperframes——它是路由器和功能图；它为任何“让我做一个……”请求选择一个工作流程——视频、甲板或合成端口——并指出下面的领域技能。默认为核心集 - 路由器安装每个创建...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">animation</span><span class="topic-badge">ffmpeg</span><span class="topic-badge">framework</span><span class="topic-badge">gsap</span><span class="topic-badge">html</span><span class="topic-badge">mcp</span><span class="topic-badge">puppeteer</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 46,495</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +474 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,343</span>
+                <span class="stat"><span class="stat-icon">📋</span> 178 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/ruvnet/ruflo">ruvnet / ruflo</a></div>
+            </div>
+            <div class="description">
+                🌊 原始代理元线束。部署智能多人群体、协调自主工作流程并构建对话式人工智能系统。具有自适应记忆、自学习智能、RAG 集成以及原生 Claude Code/Codex/Hermes 等集成功能
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Claude Code 和 Codex 的代理元工具。 📖 RuFlo 解释 - 建立一个计划、记忆、测试和改进的 AI 团队 14 章指南：从基本思想到第一个有用的任务，然后是内存、代理团队、插件、成本和验证。经纪人=模特+线束。该模型写道；该工具为它提供了工具、内存、循环、沙箱和控件，以便它能够实际工作。鲁弗洛是 h
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Claude Code 和 Codex 的代理元工具。 📖 RuFlo 解释 - 建立一个计划、记忆、测试和改进的 AI 团队 14 章指南：从基本思想到第一个有用的任务，然后是内存、代理团队、插件、成本和验证。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agentic-ai</span><span class="topic-badge">agentic-framework</span><span class="topic-badge">agentic-workflow</span><span class="topic-badge">agents</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-assistant</span><span class="topic-badge">ai-skills</span><span class="topic-badge">autonomous-agents</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 71,473</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +394 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,462</span>
+                <span class="stat"><span class="stat-icon">📋</span> 946 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://Cognitum.One" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/openai/skills">openai / skills</a></div>
+            </div>
+            <div class="description">
+                法典技能目录
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!IMPORTANT] 此存储库已弃用。有关当前 Codex 技能和插件示例，请使用 OpenAI 插件存储库。如果您想将自己的技能添加到 Codex，请遵循构建插件指南，其中包括创建仅限技能的插件的说明。代理技能是 AI 代理可以发现并用于执行特定任务的指令、脚本和资源的文件夹。写
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">该存储库已被弃用。有关当前 Codex 技能和插件示例，请使用 OpenAI 插件存储库。如果您想将自己的技能添加到 Codex，请遵循构建插件指南，其中包括创建仅限技能的插件的说明。代理技能是指令、脚本...的文件夹</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 26,148</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +351 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,752</span>
+                <span class="stat"><span class="stat-icon">📋</span> 292 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1个月前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/MoonTechLab/LunaTV">MoonTechLab / LunaTV</a></div>
+            </div>
+            <div class="description">
+                本项目采用 CC BY-NC-SA 协议，禁止任何商业化行为，任何衍生项目必须保留本项目地址并以相同协议开源
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🎬 MoonTV 是一个开箱即用的、跨平台的影视聚合播放器。它基于 Next.js 14 + Tailwind CSS + TypeScript 构建，支持多资源搜索、在线播放、收藏同步、播放记录、云端存储，让你可以随时随地畅享海量免费影视内容。 🔍 多源聚合搜索：一次搜索立刻返回全源结果。 📄 丰富详情页：支持剧集列表、演员、年份、简介等完整信息展示。 ▶️ 流畅在线播放：集成 HLS.js &amp; ArtPlayer。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">🎬 MoonTV 是一个开箱即用的、跨平台的影视聚合播放器。它基于 Next.js 14 + Tailwind CSS + TypeScript 构建，支持多资源搜索、在线播放、收藏同步、播放记录、云端存储，让你可以随时随地畅享海量免费影视内容。 🔍 多源聚合搜索：一次搜索立刻返回全源结果。 📄 丰富详情页：支持剧集列表、演员、年份、简介等完整信息展示。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 9,876</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +197 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,007</span>
+                <span class="stat"><span class="stat-icon">📋</span> 10 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3个月前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/bytedance/deer-flow">bytedance / deer-flow</a></div>
+            </div>
+            <div class="description">
+                一个开源的长期 SuperAgent 工具，用于研究、编码和创建。借助沙箱、内存、工具、技能、子代理和消息网关，它可以处理可能需要几分钟到几小时的不同级别的任务。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 中文 | 日本語 | Français | Русский On February 28th, 2026, DeerFlow claimed the 🏆 #1 spot on GitHub Trending following the launch of version 2. Thanks a million to our incredible community — you made this happen! 💪🔥 DeerFlow (Deep Exploration and Efficient Research Flow) is an open-source super agent harness that orchestrates sub-agents, memory, and sandboxes to do almost anything — powered b
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">核心功能 技能 \&amp; 工具 Claude 代码集成会话目标 这将启动一个交互式向导，指导您选择 LLM 提供商、可选的 Web 搜索以及执行/安全首选项，例如沙箱模式、bash 访问和文件写入工具。它生成一个最小的 config.yaml ...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agentic</span><span class="topic-badge">agentic-framework</span><span class="topic-badge">agentic-workflow</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">deep-research</span><span class="topic-badge">harness</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 81,924</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +195 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 11,295</span>
+                <span class="stat"><span class="stat-icon">📋</span> 905 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://deerflow.tech" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/pascalorg/editor">pascalorg / editor</a></div>
+            </div>
+            <div class="description">
+                创建和共享 3D 建筑项目。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：使用 React Three Fiber 和 WebGPU 构建的 3D 建筑编辑器。 https://github.com/user-attachments/assets/8b50e7cf-cebe-4579-9cf3-8786b35f7b6b Node.js 22.13 或更高版本可以创建持久的本地 Pascal 安装，而无需克隆此存储库：
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">有关 React 示例，请参阅 @pascal-app/viewer 快速入门。这是一个 Turborepo monorepo，带有可重用的编辑器包、独立应用程序和分发它的 CLI：编辑器/查看器使用合理的默认值渲染场景。编辑器通过交互式工具、选择管理对其进行了扩展……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">3d</span><span class="topic-badge">architecture</span><span class="topic-badge">bim</span><span class="topic-badge">cad</span><span class="topic-badge">editor</span><span class="topic-badge">floorplan</span><span class="topic-badge">mcp</span><span class="topic-badge">nextjs</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 22,445</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +168 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,869</span>
+                <span class="stat"><span class="stat-icon">📋</span> 45 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://editor.pascal.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/jo-inc/camofox-browser">jo-inc / camofox-browser</a></div>
+            </div>
+            <div class="description">
+                适用于 AI 代理的隐形无头浏览器 — 绕过 Cloudflare、机器人检测和反抓取。替代木偶师/剧作家。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：站在 Camoufox 强大的肩膀上 - 一个具有 C++ 级别指纹欺骗功能的 Firefox 分支。由 jo 背后的团队构建，jo 是一个个人人工智能代理，一半在您的 Mac 上运行，一半在专门为您提供的专用云计算机上运行 - 零维护。适用于 macOS、Telegram、WhatsApp 和电子邮件。尝试免费测试版 - `bash git clone https://github.com/jo-inc/camofox-browser &amp;&amp; cd ca
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">站在 Camoufox 强大的肩膀上 - 一个具有 C++ 级别指纹欺骗功能的 Firefox 分支。由 jo 背后的团队构建，jo 是一个个人人工智能代理，一半在您的 Mac 上运行，一半在专门为您提供的专用云计算机上运行 - 零维护。适用于 macOS、Telegram、WhatsAp...</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai-agent</span><span class="topic-badge">anti-bot</span><span class="topic-badge">antidetect-browser</span><span class="topic-badge">automation</span><span class="topic-badge">bot-detection</span><span class="topic-badge">browser-automation</span><span class="topic-badge">cloudflare-bypass</span><span class="topic-badge">headless-browser</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 9,916</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +135 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,030</span>
+                <span class="stat"><span class="stat-icon">📋</span> 126 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://github.com/jo-inc/camofox-browser#readme" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/mksglu/context-mode">mksglu / context-mode</a></div>
+            </div>
+            <div class="description">
+                AI 编码代理的上下文窗口优化。沙箱工具输出（减少 98%）、保留会话内存，并通过 MCP + 挂钩强制跨 17 个平台进行路由。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：上下文问题的另一半。每个 MCP 工具调用都会将原始数据转储到上下文窗口中。 Playwright 快照的大小为 56 KB。二十个 GitHub 问题花费 59 KB。一份访问日志 — 45 KB。 30 分钟后，40% 的上下文就消失了。当代理将对话压缩为可用空间时，它会忘记正在编辑哪些文件、正在进行哪些任务以及您上次请求的内容。到
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">上下文问题的另一半。每个 MCP 工具调用都会将原始数据转储到上下文窗口中。 Playwright 快照的大小为 56 KB。二十个 GitHub 问题花费 59 KB。一份访问日志 — 45 KB。 30 分钟后，40% 的上下文就消失了。当代理将对话压缩到可用空间时，我……</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">antigravity</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-hooks</span><span class="topic-badge">claude-code-plugins</span><span class="topic-badge">claude-code-skill</span><span class="topic-badge">codex</span><span class="topic-badge">codex-cli</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 20,999</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +96 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,523</span>
+                <span class="stat"><span class="stat-icon">📋</span> 214 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于17小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://context-mode.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/lightpanda-io/browser">lightpanda-io / browser</a></div>
+            </div>
+            <div class="description">
+                Lightpanda：专为人工智能和自动化设计的无头浏览器
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：不是 Chromium 叉子。不是 WebKit 补丁。一个用 Zig 编写的新浏览器。 ](https://github.com/lightpanda-io/demo) ](https://github.com/lightpanda-io/demo) 在 AWS EC2 m5.large 实例上通过网络请求 933 个真实网页。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">不是 Chromium 叉子。不是 WebKit 补丁。一个用 Zig 编写的新浏览器。 ](https://github.com/lightpanda-io/demo) ](https://github.com/lightpanda-io/demo)</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">browser</span><span class="topic-badge">browser-automation</span><span class="topic-badge">cdp</span><span class="topic-badge">headless</span><span class="topic-badge">lightpanda</span><span class="topic-badge">playwright</span><span class="topic-badge">puppeteer</span><span class="topic-badge">zig</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#ec915c"></span>Zig</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 34,973</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +58 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,652</span>
+                <span class="stat"><span class="stat-icon">📋</span> 92 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://lightpanda.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
