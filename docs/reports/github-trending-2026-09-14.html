@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-09-14</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-09-14 · 共 19 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">19</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">12,116</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/bilawalsidhu/gods-eye-view">bilawalsidhu / gods-eye-view</a></div>
+            </div>
+            <div class="description">
+                A spy satellite simulator in your browser, except the data is real. Live open source spatial intelligence on a photorealistic 3D globe.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Photorealistic 3D globe. Live aircraft, ships, satellites, earthquakes, traffic, and public cameras. Hands-free voice control powered by a realtime AI agent. No place left behind. ▶️ From the project behind the viral God's Eye View series (formerly WorldView) — 5M+ on YouTube · 25M+ across socials 🏆 Reached #1 on GitHub Trending, daily and weekly · August 2026
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">“pretty cool” — Brendan Eich, creator of JavaScript and co-founder of Mozilla and Brave · Featured on Pinokio ⚡ Start without API keys. Install with Pinokio or run locally from the terminal. Add optional keys inside the app. → Quick Start Quick Start · First Five Minutes · Talk to It · What's Live ·…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；近期新项目；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">3d-globe</span><span class="topic-badge">cesium</span><span class="topic-badge">flight-tracking</span><span class="topic-badge">geospatial</span><span class="topic-badge">geospatial-intelligence</span><span class="topic-badge">gis</span><span class="topic-badge">osint</span><span class="topic-badge">photogrammetry</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 32,319</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,680 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,472</span>
+                <span class="stat"><span class="stat-icon">📋</span> 200 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://maptheworld.ai/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/debpalash/VoiceStudio">debpalash / VoiceStudio</a></div>
+            </div>
+            <div class="description">
+                VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription &amp; audiobook creation in 646 languages.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Install · Features · Compare · Requirements ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Features · Compare · Requirements · Hardware · Active beta. Use the latest release for stable work. main contains the newest fixes and may change between releases. Report problems through GitHub Issues. The Voice workspace starts with three tabs: From audio for cloning, By design for creating a voic…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">audiobook</span><span class="topic-badge">cuda</span><span class="topic-badge">dubbing</span><span class="topic-badge">elevenlabs-alternative</span><span class="topic-badge">huggingface</span><span class="topic-badge">local-first</span><span class="topic-badge">mlx</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 27,373</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,632 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,375</span>
+                <span class="stat"><span class="stat-icon">📋</span> 49 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://voicestudio.sh" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/JustVugg/colibri">JustVugg / colibri</a></div>
+            </div>
+            <div class="description">
+                Run frontier MoE models on hardware you already own — pure C, zero deps, experts streamed from disk. Tiny engine, immense model. 🐦
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Website · Discord · English · 简体中文 · 繁體中文 · Italiano Tiny engine, immense model. Run frontier MoE models — 744B to 2.8T
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">With its multitiering features Colibrì removes proprietary hardware dependencies aggressively optimizing functional inference engine pipelines. Our operational mission includes changing how weights are represented and moved, deciding what lives in VRAM, RAM, or storage, overlapping heterogeneous com…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 30,251</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +868 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,276</span>
+                <span class="stat"><span class="stat-icon">📋</span> 125 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://justvugg.github.io/colibri" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/asgeirtj/system_prompts_leaks">asgeirtj / system_prompts_leaks</a></div>
+            </div>
+            <div class="description">
+                Extracted system prompts from Anthropic - Claude Fable 5.1, Opus 5, Claude Design, Claude Code. OpenAI - ChatGPT GPT-6-Astra, Codex. Google - Gemini 3.8 Flash, 3.1 Pro, Antigravity. xAI - Grok, Grok Bot, Cursor, Kimi and more! Updated regularly.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Understand your agents in production The Washington Post built its interactive story on prompts from this repo: See the hidden rules behind AI. Then use them to rewrite this article. (May 11, 2026) CEPS' AI World built a live data dashboard from this repo's files: System prompts and what they tell us about the chat before the chat  (July 10, 2026) Leaked system prompts, captured verbatim — the hid
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">CEPS' AI World built a live data dashboard from this repo's files: System prompts and what they tell us about the chat before the chat  (July 10, 2026) Leaked system prompts, captured verbatim — the hidden instructions and rules that ChatGPT, Claude, Gemini, Grok and every other AI chatbot receives …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-prompts</span><span class="topic-badge">anthropic</span><span class="topic-badge">chatbot</span><span class="topic-badge">chatgpt</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 66,224</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +706 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,821</span>
+                <span class="stat"><span class="stat-icon">📋</span> 56 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于10小时前</span><span class="stat"><span class="stat-icon">📄</span> CC0-1.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/vxcontrol/pentagi">vxcontrol / pentagi</a></div>
+            </div>
+            <div class="description">
+                Fully autonomous AI Agents system capable of performing complex penetration testing tasks
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Penetration testing Artificial General Intelligence Join the Community! Connect with security researchers, AI enthusiasts, and fellow ethical hackers. Get support, share insights, and stay updated with the latest PentAGI developments. Overview Features
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Overview Features Architecture Agent Supervision Features Architecture Agent Supervision Quick Start You can watch the video PentAGI overview: Secure &amp; Isolated. All operations are performed in a sandboxed Docker environment with complete isolation. Fully Autonomous. AI-powered agent that automatica…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-security-tool</span><span class="topic-badge">anthropic</span><span class="topic-badge">autonomous-agents</span><span class="topic-badge">golang</span><span class="topic-badge">gpt</span><span class="topic-badge">graphql</span><span class="topic-badge">multi-agent-system</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 24,117</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +590 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,106</span>
+                <span class="stat"><span class="stat-icon">📋</span> 62 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://pentagi.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/tonhowtf/omniget">tonhowtf / omniget</a></div>
+            </div>
+            <div class="description">
+                Download Udemy and Hotmart courses, YouTube videos, music and books — 1,800+ sites, no terminal. Free open-source desktop app for Windows, macOS and Linux, with a built-in course player, PDF/EPUB reader and music library. Powered by yt-dlp. Your files stay on your computer.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Search keywords (kept here so GitHub search, Google and AI assistants can find the project): OmniGet is a free open source downloader and media toolbox for Windows, macOS and Linux. udemy downloader, hotmart downloader, kiwify downloader, course downloader, youtube downloader, yt-dlp gui, instagram downloader, instagram story downloader, reels downloader, twitter downloader,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Why OmniGet Download and install Your first download in one minute What OmniGet downloads</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">bilibili-downloader</span><span class="topic-badge">course-downloader</span><span class="topic-badge">download-manager</span><span class="topic-badge">downloader</span><span class="topic-badge">epub-reader</span><span class="topic-badge">hotmart-downloader</span><span class="topic-badge">instagram-downloader</span><span class="topic-badge">media-downloader</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,915</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +507 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,038</span>
+                <span class="stat"><span class="stat-icon">📋</span> 39 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tonho.wtf" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/SnailSploit/Claude-Red">SnailSploit / Claude-Red</a></div>
+            </div>
+            <div class="description">
+                claude-red is a curated library of offensive security skills designed for the Claude skills system. Each skill is a structured SKILL.md file that primes Claude with expert-level methodology for a specific attack surface — from SQLi to shellcode, EDR evasion to exploit development.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Offensive security skills for Claude — drop-in SKILL.md files that turn Claude into a context-aware red team operator. Overview • Quickstart • Categories • Skill Index • Roadmap • Contributing claude-red is a curated library of offensive security skills for the Claude Skills system. Each skill is a structured SKILL.md file that primes Claude with expert-level methodology for a specific attack surf
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Overview • Quickstart • Categories • Skill Index • Roadmap • Contributing claude-red is a curated library of offensive security skills for the Claude Skills system. Each skill is a structured SKILL.md file that primes Claude with expert-level methodology for a specific attack surface — from SQL inje…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲</div>
+            <div class="topics"><span class="topic-badge">claude-ai</span><span class="topic-badge">claude-pt</span><span class="topic-badge">claude-skills</span><span class="topic-badge">redteam</span><span class="topic-badge">redteam-tools</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 4,272</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +506 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 600</span>
+                <span class="stat"><span class="stat-icon">📋</span> 13 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于14天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/multimodal-art-projection/YuE">multimodal-art-projection / YuE</a></div>
+            </div>
+            <div class="description">
+                YuE2: frontier music generation with symbolic planning, zero-shot covers, and agentic music editing.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Looking for the original YuE? Its code, documentation, and license are preserved on the YuE-v1 branch. 🎧 Demos · 🤗 YuE2 · 🚀 Quick start ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Zero-shot covers and agentic editing. Reimagine a transcribed song in a new style, or refine a song through a conversation about its score, arrangement, and lyrics—all with the same generation checkpoint. 192 WildSongBench prompts. Both YuE2 settings use symbolic planning. Bo8 = best-of-8. The axes …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">audio-generation</span><span class="topic-badge">deep-learning</span><span class="topic-badge">foundation-models</span><span class="topic-badge">gpt</span><span class="topic-badge">huggingface</span><span class="topic-badge">llama</span><span class="topic-badge">llms</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 7,889</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +487 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 874</span>
+                <span class="stat"><span class="stat-icon">📋</span> 14 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://map-yue2.github.io/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/jiji262/douyin-downloader">jiji262 / douyin-downloader</a></div>
+            </div>
+            <div class="description">
+                A practical Douyin downloader for both single-item and profile batch downloads, with progress display, retries, SQLite deduplication, and browser fallback support. 抖音批量下载工具，去水印，支持视频、图集、合集、音乐(原声)。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：中文文档 (Chinese): README.zh-CN.md A practical Douyin downloader supporting videos, image-notes, collections, music, favorites collections, and profile batch downloads, with progress display, retries, SQLite deduplication, download integrity checks, and browser fallback support. A desktop GUI built on the same backend, with dedicated workspaces for Douyin, TikTok, and YouTube. Paste a link to start, 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">cp config.example.yml config.yml `bash python -m tools.cookie_fetcher --config config.yml After logging into Douyin, return to the terminal and press Enter. Cookies will be written to your config automatically.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,517</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +452 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,763</span>
+                <span class="stat"><span class="stat-icon">📋</span> 40 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/alibaba/open-code-review">alibaba / open-code-review</a></div>
+            </div>
+            <div class="description">
+                Fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI &amp; Anthropic compatible.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 简体中文 | 日本語 | 한국어 | Русский Open Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and identified millions of code defects. After thorough validation at massive scale, we incubated it into an open source project for the community. Simply con
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">It reads Git diffs, sends changed files to a configurable LLM via an agent with tool-use capabilities, and generates structured review comments with line-level precision. The agent can read full file contents, search the codebase, inspect other changed files for context, and produce deep reviews — n…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agent-skills</span><span class="topic-badge">code-review</span><span class="topic-badge">code-review-assistant</span><span class="topic-badge">harness</span><span class="topic-badge">repository-level-context</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 23,784</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +443 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,759</span>
+                <span class="stat"><span class="stat-icon">📋</span> 150 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://open-codereview.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/melgarafael/DeskcommCRM">melgarafael / DeskcommCRM</a></div>
+            </div>
+            <div class="description">
+                Open-source AI sales OS — self-hosted CRM with native AI agents + WhatsApp (WAHA). Open alternative to Kommo, Octadesk &amp; Intercom for any business that sells by chat. MCP-ready, multi-tenant, LGPD.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🇧🇷 Português · 🇺🇸 English · 🇪🇸 Español Agentes de IA que atendem, qualificam e vendem no WhatsApp — dentro de um CRM open source rodando no seu servidor. Sem mensalidade, sem feature travada, seus dados com você. A alternativa aberta a Kommo, Octadesk e Intercom. ⚡ Instalar · 🔄 Atualizar · 🧭 Visão · 🏗️ Arquitetura · 🤝 Contribuir · 🗺️ Roadmap
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Sem mensalidade, sem feature travada, seus dados com você. A alternativa aberta a Kommo, Octadesk e Intercom. ⚡ Instalar · 🔄 Atualizar · 🧭 Visão · 🏗️ Arquitetura · 🤝 Contribuir · 🗺️ Roadmap ☁️ Rode este CRM em produção com 1 comando O DeskcommCRM foi desenvolvido em parceria com a HostGator: o hostg…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">chatbot</span><span class="topic-badge">crm</span><span class="topic-badge">customer-support</span><span class="topic-badge">ecommerce</span><span class="topic-badge">lgpd</span><span class="topic-badge">mcp</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,318</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +432 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 606</span>
+                <span class="stat"><span class="stat-icon">📋</span> 141 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://deskcomm.com.br" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/calesthio/OpenMontage">calesthio / OpenMontage</a></div>
+            </div>
+            <div class="description">
+                World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Paste A Video  ·  Quick Start  ·  Try These Prompts  ·  Pipelines  · 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">"THE LAST BANANA" — a 60-second Pixar-style animated short about a lonely banana who finds friendship with a kiwi. 6 Kling v3-generated motion clips (via fal.ai), Google Chirp3-HD narration, royalty-free piano music, TikTok-style word-level captions, and Remotion composition. Total cost: $1.33. "OBJ…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agentic-ai</span><span class="topic-badge">ai</span><span class="topic-badge">claude</span><span class="topic-badge">copilot</span><span class="topic-badge">cursor</span><span class="topic-badge">elevenlabs</span><span class="topic-badge">ffmpeg</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 58,661</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +380 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 7,373</span>
+                <span class="stat"><span class="stat-icon">📋</span> 320 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8天前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.openmontage.video/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/alphaXiv/OpenResearch">alphaXiv / OpenResearch</a></div>
+            </div>
+            <div class="description">
+                Turn your coding agents into research agents
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The local-first workspace for research agents and autoresearch. Turn  Claude Code, literature, develop hypotheses, run experiments, and produce research artifacts. Install the CLI on macOS or Linux, then launch OpenResearch:
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">service-owned capabilities such as organizations and managed compute. Official release builds send opt-out, coarse usage events tied to a random installation ID. They do not include code, prompts, file contents or paths, repository names, tokens, emails, or project and experiment identifiers. Offici…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,221</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +289 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 150</span>
+                <span class="stat"><span class="stat-icon">📋</span> 11 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openresearch.sh/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/tech-leads-club/agent-skills">tech-leads-club / agent-skills</a></div>
+            </div>
+            <div class="description">
+                The secure, validated skill registry for professional AI coding agents. Extend Antigravity, Claude Code, Cursor, Copilot and more with absolute confidence.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：In an ecosystem where over 13% of marketplace skills contain critical vulnerabilities, Agent Skills stands apart as a hardened library of verified, tested, and safe capabilities. Extend Antigravity, Claude Code, Cursor, and more with absolute confidence. ✨ What are Skills?
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Agent Skills stands apart as a hardened library of verified, tested, and safe capabilities. Extend Antigravity, Claude Code, Cursor, and more with absolute confidence. ✨ What are Skills? 🛡️ Security &amp; Trust 🌟 Featured Skills 🚀 Quick Start ⚡ How It Works 🔌 MCP Server Skills are packaged instructions …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">ai</span><span class="topic-badge">antigravity</span><span class="topic-badge">claude-code</span><span class="topic-badge">copilot</span><span class="topic-badge">cursor</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,776</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +265 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 503</span>
+                <span class="stat"><span class="stat-icon">📋</span> 31 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://agent-skills.techleads.club" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/jihe520/MathModelAgent">jihe520 / MathModelAgent</a></div>
+            </div>
+            <div class="description">
+                🤖📐专为数学建模设计的 Agent &amp; skills ,自动完成数学建模，生成一份完整的可以直接提交的论文。 An Agent Designed for Mathematical Modeling ,Automatically complete mathmodel and generate a complete paper ready for submission.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：专为数学建模设计的 Agent 自动完成数学建模，生成一份完整的可以直接提交的论文。 🎨 姊妹项目：sci-box —— 科研图表 &amp; 流程图 SKILL 合集 不想折腾环境？直接下载桌面版，开箱即用。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">在不同的 Harness 上测试 不同的 LLM, 提供反馈和案例放在 example 仓库 Harness SKILL 的优化需要大量黑盒测试和调优. 两年前，我做了一个 Mulit-Agent 的数学建模项目并开源出来，收到了社区的欢迎和很多 star, 感谢大家支持。 感谢开源的 latex 模板，我在此基础上转化为 typst 模板 先将.env.example文件 改为.env.dev 然后在.env.dev中 修改各 Agent API 配置 有没有自动部署的脚本 ？ mmaAutoSetupRun MathModelAgent-Example 项目处于开发实验阶段（我有时间就会更…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">llm</span><span class="topic-badge">mathmodel</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,437</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +246 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 413</span>
+                <span class="stat"><span class="stat-icon">📋</span> 43 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于21小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://mathmodel.top/home" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/yuliskov/SmartTube">yuliskov / SmartTube</a></div>
+            </div>
+            <div class="description">
+                Browse media content with your own rules on Android TV
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：My development environment was infected by unknown malicious software, as a result of which a few builds may have been affected. Once the issue was detected, I secured everything with a full disk wipe, restored a clean setup, and now all builds are scanned with VirusTotal. The F-Droid version will also be verified before release. Public keys may have been compromised, which is why I am sharing thi
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Public keys may have been compromised, which is why I am sharing this issue. You can download the new version and the new public key below, and instructions for restoring backups are provided. No extra actions are required since the app uses one-time connection codes. These codes have very limited p…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">android</span><span class="topic-badge">android-tv</span><span class="topic-badge">android-tv-box</span><span class="topic-badge">java</span><span class="topic-badge">kotlin</span><span class="topic-badge">retrofit2</span><span class="topic-badge">rxjava-android</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#b07219"></span>Java</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 33,506</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +233 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,037</span>
+                <span class="stat"><span class="stat-icon">📋</span> 712 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://smarttubeapp.github.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">17</div>
+                <div class="card-title"><a href="https://github.com/ever-co/ever-gauzy">ever-co / ever-gauzy</a></div>
+            </div>
+            <div class="description">
+                Ever® Gauzy™ - Open Business Management Platform (ERP/CRM/HRM/ATS/PM) -https://gauzy.co
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🔥🔥🔥 we just released Ever Works - An open agentic runtime that autonomously researches, ships, and maintains entire businesses, 24/7. Please grab it now from  and make it ⭐⭐⭐ on GitHub! if you like Gauzy, you should also like Ever Teams - Open Work &amp; Productivity Platform. Please check  and make it ⭐ on GitHub! It's built with a React (NextJs) / ReactNative (Expo) stack and connects to headless Ev
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Main features: Human Resources Management (HRM) with Time Management / Tracking and Employees Performance Monitoring Customer Relationship Management (CRM) Enterprise Resource Planning (ERP) A more detailed list of the features available in the platform: Headless APIs Dashboard (provides an overview…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">accounting</span><span class="topic-badge">billing</span><span class="topic-badge">bookkeeping</span><span class="topic-badge">crm</span><span class="topic-badge">crm-platform</span><span class="topic-badge">erp</span><span class="topic-badge">expenses</span><span class="topic-badge">hr</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,339</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +191 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 955</span>
+                <span class="stat"><span class="stat-icon">📋</span> 468 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://gauzy.co" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">18</div>
+                <div class="card-title"><a href="https://github.com/huggingface/transformers">huggingface / transformers</a></div>
+            </div>
+            <div class="description">
+                🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：&lt;!--- Copyright 2020 The HuggingFace Team. All rights reserved. Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">We pledge to help support new state-of-the-art models and democratize their usage by having their model definition be simple, customizable, and efficient. There are over 1M+ Transformers model checkpoints on the Hugging Face Hub you can use. Explore the Hub today to find a model and use Transformers…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">audio</span><span class="topic-badge">deep-learning</span><span class="topic-badge">deepseek</span><span class="topic-badge">gemma</span><span class="topic-badge">glm</span><span class="topic-badge">hacktoberfest</span><span class="topic-badge">llm</span><span class="topic-badge">machine-learning</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 165,647</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +152 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 34,562</span>
+                <span class="stat"><span class="stat-icon">📋</span> 2450 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://huggingface.co/transformers" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">19</div>
+                <div class="card-title"><a href="https://github.com/Swordfish90/cool-retro-term">Swordfish90 / cool-retro-term</a></div>
+            </div>
+            <div class="description">
+                A good looking terminal emulator which mimics the old cathode display...
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens. It has been designed to be eye-candy, customizable, and reasonably lightweight. It uses the QML port of qtermwidget (Konsole): https://github.com/Swordfish90/qmltermwidget. This terminal emulator works under Linux and macOS and requires Qt6.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">cool-retro-term is a terminal emulator which mimics the look and feel of the old cathode tube screens. It has been designed to be eye-candy, customizable, and reasonably lightweight. It uses the QML port of qtermwidget (Konsole): https://github.com/Swordfish90/qmltermwidget.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+            <div class="topics"><span class="topic-badge">linux</span><span class="topic-badge">macos</span><span class="topic-badge">qml</span><span class="topic-badge">qt</span><span class="topic-badge">retro</span><span class="topic-badge">terminal</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>QML</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 26,285</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +57 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,018</span>
+                <span class="stat"><span class="stat-icon">📋</span> 567 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3个月前</span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
