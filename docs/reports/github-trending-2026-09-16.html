@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-09-16</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-09-16 · 共 14 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">14</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">10,705</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/alibaba/open-code-review">alibaba / open-code-review</a></div>
+            </div>
+            <div class="description">
+                Fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI &amp; Anthropic compatible.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 简体中文 | 日本語 | 한국어 | Русский Open Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and identified millions of code defects. After thorough validation at massive scale, we incubated it into an open source project for the community. Simply con
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">It reads Git diffs, sends changed files to a configurable LLM via an agent with tool-use capabilities, and generates structured review comments with line-level precision. The agent can read full file contents, search the codebase, inspect other changed files for context, and produce deep reviews — n…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agent-skills</span><span class="topic-badge">code-review</span><span class="topic-badge">code-review-assistant</span><span class="topic-badge">harness</span><span class="topic-badge">repository-level-context</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 29,202</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,756 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,075</span>
+                <span class="stat"><span class="stat-icon">📋</span> 162 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://open-codereview.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/debpalash/VoiceStudio">debpalash / VoiceStudio</a></div>
+            </div>
+            <div class="description">
+                VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription &amp; audiobook creation in 646 languages.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Install · Features · Compare · Requirements ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Features · Compare · Requirements · Hardware · Active beta. Use the latest release for stable work. main contains the newest fixes and may change between releases. Report problems through GitHub Issues. The Voice workspace starts with three tabs: From audio for cloning, By design for creating a voic…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">audiobook</span><span class="topic-badge">cuda</span><span class="topic-badge">dubbing</span><span class="topic-badge">elevenlabs-alternative</span><span class="topic-badge">huggingface</span><span class="topic-badge">local-first</span><span class="topic-badge">mlx</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 31,254</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,072 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,717</span>
+                <span class="stat"><span class="stat-icon">📋</span> 102 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于14小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://voicestudio.sh" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/JustVugg/colibri">JustVugg / colibri</a></div>
+            </div>
+            <div class="description">
+                Run frontier MoE models on hardware you already own — pure C, zero deps, experts streamed from disk. Tiny engine, immense model. 🐦
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Website · Discord · English · 简体中文 · 繁體中文 · Italiano Tiny engine, immense model. Run frontier MoE models — 744B to 2.8T
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">With its multitiering features Colibrì removes proprietary hardware dependencies aggressively optimizing functional inference engine pipelines. Our operational mission includes changing how weights are represented and moved, deciding what lives in VRAM, RAM, or storage, overlapping heterogeneous com…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 34,104</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,026 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,570</span>
+                <span class="stat"><span class="stat-icon">📋</span> 129 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://justvugg.github.io/colibri" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/NationalSecurityAgency/ghidra">NationalSecurityAgency / ghidra</a></div>
+            </div>
+            <div class="description">
+                Ghidra is a software reverse engineering (SRE) framework
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Ghidra is a software reverse engineering (SRE) framework created and maintained by the National Security Agency Research Directorate. This framework includes a suite of full-featured, high-end software analysis tools that enable users to analyze compiled code on a variety of platforms including Windows, macOS, and Linux. Capabilities include disassembly,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">full-featured, high-end software analysis tools that enable users to analyze compiled code on a variety of platforms including Windows, macOS, and Linux. Capabilities include disassembly, assembly, decompilation, graphing, and scripting, along with hundreds of other features. Ghidra supports a wide …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">disassembler</span><span class="topic-badge">reverse-engineering</span><span class="topic-badge">software-analysis</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#b07219"></span>Java</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 76,905</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +725 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,485</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1960 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于13小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/ever-co/ever-gauzy">ever-co / ever-gauzy</a></div>
+            </div>
+            <div class="description">
+                Ever® Gauzy™ - Open Business Management Platform (ERP/CRM/HRM/ATS/PM) -https://gauzy.co
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🔥🔥🔥 we just released Ever Works - An open agentic runtime that autonomously researches, ships, and maintains entire businesses, 24/7. Please grab it now from  and make it ⭐⭐⭐ on GitHub! if you like Gauzy, you should also like Ever Teams - Open Work &amp; Productivity Platform. Please check  and make it ⭐ on GitHub! It's built with a React (NextJs) / ReactNative (Expo) stack and connects to headless Ev
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Main features: Human Resources Management (HRM) with Time Management / Tracking and Employees Performance Monitoring Customer Relationship Management (CRM) Enterprise Resource Planning (ERP) A more detailed list of the features available in the platform: Headless APIs Dashboard (provides an overview…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">accounting</span><span class="topic-badge">billing</span><span class="topic-badge">bookkeeping</span><span class="topic-badge">crm</span><span class="topic-badge">crm-platform</span><span class="topic-badge">erp</span><span class="topic-badge">expenses</span><span class="topic-badge">hr</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,825</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +634 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,048</span>
+                <span class="stat"><span class="stat-icon">📋</span> 473 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://gauzy.co" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/alphaXiv/OpenResearch">alphaXiv / OpenResearch</a></div>
+            </div>
+            <div class="description">
+                Turn your coding agents into research agents
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The local-first workspace for research agents and autoresearch. Turn  Claude Code, literature, develop hypotheses, run experiments, and produce research artifacts. Install the CLI on macOS or Linux, then launch OpenResearch:
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">service-owned capabilities such as organizations and managed compute. Official release builds send opt-out, coarse usage events tied to a random installation ID. They do not include code, prompts, file contents or paths, repository names, tokens, emails, or project and experiment identifiers. Offici…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,562</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +531 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 234</span>
+                <span class="stat"><span class="stat-icon">📋</span> 28 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openresearch.sh/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/earendil-works/pi">earendil-works / pi</a></div>
+            </div>
+            <div class="description">
+                AI agent toolkit: unified LLM API, agent loop, TUI, coding agent CLI
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：New issues and PRs from new contributors are auto-closed by default. Maintainers review auto-closed issues daily. See CONTRIBUTING.md. This is the home of the Pi agent harness project including our self extensible coding agent. * @earendil-works/pi-coding-agent: Interactive coding agent CLI * @earendil-works/pi-agent-core: Agent runtime with tool calling and state management
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">To learn more about Pi: * Visit pi.dev, the project website with demos * Read the documentation, but you can also ask the agent to explain itself For Slack/chat automation and workflows see earendil-works/pi-chat.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 105,894</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +458 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 13,312</span>
+                <span class="stat"><span class="stat-icon">📋</span> 235 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/addyosmani/agent-skills">addyosmani / agent-skills</a></div>
+            </div>
+            <div class="description">
+                Production-grade engineering skills for AI coding agents.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP /spec          /plan          /build        /test 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           B…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；本周有更新；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">antigravity</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">cursor</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 94,939</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +307 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,069</span>
+                <span class="stat"><span class="stat-icon">📋</span> 128 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://skills.addy.ie" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/Homebrew/BrewUI">Homebrew / BrewUI</a></div>
+            </div>
+            <div class="description">
+                📺 Homebrew's official macOS GUI
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Homebrew's official macOS GUI: making package management approachable for users who prefer graphical interfaces over Terminal, while maintaining complete transparency about underlying Homebrew operations. Enable CLI-averse users to safely discover, install, update, and manage Homebrew packages through a native SwiftUI interface that never hides what Homebrew is doing. Swift 6.0 with strict concurr
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Homebrew's official macOS GUI: making package management approachable for users who prefer graphical interfaces over Terminal, while maintaining complete transparency about underlying Homebrew operations. Enable CLI-averse users to safely discover, install, update, and manage Homebrew packages throu…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#F05138"></span>Swift</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 1,523</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +271 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 35</span>
+                <span class="stat"><span class="stat-icon">📋</span> 12 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/tonhowtf/omniget">tonhowtf / omniget</a></div>
+            </div>
+            <div class="description">
+                Download Udemy and Hotmart courses, YouTube videos, music and books — 1,800+ sites, no terminal. Free open-source desktop app for Windows, macOS and Linux, with a built-in course player, PDF/EPUB reader and music library. Powered by yt-dlp. Your files stay on your computer.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Search keywords (kept here so GitHub search, Google and AI assistants can find the project): OmniGet is a free open source downloader and media toolbox for Windows, macOS and Linux. udemy downloader, hotmart downloader, kiwify downloader, course downloader, youtube downloader, yt-dlp gui, instagram downloader, instagram story downloader, reels downloader, twitter downloader,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Why OmniGet Download and install Your first download in one minute What OmniGet downloads</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">bilibili-downloader</span><span class="topic-badge">course-downloader</span><span class="topic-badge">download-manager</span><span class="topic-badge">downloader</span><span class="topic-badge">epub-reader</span><span class="topic-badge">hotmart-downloader</span><span class="topic-badge">instagram-downloader</span><span class="topic-badge">media-downloader</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 13,125</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +258 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,114</span>
+                <span class="stat"><span class="stat-icon">📋</span> 8 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tonho.wtf" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/danny-avila/LibreChat">danny-avila / LibreChat</a></div>
+            </div>
+            <div class="description">
+                Enhanced ChatGPT Clone: Features Agents, MCP, Skills, DeepSeek, Anthropic, AWS, OpenAI, Responses API, Azure, Groq, o1, GPT-5, Mistral, OpenRouter, Vertex AI, Gemini, Artifacts, AI model switching, message search, Code Interpreter, langchain, DALL-E-3, OpenAPI Actions, Functions, Secure Multi-User Auth, Presets, open-source for self-hosting. Active
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English · alt="Translation Progress" Agent Management API (beta): Create, discover, update, and delete Agents; manage Agent files and Skills; and authenticate machine clients through deployment-bound OIDC identities while preserving existing role and Agent access controls. Attached workspaces (highly experimental): Select or save a per-Agent default workspace for each managed or personal code work
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Context Usage: Inspect dialogue, retained tool traffic, Agent instructions, cache, cost, and runway pressure without double-counting category subsets. Unified attachments: Upload once and let LibreChat route content to the model or extracted text, then provision File Search and Code tools only when …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">anthropic</span><span class="topic-badge">artifacts</span><span class="topic-badge">aws</span><span class="topic-badge">azure</span><span class="topic-badge">chatgpt</span><span class="topic-badge">chatgpt-clone</span><span class="topic-badge">claude</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 43,943</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +254 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,037</span>
+                <span class="stat"><span class="stat-icon">📋</span> 744 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://librechat.ai/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/melgarafael/DeskcommCRM">melgarafael / DeskcommCRM</a></div>
+            </div>
+            <div class="description">
+                Open-source AI sales OS — self-hosted CRM with native AI agents + WhatsApp (WAHA). Open alternative to Kommo, Octadesk &amp; Intercom for any business that sells by chat. MCP-ready, multi-tenant, LGPD.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🇧🇷 Português · 🇺🇸 English · 🇪🇸 Español Agentes de IA que atendem, qualificam e vendem no WhatsApp — dentro de um CRM open source rodando no seu servidor. Sem mensalidade, sem feature travada, seus dados com você. A alternativa aberta a Kommo, Octadesk e Intercom. ⚡ Instalar · 🔄 Atualizar · 🧭 Visão · 🏗️ Arquitetura · 🤝 Contribuir · 🗺️ Roadmap
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Sem mensalidade, sem feature travada, seus dados com você. A alternativa aberta a Kommo, Octadesk e Intercom. ⚡ Instalar · 🔄 Atualizar · 🧭 Visão · 🏗️ Arquitetura · 🤝 Contribuir · 🗺️ Roadmap ☁️ Rode este CRM em produção com 1 comando O DeskcommCRM foi desenvolvido em parceria com a HostGator: o hostg…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">chatbot</span><span class="topic-badge">crm</span><span class="topic-badge">customer-support</span><span class="topic-badge">ecommerce</span><span class="topic-badge">lgpd</span><span class="topic-badge">mcp</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,939</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +193 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 690</span>
+                <span class="stat"><span class="stat-icon">📋</span> 163 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://deskcomm.com.br" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/MG1937/ASC">MG1937 / ASC</a></div>
+            </div>
+            <div class="description">
+                ASC is a super FAST Android decompiler front-end designed for Agents/Mobile Researchers.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：https://blackhat.com/europe/arsenal/schedule/index.html#droid-asc-r8-compiler-optimization-as-a-decompiler-primitive-54834 When decompiling massive Android APKs, the standard procedure is to wait. We wait for tools to eat gigabytes of RAM, fully inflate the artifacts, and spend tens of minutes building heavy global indexes and cross references... All of this is just to guarantee fast code searches
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">usage: droidasc [-h] {getclass,getmanifest,findrefs} ... ASC tooling entry. positional arguments: {getclass,getmanifest,findrefs} examples: droidasc app.apk --gui droidasc getclass app.apk Lcom/poc/Main; -o Main.java droidasc getclass app.apk com.poc.Main --threads 16</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agentic-ai</span><span class="topic-badge">android</span><span class="topic-badge">decompilation</span><span class="topic-badge">decompile</span><span class="topic-badge">decompiler</span><span class="topic-badge">mobile</span><span class="topic-badge">reverse</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 1,283</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +129 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 205</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于10小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/pacifio/atlas">pacifio / atlas</a></div>
+            </div>
+            <div class="description">
+                Source control for agents. Use multiple coding agents, track their changes and query them in one place
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Source control for coding agents. Atlas is source control for coding agents. Every agent run produces checkpoints: commits are linked back to the session that made it alongside the prompts, tool calls, and reasoning. You see which agent did exactly what and why. Run Claude Code, Codex, Atlas's own agent, or anything from the ACP registry side by side against the same codebase, with shared memory s
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Atlas is source control for coding agents. Every agent run produces checkpoints: commits are linked back to the session that made it alongside the prompts, tool calls, and reasoning. You see which agent did exactly what and why. Run Claude Code, Codex, Atlas's own agent, or anything from the ACP reg…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-coding-assistant</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">coding-agents</span><span class="topic-badge">git</span><span class="topic-badge">gitops</span><span class="topic-badge">kilo-code</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 4,711</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +91 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 282</span>
+                <span class="stat"><span class="stat-icon">📋</span> 24 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.tryatlas.cc/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
