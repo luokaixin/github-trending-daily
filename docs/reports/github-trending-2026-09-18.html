@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-09-18</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-09-18 · 共 20 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">20</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">18,209</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/cloudflare/security-audit-skill">cloudflare / security-audit-skill</a></div>
+            </div>
+            <div class="description">
+                A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting. This is the skill that seeded Cloudflare's vulnerability discovery harness, described in Build your own vulnerability harness. The harness grew into a
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting. This is the skill that seeded Cloudflare's vulnera…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,058</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +3,607 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 594</span>
+                <span class="stat"><span class="stat-icon">📋</span> 32 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/alibaba/open-code-review">alibaba / open-code-review</a></div>
+            </div>
+            <div class="description">
+                Fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI &amp; Anthropic compatible.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 简体中文 | 日本語 | 한국어 | Русский Open Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and identified millions of code defects. After thorough validation at massive scale, we incubated it into an open source project for the community. Simply con
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">It reads Git diffs, sends changed files to a configurable LLM via an agent with tool-use capabilities, and generates structured review comments with line-level precision. The agent can read full file contents, search the codebase, inspect other changed files for context, and produce deep reviews — n…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agent-skills</span><span class="topic-badge">code-review</span><span class="topic-badge">code-review-assistant</span><span class="topic-badge">harness</span><span class="topic-badge">repository-level-context</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 35,367</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +3,286 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,508</span>
+                <span class="stat"><span class="stat-icon">📋</span> 207 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://open-codereview.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/Tencent/BrowserSkill">Tencent / BrowserSkill</a></div>
+            </div>
+            <div class="description">
+                Let AI agents use your real, logged-in browser without interrupting your work. CLI + extension for browser automation across any shell-capable AI agent.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English · 中文 BrowserSkill connects Cursor, Claude Code, Codex, OpenClaw, CodeBuddy, WorkBuddy, Pi, Hermes Agent, DeepSeek Harness, and other AI agents to your already logged-in browser.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">For non-interactive installation, specify the intended harness, for example bsk install-skill --harness cursor --json. Explicit selection also works when the harness is not detected. --yes alone installs into every detected harness and fails when none are detected.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日爆发式增长；近期新项目；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">browser-use</span><span class="topic-badge">dsh-plugin</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 4,457</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,302 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 315</span>
+                <span class="stat"><span class="stat-icon">📋</span> 51 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a></div>
+            </div>
+            <div class="description">
+                The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English Português (Brasil) Türkçe Русский
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">ECC is MIT-licensed open source. It works best with Claude Code today, has a supported Codex sync path, and provides capability-limited adapters for Cursor, OpenCode, Gemini, Zed, GitHub Copilot, Antigravity, Qwen, and other harnesses. See the support status matrix before assuming feature parity. Ac…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">anthropic</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span><span class="topic-badge">mcp</span><span class="topic-badge">productivity</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 261,314</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,171 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 39,116</span>
+                <span class="stat"><span class="stat-icon">📋</span> 227 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ecc.tools" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/Tencent/WeKnora">Tencent / WeKnora</a></div>
+            </div>
+            <div class="description">
+                Open-source LLM knowledge platform: turn raw documents into a queryable RAG, an autonomous reasoning agent, and a self-maintaining Wiki.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Overview • Architecture • Key Features • Getting Started • API Reference • Developer Guide WeKnora is an open-source, LLM-powered knowledge framework built for enterprise-grade document understanding, semantic retrieval, and autonomous reasoning. https://github.com/user-attachments/assets/19b28ce2-a62f-4f54-b289-c983576259bc 2:25 · 1080p · English narration &amp; captions.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Overview • Architecture • Key Features • Getting Started • API Reference • Developer Guide WeKnora is an open-source, LLM-powered knowledge framework built for enterprise-grade document understanding, semantic retrieval, and autonomous reasoning. https://github.com/user-attachments/assets/19b28ce2-a…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agentic</span><span class="topic-badge">ai</span><span class="topic-badge">chatbot</span><span class="topic-badge">dsh-plugin</span><span class="topic-badge">embeddings</span><span class="topic-badge">evaluation</span><span class="topic-badge">generative-ai</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 26,509</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,125 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,570</span>
+                <span class="stat"><span class="stat-icon">📋</span> 674 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://weknora.weixin.qq.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/alphaXiv/OpenResearch">alphaXiv / OpenResearch</a></div>
+            </div>
+            <div class="description">
+                Turn your coding agents into research agents
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The local-first workspace for research agents and autoresearch. Turn  Claude Code, literature, develop hypotheses, run experiments, and produce research artifacts. Install the CLI on macOS or Linux, then launch OpenResearch:
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">service-owned capabilities such as organizations and managed compute. Official release builds send opt-out, coarse usage events tied to a random installation ID. They do not include code, prompts, file contents or paths, repository names, tokens, emails, or project and experiment identifiers. Offici…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,078</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +939 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 309</span>
+                <span class="stat"><span class="stat-icon">📋</span> 43 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openresearch.sh/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/NationalSecurityAgency/ghidra">NationalSecurityAgency / ghidra</a></div>
+            </div>
+            <div class="description">
+                Ghidra is a software reverse engineering (SRE) framework
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Ghidra is a software reverse engineering (SRE) framework created and maintained by the National Security Agency Research Directorate. This framework includes a suite of full-featured, high-end software analysis tools that enable users to analyze compiled code on a variety of platforms including Windows, macOS, and Linux. Capabilities include disassembly,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">full-featured, high-end software analysis tools that enable users to analyze compiled code on a variety of platforms including Windows, macOS, and Linux. Capabilities include disassembly, assembly, decompilation, graphing, and scripting, along with hundreds of other features. Ghidra supports a wide …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">disassembler</span><span class="topic-badge">reverse-engineering</span><span class="topic-badge">software-analysis</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#b07219"></span>Java</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 78,629</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +912 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,694</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1961 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于16小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/JustVugg/colibri">JustVugg / colibri</a></div>
+            </div>
+            <div class="description">
+                Run frontier MoE models on hardware you already own — pure C, zero deps, experts streamed from disk. Tiny engine, immense model. 🐦
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Website · Discord · English · 简体中文 · 繁體中文 · Italiano Tiny engine, immense model. Run frontier MoE models — 744B to 2.8T
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">With its multitiering features Colibrì removes proprietary hardware dependencies aggressively optimizing functional inference engine pipelines. Our operational mission includes changing how weights are represented and moved, deciding what lives in VRAM, RAM, or storage, overlapping heterogeneous com…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 35,844</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +873 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,768</span>
+                <span class="stat"><span class="stat-icon">📋</span> 143 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于14小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://justvugg.github.io/colibri" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/abue-ammar/tinycast">abue-ammar / tinycast</a></div>
+            </div>
+            <div class="description">
+                Tinycast — a tiny, fully native macOS launcher, hotkeys, and clipboard history.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A tiny, fully native macOS launcher. One hotkey, everything you reach for all day, under 100 MB of SwiftUI and AppKit, zero third-party dependencies, no Electron and no telemetry. It also runs real Raycast extensions, rendered as native SwiftUI. Free, open source, and staying that way. For anything private, email iabueammar@gmail.com.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">AI chat — use your own key or an installed AI account, chat from the palette. Off out of the box, like every AI feature. Quick Actions — fix grammar, rewrite, translate or summarize the selected text in any app. Raycast extensions — run the ones you already have natively, rendered as SwiftUI. Backup…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#F05138"></span>Swift</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,226</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +739 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 287</span>
+                <span class="stat"><span class="stat-icon">📋</span> 56 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://abue-ammar.github.io/tinycast/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/addyosmani/agent-skills">addyosmani / agent-skills</a></div>
+            </div>
+            <div class="description">
+                Production-grade engineering skills for AI coding agents.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP /spec          /plan          /build        /test 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           B…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">antigravity</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">cursor</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 95,977</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +680 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,156</span>
+                <span class="stat"><span class="stat-icon">📋</span> 109 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://skills.addy.ie" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/jamiepine/voicebox">jamiepine / voicebox</a></div>
+            </div>
+            <div class="description">
+                The open-source AI voice studio. Clone, dictate, create.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Clone any voice. Generate speech. Dictate into any app. Talk to agents in voices you own. The full voice I/O stack, running locally on your machine. voicebox.sh • Docs •
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Features • API • Voicebox is a local-first AI voice studio — a free and open-source alternative to ElevenLabs and WisprFlow in one app. Clone voices from a few seconds of audio, generate speech in 23 languages across 7 TTS engines, dictate into any text field with a global hotkey, and give any MCP-a…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">cuda</span><span class="topic-badge">mlx</span><span class="topic-badge">qwen3-tts</span><span class="topic-badge">qwen3-tts-ui</span><span class="topic-badge">voice-ai</span><span class="topic-badge">voice-clone</span><span class="topic-badge">whisper</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 54,935</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +667 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,832</span>
+                <span class="stat"><span class="stat-icon">📋</span> 698 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1个月前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://voicebox.sh" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/anthropics/claude-code">anthropics / claude-code</a></div>
+            </div>
+            <div class="description">
+                Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands. Use it in your terminal, IDE, or tag @claude on Github. Learn more in the official documentation. [!NOTE] Installation via npm is deprecated. Use one of the r
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">When you use Claude Code, we collect feedback, which includes usage data (such as code acceptance or rejections), associated conversation data, and user feedback submitted via the /bug command. See our data usage policies. We have implemented several safeguards to protect your data, including limite…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 145,942</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +538 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 23,653</span>
+                <span class="stat"><span class="stat-icon">📋</span> 12492 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://code.claude.com/docs/en/overview" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/ever-co/ever-gauzy">ever-co / ever-gauzy</a></div>
+            </div>
+            <div class="description">
+                Ever® Gauzy™ - Open Business Management Platform (ERP/CRM/HRM/ATS/PM) -https://gauzy.co
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🔥🔥🔥 we just released Ever Works - An open agentic runtime that autonomously researches, ships, and maintains entire businesses, 24/7. Please grab it now from  and make it ⭐⭐⭐ on GitHub! if you like Gauzy, you should also like Ever Teams - Open Work &amp; Productivity Platform. Please check  and make it ⭐ on GitHub! It's built with a React (NextJs) / ReactNative (Expo) stack and connects to headless Ev
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Main features: Human Resources Management (HRM) with Time Management / Tracking and Employees Performance Monitoring Customer Relationship Management (CRM) Enterprise Resource Planning (ERP) A more detailed list of the features available in the platform: Headless APIs Dashboard (provides an overview…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">accounting</span><span class="topic-badge">billing</span><span class="topic-badge">bookkeeping</span><span class="topic-badge">crm</span><span class="topic-badge">crm-platform</span><span class="topic-badge">erp</span><span class="topic-badge">expenses</span><span class="topic-badge">hr</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 7,621</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +470 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,132</span>
+                <span class="stat"><span class="stat-icon">📋</span> 459 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://gauzy.co" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/cline/cline">cline / cline</a></div>
+            </div>
+            <div class="description">
+                Autonomous coding agent as an SDK, IDE extension, or CLI assistant.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The open source coding agent in your IDE, terminal, &amp; desktop. Run Cline in your terminal. Interactive chat or fully headless for CI/CD and scripting.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Extend Cline's capabilities with plugins. Using the SDK, register tools and lifecycle hooks programmatically through the plugin system for logging, auditing, policy enforcement, or adding domain-specific capabilities. Simple plugin example below. `typescript import { Agent, createTool } from "@cline…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 68,606</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +380 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 7,419</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1354 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://cline.bot" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/TencentCloud/Octop">TencentCloud / Octop</a></div>
+            </div>
+            <div class="description">
+                A smarter, self-hosted AI assistant — multi-user, multi-agent.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Highlights · Overview · Core Technology · Features ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Overview · Core Technology · Features · Roadmap · Features · Roadmap · Quick Start · Octop is an open-source, self-hosted AI assistant. It's not just a tool — it's a digital life form that can operate in parallel. Through its multi-agent architecture, it builds an intelligent environment that is bot…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；近期新项目；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agentic-ai</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agent</span><span class="topic-badge">ai-agents</span><span class="topic-badge">local-first</span><span class="topic-badge">long-term-memory</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,598</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +367 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 373</span>
+                <span class="stat"><span class="stat-icon">📋</span> 242 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://octop.cloud" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/roboflow/supervision">roboflow / supervision</a></div>
+            </div>
+            <div class="description">
+                We write your reusable computer vision tools. 💜
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：width="100%" src="https://media.roboflow.com/open-source/supervision/rf-supervision-banner.png?updatedAt=1678995927529" notebooks | inference | autodistill | maestro 👋 Hello
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Read more about conda, mamba, and installing from source in our guide. Supervision was designed to be model agnostic. Just plug in any classification, detection, or segmentation model. For your convenience, we have created connectors for the most popular libraries like Ultralytics, Transformers, MMD…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">classification</span><span class="topic-badge">coco</span><span class="topic-badge">computer-vision</span><span class="topic-badge">deep-learning</span><span class="topic-badge">hacktoberfest</span><span class="topic-badge">image-processing</span><span class="topic-badge">instance-segmentation</span><span class="topic-badge">low-code</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 50,857</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +329 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,832</span>
+                <span class="stat"><span class="stat-icon">📋</span> 71 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://supervision.roboflow.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">17</div>
+                <div class="card-title"><a href="https://github.com/anthropics/knowledge-work-plugins">anthropics / knowledge-work-plugins</a></div>
+            </div>
+            <div class="description">
+                Open source repository of plugins primarily intended for knowledge workers to use in Claude Cowork
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Plugins that turn Claude into a specialist for your role, team, and company. Built for Claude Cowork, also compatible with Claude Code. Cowork lets you set the goal and Claude delivers finished, professional work. Plugins let you go further: tell Claude how you like work done, which tools and data to pull from, how to handle critical workflows, and what slash commands to expose — so your team gets
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Plugins that turn Claude into a specialist for your role, team, and company. Built for Claude Cowork, also compatible with Claude Code. Cowork lets you set the goal and Claude delivers finished, professional work. Plugins let you go further: tell Claude how you like work done, which tools and data t…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 24,629</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +287 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,952</span>
+                <span class="stat"><span class="stat-icon">📋</span> 81 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">18</div>
+                <div class="card-title"><a href="https://github.com/n8n-io/n8n">n8n-io / n8n</a></div>
+            </div>
+            <div class="description">
+                Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Fair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code, run it self-hosted or in the cloud, and connect to 1500+ integrations. AI automation you can trust with real work, from prototype to production. AI-Native Automation Platform: Build and operationalize AI workflows and multi-step agents using your own data, models, and tools Model Flexibility, 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">💡 Example Workflows 🤖 AI &amp; LangChain Guide 👥 Community Forum 📖 Community Tutorials Enterprise Licenses available for additional features and support. Additional information about the license model can be found in the docs. Found a bug 🐛 or have a feature idea ✨? Check our Contributing Guide for a se…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">apis</span><span class="topic-badge">automation</span><span class="topic-badge">cli</span><span class="topic-badge">data-flow</span><span class="topic-badge">development</span><span class="topic-badge">integration-framework</span><span class="topic-badge">integrations</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 205,097</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +281 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 60,754</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1197 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://n8n.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">19</div>
+                <div class="card-title"><a href="https://github.com/coder/coder">coder / coder</a></div>
+            </div>
+            <div class="description">
+                Secure environments for developers and their agents
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Self-Hosted Cloud Development Environments and AI Agents Quickstart | Docs | Why Coder | Premium Coder is a self-hosted platform for cloud development environments and AI coding agents. Workspaces are defined with Terraform, connected through a secure Wireguard® tunnel, and automatically shut down when not used. Coder Agents runs a native AI coding agent whose loop executes in the control plane on
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Quickstart | Docs | Why Coder | Premium Coder is a self-hosted platform for cloud development environments and AI coding agents. Workspaces are defined with Terraform, connected through a secure Wireguard® tunnel, and automatically shut down when not used. Coder Agents runs a native AI coding agent …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">dev-tools</span><span class="topic-badge">development-environment</span><span class="topic-badge">go</span><span class="topic-badge">golang</span><span class="topic-badge">ide</span><span class="topic-badge">jetbrains</span><span class="topic-badge">remote-development</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 14,929</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +145 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,488</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1035 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://coder.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">20</div>
+                <div class="card-title"><a href="https://github.com/cilium/cilium">cilium / cilium</a></div>
+            </div>
+            <div class="description">
+                eBPF-based Networking, Security, and Observability
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：.. raw:: html Cilium is a networking, observability, and security solution with an eBPF-based dataplane. It provides a simple flat Layer 3 network with the ability to span multiple clusters in either a native routing or overlay mode. It is L7-protocol
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">and flexible. To learn more about eBPF, visit eBPF.io_. .. image:: Documentation/images/cilium-overview.png :alt: Overview of Cilium features for networking, observability, service mesh, and runtime security .. raw:: html .. image:: Documentation/images/cilium-overview.png :alt: Overview of Cilium f…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">bpf</span><span class="topic-badge">cncf</span><span class="topic-badge">cni</span><span class="topic-badge">containers</span><span class="topic-badge">ebpf</span><span class="topic-badge">k8s</span><span class="topic-badge">kernel</span><span class="topic-badge">kubernetes</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 25,303</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +111 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,076</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1087 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://cilium.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
