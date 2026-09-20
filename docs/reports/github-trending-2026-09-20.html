@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-09-20</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-09-20 · 共 15 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">15</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">7</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">7,396</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/cloudflare/security-audit-skill">cloudflare / security-audit-skill</a></div>
+            </div>
+            <div class="description">
+                A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting. This is the skill that seeded Cloudflare's vulnerability discovery harness, described in Build your own vulnerability harness. The harness grew into a
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting. This is the skill that seeded Cloudflare's vulnera…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；本周有更新</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 16,742</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +3,155 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 916</span>
+                <span class="stat"><span class="stat-icon">📋</span> 39 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/trycua/cua">trycua / cua</a></div>
+            </div>
+            <div class="description">
+                Scale computer-use 2.0 with open-source drivers, cross-OS fleets, and benchmarks for training, evaluation, and data generation.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Cua Fleets: Provision a Linux desktop, run a command, and save a screenshot. CUA-S1: Explore small, specialized models for computer-use decisions. Cua Driver: Operate Calculator and verify its result. Lume: Create a Tahoe VM and connect over SSH.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Your first Cloud Fleet | Fleet overview | Sandbox SDK reference Give your agent tools to inspect and operate native desktop apps and browsers on macOS, Windows, and Linux. Connect through the CLI, MCP, or typed SDKs. Background delivery lets agents work without moving your pointer or taking focus wh…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">ai-agent</span><span class="topic-badge">apple</span><span class="topic-badge">computer-use</span><span class="topic-badge">computer-use-agent</span><span class="topic-badge">containerization</span><span class="topic-badge">cua</span><span class="topic-badge">desktop-automation</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#e34c26"></span>HTML</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 24,621</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +859 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,691</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1032 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://cua.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/addyosmani/agent-skills">addyosmani / agent-skills</a></div>
+            </div>
+            <div class="description">
+                Production-grade engineering skills for AI coding agents.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP /spec          /plan          /build        /test 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           B…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">antigravity</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">cursor</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 97,174</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +556 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,256</span>
+                <span class="stat"><span class="stat-icon">📋</span> 111 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://skills.addy.ie" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/anthropics/claude-code">anthropics / claude-code</a></div>
+            </div>
+            <div class="description">
+                Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows - all through natural language commands.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster by executing routine tasks, explaining complex code, and handling git workflows -- all through natural language commands. Use it in your terminal, IDE, or tag @claude on Github. Learn more in the official documentation. [!NOTE] Installation via npm is deprecated. Use one of the r
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">When you use Claude Code, we collect feedback, which includes usage data (such as code acceptance or rejections), associated conversation data, and user feedback submitted via the /bug command. See our data usage policies. We have implemented several safeguards to protect your data, including limite…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 146,791</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +483 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 23,973</span>
+                <span class="stat"><span class="stat-icon">📋</span> 12323 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://code.claude.com/docs/en/overview" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/Open-Dev-Society/OpenStock">Open-Dev-Society / OpenStock</a></div>
+            </div>
+            <div class="description">
+                OpenStock is an open-source alternative to expensive market platforms. Track real-time prices, set personalized alerts, and explore detailed company insights — built openly, for everyone, forever free.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：New from Open Dev Society: kitbash. Before you build, find out which parts already exist on GitHub. Borrow them, adapt them, or write the rest. © Open Dev Society. This project is licensed under AGPL-3.0; if you modify, redistribute, or deploy it (including as a web service), you must release your source code under the same license and credit the original authors. OpenStock is an open-source alter
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">✨ Introduction 2. 🌍 Open Dev Society Manifesto 3. ⚙️ Tech Stack 4. 🔋 Features 4. 🔋 Features 5. 🤸 Quick Start 6. 🐳 Docker Setup 7. 🔐 Environment Variables Market overview Heatmap, quotes, and top stories (TradingView widgets) Personalized onboarding Collects country, investment goals, risk toleran…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">coderabbit</span><span class="topic-badge">inngest</span><span class="topic-badge">nextjs</span><span class="topic-badge">shadcn-ui</span><span class="topic-badge">stock-market</span><span class="topic-badge">tailwindcss</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 16,228</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +472 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,097</span>
+                <span class="stat"><span class="stat-icon">📋</span> 29 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于16小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openstock-ods.vercel.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/asciimoo/hister">asciimoo / hister</a></div>
+            </div>
+            <div class="description">
+                Your own search engine
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Your own search engine Hister is a private search engine for the pages you visit and the files you keep. It indexes their full contents so you can find information again from the web interface, terminal, or an AI assistant connected through MCP. Try the demo · Download Hister · Read the quickstart · Documentation 1. Download the binary for your platform from the latest release, then rename it to h
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Optional semantic search sends document text to the embeddings endpoint you choose. Review the privacy overview and semantic search configuration before enabling remote integrations. Unlike traditional search engines, Hister builds a personal search index from the web pages and files you choose to k…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">browser-history</span><span class="topic-badge">go</span><span class="topic-badge">golang</span><span class="topic-badge">history</span><span class="topic-badge">index</span><span class="topic-badge">mcp</span><span class="topic-badge">mcp-server</span><span class="topic-badge">personal-search</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,304</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +420 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 222</span>
+                <span class="stat"><span class="stat-icon">📋</span> 61 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://hister.org/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/coder/coder">coder / coder</a></div>
+            </div>
+            <div class="description">
+                Secure environments for developers and their agents
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Self-Hosted Cloud Development Environments and AI Agents Quickstart | Docs | Why Coder | Premium Coder is a self-hosted platform for cloud development environments and AI coding agents. Workspaces are defined with Terraform, connected through a secure Wireguard® tunnel, and automatically shut down when not used. Coder Agents runs a native AI coding agent whose loop executes in the control plane on
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Quickstart | Docs | Why Coder | Premium Coder is a self-hosted platform for cloud development environments and AI coding agents. Workspaces are defined with Terraform, connected through a secure Wireguard® tunnel, and automatically shut down when not used. Coder Agents runs a native AI coding agent …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">dev-tools</span><span class="topic-badge">development-environment</span><span class="topic-badge">go</span><span class="topic-badge">golang</span><span class="topic-badge">ide</span><span class="topic-badge">jetbrains</span><span class="topic-badge">remote-development</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 15,687</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +402 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,525</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1047 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://coder.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/anthropics/knowledge-work-plugins">anthropics / knowledge-work-plugins</a></div>
+            </div>
+            <div class="description">
+                Open source repository of plugins primarily intended for knowledge workers to use in Claude Cowork
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Plugins that turn Claude into a specialist for your role, team, and company. Built for Claude Cowork, also compatible with Claude Code. Cowork lets you set the goal and Claude delivers finished, professional work. Plugins let you go further: tell Claude how you like work done, which tools and data to pull from, how to handle critical workflows, and what slash commands to expose — so your team gets
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Plugins that turn Claude into a specialist for your role, team, and company. Built for Claude Cowork, also compatible with Claude Code. Cowork lets you set the goal and Claude delivers finished, professional work. Plugins let you go further: tell Claude how you like work done, which tools and data t…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 25,181</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +281 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,000</span>
+                <span class="stat"><span class="stat-icon">📋</span> 88 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于22小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/cactus-compute/needle">cactus-compute / needle</a></div>
+            </div>
+            <div class="description">
+                Automation foundation model for tiny devices: 2-bit, 8-29 MB, tool calls, structured extraction and embeddings on phones, wearables, smart homes, robots, cars and microcontrollers.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A foundation model for mobiles, wearables, robots, smart home, automotive and microcontrollers. The whole model is a single 8-29 MB binary built on our Simple Attention Network, and we trade general chat capacity to beat models 10x its size on mobile tool calls and match 2-3x bigger models on extraction. Tool calls: given the functions your app exposes, Needle picks the right ones and fills every 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A foundation model for mobiles, wearables, robots, smart home, automotive and microcontrollers. The whole model is a single 8-29 MB binary built on our Simple Attention Network, and we trade general chat capacity to beat models 10x its size on mobile tool calls and match 2-3x bigger models on extrac…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">cactus</span><span class="topic-badge">edge-ai</span><span class="topic-badge">foundation-model</span><span class="topic-badge">function-calling</span><span class="topic-badge">llm</span><span class="topic-badge">on-device-ai</span><span class="topic-badge">tinyml</span><span class="topic-badge">tool-calling</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,680</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +234 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 749</span>
+                <span class="stat"><span class="stat-icon">📋</span> 29 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://cactuscompute.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/higgsfield-ai/higgsfield">higgsfield-ai / higgsfield</a></div>
+            </div>
+            <div class="description">
+                Fault-tolerant, highly scalable GPU orchestration, and a machine learning framework designed for training models with billions to trillions of parameters
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Higgsfield is an open-source, fault-tolerant, highly scalable GPU orchestration, and a machine learning framework designed for training models with billions to trillions of parameters, such as Large Language Models (LLMs). Higgsfield serves as a GPU workload manager and machine learning framework with five primary functions: 1. Allocating exclusive and non-exclusive access to compute resources (no
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Feel free to open an issue if you have any problems with other clouds. Here you can find the quick start guide on how to setup your nodes and start training. Initialize the project Setup the environment</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；本周有更新</div>
+            <div class="topics"><span class="topic-badge">cluster-management</span><span class="topic-badge">deep-learning</span><span class="topic-badge">distributed</span><span class="topic-badge">llama</span><span class="topic-badge">llama2</span><span class="topic-badge">llm</span><span class="topic-badge">machine-learning</span><span class="topic-badge">mlops</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#DA5B0B"></span>Jupyter Notebook</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,032</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +196 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 922</span>
+                <span class="stat"><span class="stat-icon">📋</span> 13 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/docling-project/docling">docling-project / docling</a></div>
+            </div>
+            <div class="description">
+                Get your documents ready for gen AI
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Docling simplifies document processing by parsing diverse formats — including advanced PDF understanding — and providing seamless integrations with the generative AI ecosystem. 🗂️ Parsing of multiple document formats including PDF, DOCX, PPTX, XLSX, HTML, EPUB, Apple Pages, WAV, MP3, WebVTT, Box Notes, email formats (EML, MSG), images (PNG, TIFF, JPEG, ...), LaTeX, DocLang, plain text, and more 📑 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">🔒 Local execution capabilities for sensitive data and air-gapped environments 🤖 Plug-and-play integrations incl. LangChain, LlamaIndex, Crew AI &amp; Haystack for agentic AI 🔍 Extensive OCR support for scanned PDFs and images 👓 Support for several Visual Language Models, such as (GraniteDocling) More ad…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">convert</span><span class="topic-badge">document-parser</span><span class="topic-badge">document-parsing</span><span class="topic-badge">documents</span><span class="topic-badge">docx</span><span class="topic-badge">html</span><span class="topic-badge">markdown</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 67,198</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +129 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,839</span>
+                <span class="stat"><span class="stat-icon">📋</span> 935 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docling-project.github.io/docling" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/ruanyf/weekly">ruanyf / weekly</a></div>
+            </div>
+            <div class="description">
+                科技爱好者周刊，每周五发布
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：记录每周值得分享的科技内容，周五发布。 欢迎投稿文章/软件/资源，请提交 issue 。 P.S. 讨论区的《谁在招人》，是一个免费的程序员招聘帖，提供大量就业信息，欢迎发布工作/实习岗位。 第 413 期：再见了，React Native
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">记录每周值得分享的科技内容，周五发布。 欢迎投稿文章/软件/资源，请提交 issue 。 P.S. 讨论区的《谁在招人》，是一个免费的程序员招聘帖，提供大量就业信息，欢迎发布工作/实习岗位。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>未指定</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 103,350</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +98 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,431</span>
+                <span class="stat"><span class="stat-icon">📋</span> 9137 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于17小时前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/ZuodaoTech/everyone-can-use-english">ZuodaoTech / everyone-can-use-english</a></div>
+            </div>
+            <div class="description">
+                人人都能用英语
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：AI 是当今世界上最好的外语老师，Enjoy 做 AI 最好的助教。 Enjoy 全新版本已经上线，可访问 https://enjoy.bot 直接使用。 Enjoy 浏览器插件已经上线，支持 YouTube 和 Netflix。可访问 Chrome Web Store 安装使用。 新版桌面版将会是对网页版的套壳和增强，即将发布。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">AI 是当今世界上最好的外语老师，Enjoy 做 AI 最好的助教。 Enjoy 全新版本已经上线，可访问 https://enjoy.bot 直接使用。 Enjoy 浏览器插件已经上线，支持 YouTube 和 Netflix。可访问 Chrome Web Store 安装使用。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 37,940</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +48 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,216</span>
+                <span class="stat"><span class="stat-icon">📋</span> 125 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2个月前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://1000h.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/yynxxxxx/Codex-X">yynxxxxx / Codex-X</a></div>
+            </div>
+            <div class="description">
+                OpenAI Codex 桌面端/CLI 的可视化管理工具，具有Provider/API 切换、会话同步、提示词注入、Skills/MCP 管理、TOML 配置可视化的跨平台工具。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Codex 可视化提示词注入 · Provider · 会话 · Skills / MCP 管理工具 一款面向 OpenAI Codex 桌面端 / Codex CLI 的跨平台桌面工具。把提示词模板、自定义 Prompt、第三方 API 供应商、会话同步、Skills / MCP 和 TOML 配置都放进可视化界面里，不用反复手改文件。 当你同时使用 Codex 桌面端、CLI、第三方 API、Skills / MCP 和多套提示词时，配置很容易散落在不同文件里。Codex-X 把这些高频操作集中到一个桌面界面中，让当前状态看得见、常用操作点一下就能完成。 你可以用它：
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">安装包离线自带 5 套模板；软件启动后会从 GitHub examples/ 同步另外 6 套软件开发与写作辅助模板，以及后续更新。同步成功的在线版本会缓存到本地，临时离线仍可继续使用。你也可以导入自己的 .md、新增分类、编辑说明，并像切换插件一样启用或禁用任意提示词。 Codex-X 现在不只是“几套内置 Prompt”的启动器，而是一个可视化提示词注入与管理工具： 按分类管理提示词，例如破甲 / 逆向、软件开发、写作辅助，也可以新增自己的分类 支持同步 GitHub 模板、导入 Markdown、手动添加提示词、编辑标题 / 文件名 / 内容 如果你有好用的提示词模板，欢迎在 Issue…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,460</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +32 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 451</span>
+                <span class="stat"><span class="stat-icon">📋</span> 29 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://codex-x.site" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/cloudflare/quiche">cloudflare / quiche</a></div>
+            </div>
+            <div class="description">
+                🥧 Savoury implementation of the QUIC transport protocol and HTTP/3
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[quiche] is an implementation of the QUIC transport protocol and HTTP/3 as specified by the [IETF]. It provides a low level API for processing QUIC packets and handling connection state. The application is responsible for providing I/O (e.g. sockets handling) as well as an event loop with support for timers.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">For more information on how quiche came about and some insights into its design you can read a [post] on Cloudflare's blog that goes into some more detail. Who uses quiche? --------------- Before diving into the quiche API, here are a few examples on how to use the quiche tools provided as part of t…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">http3</span><span class="topic-badge">network-programming</span><span class="topic-badge">protocol</span><span class="topic-badge">quic</span><span class="topic-badge">rust</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 12,076</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +31 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,120</span>
+                <span class="stat"><span class="stat-icon">📋</span> 365 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> BSD-2-Clause</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.quic.tech/quiche/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
