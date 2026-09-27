@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-09-27</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-09-27 · 共 15 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">15</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8,306</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/paperclipai/paperclip">paperclipai / paperclip</a></div>
+            </div>
+            <div class="description">
+                The open-source app everyone uses to manage agents at work
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Quickstart · Docs · GitHub · Discord ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Every task traces back to the organization mission. Agents know what to do and why. Agents wake on a schedule, check work, and act. Delegation flows up and down the org chart. Monthly budgets per agent. When they hit the limit, they stop. No runaway costs. One deployment, many organizations. Complet…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 87,805</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,608 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 15,480</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5770 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://paperclip.ing" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/vectorize-io/hindsight">vectorize-io / hindsight</a></div>
+            </div>
+            <div class="description">
+                Hindsight: Agent Memory That Learns
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Documentation • Integrations • Cookbook • Benchmarks • Paper • Hindsight Cloud Hindsight™ is an agent memory system built to create smarter agents that learn over time. Most agent memory systems focus on recalling conversation history. Hindsight is focused on making agents that learn, not just remember. It eliminates the shortcomings of alternative techniques such as RAG and knowledge graph and de
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Use Cases Running in Production Resources Hindsight is the most accurate agent memory system ever tested according to benchmark performance. It has achieved state-of-the-art performance on the LongMemEval benchmark, widely used to assess memory system performance across a variety of conversational A…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agentic-ai</span><span class="topic-badge">agents</span><span class="topic-badge">ai-memory</span><span class="topic-badge">memory</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 33,407</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,147 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,859</span>
+                <span class="stat"><span class="stat-icon">📋</span> 155 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于15小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://hindsight.vectorize.io/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/dream-num/univer">dream-num / univer</a></div>
+            </div>
+            <div class="description">
+                The Office Harness for AI Agents — Spreadsheets, Docs, Slides, Canvas, Relational Tables, and PDF in one runtime.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The Office Harness for AI Agents Spreadsheets · Documents · Presentations · Bases · Boards · PDFs (coming soon) High-performance, fully customizable Office SDK Build embeddable productivity experiences with a plugin architecture, Canvas-based rendering,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Compose only the features you need through plugins or start quickly with presets. Extend behavior through custom plugins, commands, services, UI components, and Facade APIs. Univer is not a spreadsheet file viewer only. It is a framework for building your own productivity surface. Across the Univer …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">board</span><span class="topic-badge">collaboration</span><span class="topic-badge">data-table</span><span class="topic-badge">doc</span><span class="topic-badge">docx</span><span class="topic-badge">excel</span><span class="topic-badge">grid</span><span class="topic-badge">pdf</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 19,677</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +849 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,659</span>
+                <span class="stat"><span class="stat-icon">📋</span> 150 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.univer.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/rohitg00/ai-engineering-from-scratch">rohitg00 / ai-engineering-from-scratch</a></div>
+            </div>
+            <div class="description">
+                Learn it. Build it. Ship it for others.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Español · Français · Português · Deutsch ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Each lesson runs the same loop: read the problem, derive the math, write the code, run</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-engineering</span><span class="topic-badge">computer-vision</span><span class="topic-badge">course</span><span class="topic-badge">deep-learning</span><span class="topic-badge">from-scratch</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 58,516</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +827 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,148</span>
+                <span class="stat"><span class="stat-icon">📋</span> 46 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aiengineeringfromscratch.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/openbao/openbao">openbao / openbao</a></div>
+            </div>
+            <div class="description">
+                OpenBao is a software solution to manage, store, and distribute sensitive data including secrets, certificates, and keys.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Please note: We take OpenBao's security and our users' trust very seriously. If you believe you have found a security issue in OpenBao, _please responsibly disclose_ by contacting us at openbao-security@lists.openssf.org.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The key features of OpenBao are: * Secure Secret Storage: Arbitrary key/value secrets can be stored in OpenBao. OpenBao encrypts these secrets prior to writing them to persistent storage, so gaining access to the raw storage isn't enough to access your such as AWS or SQL databases. For example, when…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">go</span><span class="topic-badge">secret-management</span><span class="topic-badge">security</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 8,050</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +364 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 591</span>
+                <span class="stat"><span class="stat-icon">📋</span> 327 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MPL-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openbao.org/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/zhaoxuya520/reverse-skill">zhaoxuya520 / reverse-skill</a></div>
+            </div>
+            <div class="description">
+                Reverse Engineering / Authorized Penetration Testing / Security Research Skill Router Pack AI-powered routing + On-demand toolchain bootstrapping + Self-evolving knowledge base Supports Claude Code, Kiro, Cursor, Cline, and other AI coding clients 逆向/渗透/安全技能路由包 - AI 自动路由 + 按需自举工具链 + 自动进化经验库 | 支持 Claude Code / Kiro / Cursor / Cline 等代码 AI 客户端
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：About · Getting Started · Usage · Tutorial ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">About · Getting Started · Usage · Tutorial · Usage · Tutorial · Fast route · Routing · Why this exists: AI agents don't know whether to use jadx, apktool, Frida, IDA, or BurpSuite for a given task APK, ELF, JS, PCAP, and CTF tasks each need different playbooks Tools, MCP servers, and scripts are sca…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；本周有更新</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#012456"></span>PowerShell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 38,110</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +361 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,289</span>
+                <span class="stat"><span class="stat-icon">📋</span> 22 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/NVIDIA/Model-Optimizer">NVIDIA / Model-Optimizer</a></div>
+            </div>
+            <div class="description">
+                A unified library of SOTA model optimization techniques like quantization, distillation, pruning, neural architecture search, speculative decoding, etc. It compresses deep learning models for downstream deployment frameworks like TensorRT-LLM, TensorRT, vLLM, etc. to optimize inference speed.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Documentation Roadmap Announcement Blogs ______________________________________________________________________
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">[2025/09/17] BLOG: An Introduction to Speculative Decoding for Reducing Latency in AI Inference [2025/09/11] BLOG: How Quantization Aware Training Enables Low-Precision Accuracy Recovery [2025/08/29] BLOG: Fine-Tuning gpt-oss for Accuracy and Performance with Quantization Aware Training [2025/08/01]…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 4,812</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +357 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 672</span>
+                <span class="stat"><span class="stat-icon">📋</span> 426 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://nvidia.github.io/Model-Optimizer/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/block/buzz">block / buzz</a></div>
+            </div>
+            <div class="description">
+                A hive mind communication platform
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Vision · Sovereign · Forge · Agents ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Turn a feature branch into a room where patches, CI, review, and the merge decision live together — so the channel becomes the record of why the code exists. Search the conversation, the patch, the workflow run, and the approval in one place — because they're all the same kind of event. Let an agent…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 34,875</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +339 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,598</span>
+                <span class="stat"><span class="stat-icon">📋</span> 3662 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/mobile-next/mobile-mcp">mobile-next / mobile-mcp</a></div>
+            </div>
+            <div class="description">
+                Model Context Protocol Server for Mobile Automation and Scraping (iOS, Android, Emulators, Simulators and Real Devices)
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 日本語 | 简体中文 This is an MCP Server that enables scalable mobile automation, development through a platform-agnostic interface, eliminating the need for distinct iOS or Android knowledge. You can run it on emulators, simulators, and real devices (iOS and Android). This server allows Agents and LLMs to interact with native iOS/Android applications and devices through structured accessibility
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">🤖 Enables agent-to-agent communication for mobile automation usecases, data extraction 🚀 Accessibility-first — fast and cheap: drives apps from the native accessibility tree (no vision model, no image tokens), falling back to screenshots + coordinates only when needed. 📱 One API, every target: the s…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">android</span><span class="topic-badge">emulator</span><span class="topic-badge">ios</span><span class="topic-badge">mcp</span><span class="topic-badge">mobile</span><span class="topic-badge">physical</span><span class="topic-badge">real</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 7,471</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +168 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 648</span>
+                <span class="stat"><span class="stat-icon">📋</span> 45 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://mobilenext.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/microsoft/vscode">microsoft / vscode</a></div>
+            </div>
+            <div class="description">
+                Visual Studio Code
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：This repository ("Code - OSS") is where we (Microsoft) develop the Visual Studio Code product together with the community. Not only do we work on code and issues here, but we also publish our roadmap, monthly iteration plans, and our endgame plans. This source code is available to everyone under the standard MIT license. Visual Studio Code is a distribution of the Code - OSS repository with Micros
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Visual Studio Code is updated monthly with new features and bug fixes. You can download it for Windows, macOS, and Linux on the Visual Studio Code website. To get the latest releases every day, install the Insiders build. There are many ways in which you can participate in this project, for example:…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">editor</span><span class="topic-badge">electron</span><span class="topic-badge">microsoft</span><span class="topic-badge">typescript</span><span class="topic-badge">visual-studio-code</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 193,103</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +95 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 43,601</span>
+                <span class="stat"><span class="stat-icon">📋</span> 21143 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://code.visualstudio.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/vercel/next.js">vercel / next.js</a></div>
+            </div>
+            <div class="description">
+                The React Framework
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Used by some of the world's largest companies, Next.js enables you to create full-stack web applications by extending the latest React features, and integrating powerful Rust-based JavaScript tooling for the fastest builds. Visit our Learn Next.js course to get started with Next.js. Visit the Next.js Showcase to see more sites built with Next.js. Visit https://nextjs.org/docs to view the full docu
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Used by some of the world's largest companies, Next.js enables you to create full-stack web applications by extending the latest React features, and integrating powerful Rust-based JavaScript tooling for the fastest builds. Visit our Learn Next.js course to get started with Next.js. Visit the Next.j…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">blog</span><span class="topic-badge">browser</span><span class="topic-badge">compiler</span><span class="topic-badge">components</span><span class="topic-badge">hybrid</span><span class="topic-badge">nextjs</span><span class="topic-badge">node</span><span class="topic-badge">react</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 142,688</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +54 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 33,203</span>
+                <span class="stat"><span class="stat-icon">📋</span> 3497 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://nextjs.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/tensorflow/tensorflow">tensorflow / tensorflow</a></div>
+            </div>
+            <div class="description">
+                An Open Source Machine Learning Framework for Everyone
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Documentation ------------------ TensorFlow is an end-to-end open source platform for machine learning. It has a comprehensive, flexible ecosystem of
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">For more examples, see the TensorFlow Tutorials. If you want to contribute to TensorFlow, be sure to review the Contribution Guidelines. This project adheres to TensorFlow's Follow these steps to patch a specific version of TensorFlow, for example, to apply fixes to bugs or security vulnerabilities:…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">deep-learning</span><span class="topic-badge">deep-neural-networks</span><span class="topic-badge">distributed</span><span class="topic-badge">machine-learning</span><span class="topic-badge">ml</span><span class="topic-badge">neural-network</span><span class="topic-badge">python</span><span class="topic-badge">tensorflow</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f34b7d"></span>C++</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 200,493</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +46 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 77,664</span>
+                <span class="stat"><span class="stat-icon">📋</span> 3360 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tensorflow.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/llvm/llvm-project">llvm / llvm-project</a></div>
+            </div>
+            <div class="description">
+                The LLVM Project is a collection of modular and reusable compiler and toolchain technologies.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Welcome to the LLVM project! This repository contains the source code for LLVM, a toolkit for the construction of highly optimized compilers, optimizers, and run-time environments.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Welcome to the LLVM project! This repository contains the source code for LLVM, a toolkit for the construction of highly optimized compilers, optimizers, and run-time</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>LLVM</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 40,774</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +41 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 18,826</span>
+                <span class="stat"><span class="stat-icon">📋</span> 39596 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="http://llvm.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/anthropics/claude-code-action">anthropics / claude-code-action</a></div>
+            </div>
+            <div class="description">
+                暂无描述
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A general-purpose Claude Code action for GitHub PRs and issues that can answer questions and implement code changes. This action intelligently detects when to activate based on your workflow context—whether responding to @claude mentions, issue assignments, or executing automation tasks with explicit prompts. It supports multiple authentication methods including Anthropic direct API (API key or wo
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">🤖 Interactive Code Assistant: Claude can answer questions about code, architecture, and programming 🔍 Code Review: Analyzes PR changes and suggests improvements ✨ Code Implementation: Can implement simple fixes, refactoring, and even new features 💬 PR/Issue Integration: Works seamlessly with GitHub …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 9,135</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +31 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,168</span>
+                <span class="stat"><span class="stat-icon">📋</span> 805 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/actions/runner-images">actions / runner-images</a></div>
+            </div>
+            <div class="description">
+                GitHub Actions runner images
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Table of Contents About Available Images Announcements
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">About Available Images Announcements Image Definitions The -xlarge and -large suffixes are unique to macOS images and are only available for GitHub Actions. Learn more about GitHub Actions larger runners. See notable upcoming changes by viewing issues with the Announcement label. The purpose of a Be…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#012456"></span>PowerShell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 13,329</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +19 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,869</span>
+                <span class="stat"><span class="stat-icon">📋</span> 137 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
