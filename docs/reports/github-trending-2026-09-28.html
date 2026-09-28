@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-09-28</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-09-28 · 共 9 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">9</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">4</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">12,233</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/vectorize-io/hindsight">vectorize-io / hindsight</a></div>
+            </div>
+            <div class="description">
+                Hindsight: Agent Memory That Learns
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Documentation • Integrations • Cookbook • Benchmarks • Paper • Hindsight Cloud Hindsight™ is an agent memory system built to create smarter agents that learn over time. Most agent memory systems focus on recalling conversation history. Hindsight is focused on making agents that learn, not just remember. It eliminates the shortcomings of alternative techniques such as RAG and knowledge graph and de
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Use Cases Running in Production Resources Hindsight is the most accurate agent memory system ever tested according to benchmark performance. It has achieved state-of-the-art performance on the LongMemEval benchmark, widely used to assess memory system performance across a variety of conversational A…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agentic-ai</span><span class="topic-badge">agents</span><span class="topic-badge">ai-memory</span><span class="topic-badge">memory</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 38,226</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +4,520 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,990</span>
+                <span class="stat"><span class="stat-icon">📋</span> 174 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://hindsight.vectorize.io/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/debpalash/VoiceStudio">debpalash / VoiceStudio</a></div>
+            </div>
+            <div class="description">
+                VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription &amp; audiobook creation in 646 languages.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Website · Download · Get started · Docs ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Start with VoiceStudio (default, powered by k2-fsa/OmniVoice), or choose another engine. Features &amp; engine catalog. Local workflows run on your hardware. Remote services are optional; usage analytics requires consent. curl -fsSL https://voicestudio.sh/install | sh curl -fsSL https://voicestudio.sh/i…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">audiobook</span><span class="topic-badge">cuda</span><span class="topic-badge">dubbing</span><span class="topic-badge">elevenlabs-alternative</span><span class="topic-badge">huggingface</span><span class="topic-badge">local-first</span><span class="topic-badge">mlx</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 40,784</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +3,086 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,840</span>
+                <span class="stat"><span class="stat-icon">📋</span> 21 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于16小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://voicestudio.sh" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/paperclipai/paperclip">paperclipai / paperclip</a></div>
+            </div>
+            <div class="description">
+                The open-source app everyone uses to manage agents at work
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Quickstart · Docs · GitHub · Discord ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Every task traces back to the organization mission. Agents know what to do and why. Agents wake on a schedule, check work, and act. Delegation flows up and down the org chart. Monthly budgets per agent. When they hit the limit, they stop. No runaway costs. One deployment, many organizations. Complet…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 90,629</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,401 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 15,718</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5882 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://paperclip.ing" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/dream-num/univer">dream-num / univer</a></div>
+            </div>
+            <div class="description">
+                The Office Harness for AI Agents — Spreadsheets, Docs, Slides, Canvas, Relational Tables, and PDF in one runtime.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The Office Harness for AI Agents Spreadsheets · Documents · Presentations · Bases · Boards · PDFs (coming soon) High-performance, fully customizable Office SDK Build embeddable productivity experiences with a plugin architecture, Canvas-based rendering,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Compose only the features you need through plugins or start quickly with presets. Extend behavior through custom plugins, commands, services, UI components, and Facade APIs. Univer is not a spreadsheet file viewer only. It is a framework for building your own productivity surface. Across the Univer …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">board</span><span class="topic-badge">collaboration</span><span class="topic-badge">data-table</span><span class="topic-badge">doc</span><span class="topic-badge">docx</span><span class="topic-badge">excel</span><span class="topic-badge">grid</span><span class="topic-badge">pdf</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 20,757</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +895 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,760</span>
+                <span class="stat"><span class="stat-icon">📋</span> 154 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.univer.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/rohitg00/ai-engineering-from-scratch">rohitg00 / ai-engineering-from-scratch</a></div>
+            </div>
+            <div class="description">
+                Learn it. Build it. Ship it for others.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Español · Français · Português · Deutsch ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Each lesson runs the same loop: read the problem, derive the math, write the code, run</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-engineering</span><span class="topic-badge">computer-vision</span><span class="topic-badge">course</span><span class="topic-badge">deep-learning</span><span class="topic-badge">from-scratch</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 59,654</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +790 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,277</span>
+                <span class="stat"><span class="stat-icon">📋</span> 45 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于18小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aiengineeringfromscratch.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/InfinityLoop1308/PipePipe">InfinityLoop1308 / PipePipe</a></div>
+            </div>
+            <div class="description">
+                An open-source Android app to let you browse YouTube and other services freely.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：NewPipe, reimagined: faster, more stable, and packed with more features. * Integrate SponsorBlock for skipping sponsored segments (YouTube &amp; BiliBili) * Restore YouTube dislikes with ReturnYouTubeDislike * Show original titles on YouTube (non-localized)
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">NewPipe, reimagined: faster, more stable, and packed with more features. * Integrate SponsorBlock for skipping sponsored segments (YouTube &amp; BiliBili) * Restore YouTube dislikes with ReturnYouTubeDislike * Show original titles on YouTube (non-localized) Making a hard fork allows us to effectively ad…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">android</span><span class="topic-badge">mediaplayer</span><span class="topic-badge">newpipe</span><span class="topic-badge">sponsorblock</span><span class="topic-badge">youtube</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,677</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +242 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 225</span>
+                <span class="stat"><span class="stat-icon">📋</span> 154 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://pipepipe.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/mvschwarz/openrig">mvschwarz / openrig</a></div>
+            </div>
+            <div class="description">
+                Multi-agent harness that runs Claude Code and Codex together as one system
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A harness wraps a model. A rig wraps your harnesses. Define your agent team in YAML, boot it with one command. Claude Code and Codex in the same rig, managed as one system. OpenRig turns AI coding agents from a pile of terminal sessions into a persistent, organized team. Talk to a lead agent about the outcome you want; it can coordinate specialists across teams and bring you results and decisions 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenRig turns AI coding agents from a pile of terminal sessions into a persistent, organized team. Talk to a lead agent about the outcome you want; it can coordinate specialists across teams and bring you results and decisions that need your attention. Start with a repository and one useful change, …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-harness</span><span class="topic-badge">agent-orchestration</span><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-coding</span><span class="topic-badge">claude-code</span><span class="topic-badge">cli</span><span class="topic-badge">codex-cli</span><span class="topic-badge">multi-agent</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 1,157</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +114 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 111</span>
+                <span class="stat"><span class="stat-icon">📋</span> 51 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openrig.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/vercel-labs/scriptc">vercel-labs / scriptc</a></div>
+            </div>
+            <div class="description">
+                TypeScript-to-Native Compiler
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：scriptc compiles TypeScript and JavaScript to typed IR, readable C, textual LLVM IR, native assembly and objects, native executables, and WebAssembly modules. It uses the TypeScript compiler for parsing and type checking. Source outputs require only Node. On macOS 15+ arm64, ordinary LLVM-tier executables use scriptc's bundled helper and precompiled runtime pack; clang is only the platform linker 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">hidden scriptc cache paths. See examples/native-object for C-driver and direct Apple-linker builds. Supported Node APIs compile to the native runtime. For example, server.ts: import { createServer } from "node:http"; Supported Node APIs compile to the native runtime. For example, server.ts: import {…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,482</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +102 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 142</span>
+                <span class="stat"><span class="stat-icon">📋</span> 55 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://scriptc.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/willfaust/Madeira">willfaust / Madeira</a></div>
+            </div>
+            <div class="description">
+                Run x86-64 Windows PC games on jailed iOS via FEX-Emu + Wine + DXMT
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Run Windows PC games on a non-jailbroken iPhone. Madeira combines Wine (ARM64EC), FEX-Emu for x86-64 → ARM64 translation, and DXMT for D3D11 → Metal, running as a single
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Run Windows PC games on a non-jailbroken iPhone. Madeira combines Wine (ARM64EC), FEX-Emu for x86-64 → ARM64 translation, and</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 876</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +83 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 153</span>
+                <span class="stat"><span class="stat-icon">📋</span> 34 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
