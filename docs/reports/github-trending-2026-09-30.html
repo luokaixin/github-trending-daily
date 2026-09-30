@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-09-30</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-09-30 · 共 14 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">14</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">7</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">15,304</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/debpalash/VoiceStudio">debpalash / VoiceStudio</a></div>
+            </div>
+            <div class="description">
+                VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription &amp; audiobook creation in 646 languages.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Website · Download · Get started · Docs ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Start with VoiceStudio (default, powered by k2-fsa/OmniVoice), or choose another engine. Features &amp; engine catalog. Local workflows run on your hardware. Remote services are optional; usage analytics requires consent. curl -fsSL https://voicestudio.sh/install | sh curl -fsSL https://voicestudio.sh/i…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">audiobook</span><span class="topic-badge">cuda</span><span class="topic-badge">dubbing</span><span class="topic-badge">elevenlabs-alternative</span><span class="topic-badge">huggingface</span><span class="topic-badge">local-first</span><span class="topic-badge">mlx</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 48,801</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +4,758 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,461</span>
+                <span class="stat"><span class="stat-icon">📋</span> 67 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于14小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://voicestudio.sh" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/vectorize-io/hindsight">vectorize-io / hindsight</a></div>
+            </div>
+            <div class="description">
+                Hindsight: Agent Memory That Learns
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Documentation • Integrations • Cookbook • Benchmarks • Paper • Hindsight Cloud Hindsight™ is an agent memory system built to create smarter agents that learn over time. Most agent memory systems focus on recalling conversation history. Hindsight is focused on making agents that learn, not just remember. It eliminates the shortcomings of alternative techniques such as RAG and knowledge graph and de
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Use Cases Running in Production Resources Hindsight is the most accurate agent memory system ever tested according to benchmark performance. It has achieved state-of-the-art performance on the LongMemEval benchmark, widely used to assess memory system performance across a variety of conversational A…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agentic-ai</span><span class="topic-badge">agents</span><span class="topic-badge">ai-memory</span><span class="topic-badge">memory</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 43,155</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,575 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,807</span>
+                <span class="stat"><span class="stat-icon">📋</span> 168 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://hindsight.vectorize.io/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/paperclipai/paperclip">paperclipai / paperclip</a></div>
+            </div>
+            <div class="description">
+                The open-source app everyone uses to manage agents at work
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Quickstart · Docs · GitHub · Discord ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Every task traces back to the organization mission. Agents know what to do and why. Agents wake on a schedule, check work, and act. Delegation flows up and down the org chart. Monthly budgets per agent. When they hit the limit, they stop. No runaway costs. One deployment, many organizations. Complet…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 94,723</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,458 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 16,079</span>
+                <span class="stat"><span class="stat-icon">📋</span> 6111 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://paperclip.ing" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/NVIDIA/OpenShell">NVIDIA / OpenShell</a></div>
+            </div>
+            <div class="description">
+                OpenShell is the safe, private runtime for autonomous AI agents.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!IMPORTANT] New in OpenShell 0.1.x: a stable release cadence, new isolation primitives, an expanded extension surface, and new APIs. Read the 0.1.0 upgrade guide. OpenShell is the safe, private runtime for fleets of autonomous AI agents. Agents are most useful when they can read files, install packages, call APIs, and use credentials. OpenShell gives them that capability without giving them unres
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenShell is the safe, private runtime for fleets of autonomous AI agents. Agents are most useful when they can read files, install packages, call APIs, and use credentials. OpenShell gives them that capability without giving them unrestricted access to your data, secrets, or network. You declare wh…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 10,864</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +990 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,436</span>
+                <span class="stat"><span class="stat-icon">📋</span> 506 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.nvidia.com/openshell/latest/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/VectifyAI/PageIndex">VectifyAI / PageIndex</a></div>
+            </div>
+            <div class="description">
+                📑 PageIndex: Document Index for Vectorless, Reasoning-based RAG
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🌐 Website  •   ☁️ Cloud  •   📖 Docs  •   📝 Blog  •  
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Building a tree locally runs about $0.001 per page with gpt-5.6-luna as the index model, so a 1,000-page textbook costs a little over a dollar and a few minutes, once, and every later question reuses it. PageIndex is designed not to rely heavily on the model used at index time, so in our experiments…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agentic-ai</span><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">context-engineering</span><span class="topic-badge">information-retrieval</span><span class="topic-badge">llm</span><span class="topic-badge">rag</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 37,593</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +835 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,274</span>
+                <span class="stat"><span class="stat-icon">📋</span> 108 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于14小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://pageindex.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/rohitg00/ai-engineering-from-scratch">rohitg00 / ai-engineering-from-scratch</a></div>
+            </div>
+            <div class="description">
+                Learn it. Build it. Ship it for others.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Español · Français · Português · Deutsch ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Each lesson runs the same loop: read the problem, derive the math, write the code, run</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-engineering</span><span class="topic-badge">computer-vision</span><span class="topic-badge">course</span><span class="topic-badge">deep-learning</span><span class="topic-badge">from-scratch</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 61,675</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +786 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,556</span>
+                <span class="stat"><span class="stat-icon">📋</span> 58 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于10小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aiengineeringfromscratch.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/mvschwarz/openrig">mvschwarz / openrig</a></div>
+            </div>
+            <div class="description">
+                Multi-agent harness that runs Claude Code and Codex together as one system
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A harness wraps a model. A rig wraps your harnesses. Define your agent team in YAML, boot it with one command. Claude Code and Codex in the same rig, managed as one system. OpenRig turns AI coding agents from a pile of terminal sessions into a persistent, organized team. Talk to a lead agent about the outcome you want; it can coordinate specialists across teams and bring you results and decisions 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenRig turns AI coding agents from a pile of terminal sessions into a persistent, organized team. Talk to a lead agent about the outcome you want; it can coordinate specialists across teams and bring you results and decisions that need your attention. Start with a repository and one useful change, …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-harness</span><span class="topic-badge">agent-orchestration</span><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-coding</span><span class="topic-badge">claude-code</span><span class="topic-badge">cli</span><span class="topic-badge">codex-cli</span><span class="topic-badge">multi-agent</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,561</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +737 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 181</span>
+                <span class="stat"><span class="stat-icon">📋</span> 78 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openrig.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/dream-num/univer">dream-num / univer</a></div>
+            </div>
+            <div class="description">
+                The Office Harness for AI Agents — Spreadsheets, Docs, Slides, Canvas, Relational Tables, and PDF in one runtime.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The Office Harness for AI Agents Spreadsheets · Documents · Presentations · Bases · Boards · PDFs High-performance, fully customizable Office SDK Build embeddable productivity experiences with a plugin architecture, Canvas-based rendering,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Compose only the features you need through plugins or start quickly with presets. Extend behavior through custom plugins, commands, services, UI components, and Facade APIs. Univer is not a spreadsheet file viewer only. It is a framework for building your own productivity surface. Across the Univer …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">board</span><span class="topic-badge">collaboration</span><span class="topic-badge">data-table</span><span class="topic-badge">doc</span><span class="topic-badge">docx</span><span class="topic-badge">excel</span><span class="topic-badge">grid</span><span class="topic-badge">pdf</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 21,975</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +696 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,859</span>
+                <span class="stat"><span class="stat-icon">📋</span> 146 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.univer.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/cs341-illinois/coursebook">cs341-illinois / coursebook</a></div>
+            </div>
+            <div class="description">
+                Open Source Introductory Systems Programming Textbook for the University of Illinois
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Welcome to the systems programming coursebook! This repository houses a high-quality, open-source introductory systems programming textbook used by the CS 341: System Programming course at the University of Illinois Urbana-Champaign The book assumes that you have taken a programming language course and are familiar with assembly instructions. All of the code and instruction will be in C, as it is 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Welcome to the systems programming coursebook! This repository houses a high-quality, open-source introductory systems programming textbook used by the CS 341: System Programming course at the University of Illinois Urbana-Champaign The book assumes that you have taken a programming language course …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">awesome</span><span class="topic-badge">c</span><span class="topic-badge">latex</span><span class="topic-badge">linux</span><span class="topic-badge">posix</span><span class="topic-badge">system-programming</span><span class="topic-badge">wikibook</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>TeX</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,199</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +572 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 278</span>
+                <span class="stat"><span class="stat-icon">📋</span> 46 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://cs341.cs.illinois.edu/coursebook" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/oblien/openship">oblien / openship</a></div>
+            </div>
+            <div class="description">
+                Self-hosted deployment platform
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Open-source, self-hostable deployment platform with built-in CI/CD. Point it at a repo — it builds, ships, routes, and TLS-terminates your app. Drive it from a desktop app, web dashboard, or CLI. Quick Start · How It Works ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">openship up --public-url https://openship.example.com   # + serve the dashboard on your domain (edge + TLS handled) openship up picks how it runs for you: On Linux with Docker → Compose mode (the default). Brings up the full stack — Postgres, Redis, API, dashboard, and a containerized OpenResty edge…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">deployments</span><span class="topic-badge">self-hosted</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 13,985</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +437 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,251</span>
+                <span class="stat"><span class="stat-icon">📋</span> 132 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openship.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/t8y2/dbx">t8y2 / dbx</a></div>
+            </div>
+            <div class="description">
+                25 MB lightweight cross-platform database client for 100+ databases, including MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, SQL Server, and Dameng. Built-in AI, MCP Server, CLI, desktop and Docker. | 轻量级跨平台数据库管理工具，支持 MySQL、PostgreSQL、SQLite、Redis、MongoDB、达梦等 100+ 数据库，提供桌面端、Docker、CLI、内置 AI 助手和 MCP。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 前往中文版本 RainYun is a cloud service provider offering cloud servers, physical servers, game hosting, and developer-friendly infrastructure services. TrustAsia provides cloud-based code signing service for DBX, enabling trusted software through automated CI/CD builds. Jalapeño Cloud is an AI infrastructure and token compute platform, with an exclusive DBX entry offering free credits and top
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Easysearch is an enterprise-grade distributed search engine compatible with Elasticsearch APIs, combining full-text, vector, geospatial search, real-time analytics, and AI capabilities in one platform. MySQL, PostgreSQL, SQLite, Cloudflare D1, Redis, MongoDB, DuckDB, ClickHouse, SQL Server, Oracle, …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">cli</span><span class="topic-badge">clickhouse</span><span class="topic-badge">database</span><span class="topic-badge">database-client</span><span class="topic-badge">database-management</span><span class="topic-badge">docker</span><span class="topic-badge">gui</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 22,401</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +232 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,102</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1291 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://dbxio.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/averygan/reclip">averygan / reclip</a></div>
+            </div>
+            <div class="description">
+                Download videos from almost any website. Lightweight, self-hosted media downloader with a clean web UI.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A self-hosted, open-source video and audio downloader with a clean web UI. Paste links from YouTube, TikTok, Instagram, Twitter/X, and 1000+ other sites — download as MP4 or MP3. https://github.com/user-attachments/assets/419d3e50-c933-444b-8cab-a9724986ba05 Download videos from 1000+ supported sites (via yt-dlp) MP4 video or MP3 audio extraction
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A self-hosted, open-source video and audio downloader with a clean web UI. Paste links from YouTube, TikTok, Instagram, Twitter/X, and 1000+ other sites — download as MP4 or MP3. https://github.com/user-attachments/assets/419d3e50-c933-444b-8cab-a9724986ba05 Download videos from 1000+ supported site…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#e34c26"></span>HTML</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 10,308</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +113 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,547</span>
+                <span class="stat"><span class="stat-icon">📋</span> 67 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2个月前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/willfaust/Madeira">willfaust / Madeira</a></div>
+            </div>
+            <div class="description">
+                Run x86-64 Windows PC games on jailed iOS via FEX-Emu + Wine + DXMT
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Run Windows PC games on a non-jailbroken iPhone. Madeira combines Wine (ARM64EC), FEX-Emu for x86-64 → ARM64 translation, and DXMT for D3D11 → Metal, running as a single
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Run Windows PC games on a non-jailbroken iPhone. Madeira combines Wine (ARM64EC), FEX-Emu for x86-64 → ARM64 translation, and</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 1,140</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +81 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 191</span>
+                <span class="stat"><span class="stat-icon">📋</span> 19 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于15小时前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/rakyll/hey">rakyll / hey</a></div>
+            </div>
+            <div class="description">
+                HTTP load generator, ApacheBench (ab) replacement
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：hey is a tiny program that sends some load to a web application. hey was originally called boom and was influenced from Tarek Ziade's tool at tarekziade/boom. Using the same name was a mistake as it resulted in cases where binary name conflicts created confusion.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Usage: hey [options...] Options: n  Number of requests to run. Default is 200. c  Number of workers to run concurrently. Total number of requests cannot Examples: -z 10s -z 3m. o  Output type. If none provided, a summary is printed. "csv" is the only supported alternative. Dumps the response metrics…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 20,538</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +34 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,315</span>
+                <span class="stat"><span class="stat-icon">📋</span> 190 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8个月前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
