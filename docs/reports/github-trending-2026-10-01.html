@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-10-01</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-10-01 · 共 17 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">17</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">11,553</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/debpalash/VoiceStudio">debpalash / VoiceStudio</a></div>
+            </div>
+            <div class="description">
+                VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription &amp; audiobook creation in 646 languages.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Website · Download · Get started · Docs ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Start with VoiceStudio (default, powered by k2-fsa/OmniVoice), or choose another engine. Features &amp; engine catalog. Local workflows run on your hardware. Remote services are optional; usage analytics requires consent. curl -fsSL https://voicestudio.sh/install | sh curl -fsSL https://voicestudio.sh/i…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">audiobook</span><span class="topic-badge">cuda</span><span class="topic-badge">dubbing</span><span class="topic-badge">elevenlabs-alternative</span><span class="topic-badge">huggingface</span><span class="topic-badge">local-first</span><span class="topic-badge">mlx</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 50,746</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +3,483 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,626</span>
+                <span class="stat"><span class="stat-icon">📋</span> 99 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://voicestudio.sh" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/NVIDIA/OpenShell">NVIDIA / OpenShell</a></div>
+            </div>
+            <div class="description">
+                OpenShell is the safe, private runtime for autonomous AI agents.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!IMPORTANT] New in OpenShell 0.1.x: a stable release cadence, new isolation primitives, an expanded extension surface, and new APIs. Read the 0.1.0 upgrade guide. OpenShell is the safe, private runtime for fleets of autonomous AI agents. Agents are most useful when they can read files, install packages, call APIs, and use credentials. OpenShell gives them that capability without giving them unres
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenShell is the safe, private runtime for fleets of autonomous AI agents. Agents are most useful when they can read files, install packages, call APIs, and use credentials. OpenShell gives them that capability without giving them unrestricted access to your data, secrets, or network. You declare wh…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 13,149</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,281 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,569</span>
+                <span class="stat"><span class="stat-icon">📋</span> 512 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.nvidia.com/openshell/latest/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/t8y2/dbx">t8y2 / dbx</a></div>
+            </div>
+            <div class="description">
+                25 MB lightweight cross-platform database client for 100+ databases, including MySQL, PostgreSQL, SQLite, Redis, MongoDB, DuckDB, SQL Server, and Dameng. Built-in AI, MCP Server, CLI, desktop and Docker. | 轻量级跨平台数据库管理工具，支持 MySQL、PostgreSQL、SQLite、Redis、MongoDB、达梦等 100+ 数据库，提供桌面端、Docker、CLI、内置 AI 助手和 MCP。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 前往中文版本 RainYun is a cloud service provider offering cloud servers, physical servers, game hosting, and developer-friendly infrastructure services. TrustAsia provides cloud-based code signing service for DBX, enabling trusted software through automated CI/CD builds. Jalapeño Cloud is an AI infrastructure and token compute platform, with an exclusive DBX entry offering free credits and top
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Easysearch is an enterprise-grade distributed search engine compatible with Elasticsearch APIs, combining full-text, vector, geospatial search, real-time analytics, and AI capabilities in one platform. MySQL, PostgreSQL, SQLite, Cloudflare D1, Redis, MongoDB, DuckDB, ClickHouse, SQL Server, Oracle, …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">cli</span><span class="topic-badge">clickhouse</span><span class="topic-badge">database</span><span class="topic-badge">database-client</span><span class="topic-badge">database-management</span><span class="topic-badge">docker</span><span class="topic-badge">gui</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 23,403</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,138 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,162</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1309 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于10小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://dbxio.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/VectifyAI/PageIndex">VectifyAI / PageIndex</a></div>
+            </div>
+            <div class="description">
+                📑 PageIndex: Document Index for Vectorless, Reasoning-based RAG
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🌐 Website  •   ☁️ Cloud  •   📖 Docs  •   📝 Blog  •  
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Building a tree locally runs about $0.001 per page with gpt-5.6-luna as the index model, so a 1,000-page textbook costs a little over a dollar and a few minutes, once, and every later question reuses it. PageIndex is designed not to rely heavily on the model used at index time, so in our experiments…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agentic-ai</span><span class="topic-badge">agents</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">context-engineering</span><span class="topic-badge">information-retrieval</span><span class="topic-badge">llm</span><span class="topic-badge">rag</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 38,242</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,097 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,317</span>
+                <span class="stat"><span class="stat-icon">📋</span> 109 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于22小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://pageindex.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/mattpocock/skills">mattpocock / skills</a></div>
+            </div>
+            <div class="description">
+                Skills for Real Engineers. Straight from my .agents directory.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：My agent skills that I use every day to do real engineering - not vibe coding. Developing real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve. These skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on d
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The Problem. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all. This is just the same in the AI age. There is a communication gap between you and the agent. Th…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 273,197</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +876 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 22,966</span>
+                <span class="stat"><span class="stat-icon">📋</span> 541 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aihero.dev/skills" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/DietrichGebert/ponytail">DietrichGebert / ponytail</a></div>
+            </div>
+            <div class="description">
+                Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：You know him. Long ponytail. Oval glasses. Has been at the company longer than the version control. You show him fifty lines; he looks at them, says nothing, and replaces them with one. Ponytail puts him inside your AI agent. You ask for a date picker. Your agent installs flatpickr, writes a wrapper component, adds a stylesheet, and starts a discussion about timezones. With ponytail:
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">You ask for a date picker. Your agent installs flatpickr, writes a wrapper component, adds a stylesheet, and starts a discussion about timezones. With ponytail: `html More survivors in examples/. More survivors in examples/. The honest measurement is a real agent doing real work: a headless Claude C…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-agents</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-plugin</span><span class="topic-badge">cursor-rules</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 149,461</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +743 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,030</span>
+                <span class="stat"><span class="stat-icon">📋</span> 319 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于16天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ponytail.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/byoungd/up">byoungd / up</a></div>
+            </div>
+            <div class="description">
+                An advanced guide which might benefit you a lot 🎉 . 韩先凯的人生进阶指南 人生进阶指南 离谱的人生 人生进阶 AI学习 AI指南 韩先凯的AI学习指南 英语学习指南/英语学习教程/英语学习/学英语
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：title: 人生进阶指南｜AI 时代终身学习 description: 《人生进阶指南》帮助普通人在 AI 时代持续学习、完成真实项目、穿越人生低谷并留下成长证据。 updated: 2026-09-02 中文 | English
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">title: 人生进阶指南｜AI 时代终身学习 description: 《人生进阶指南》帮助普通人在 AI 时代持续学习、完成真实项目、穿越人生低谷并留下成长证据。 updated: 2026-09-02</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲</div>
+            <div class="topics"><span class="topic-badge">chinese</span><span class="topic-badge">english-learning</span><span class="topic-badge">tutorial</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 66,502</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +743 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,643</span>
+                <span class="stat"><span class="stat-icon">📋</span> 33 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11天前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://biezou.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/mvschwarz/openrig">mvschwarz / openrig</a></div>
+            </div>
+            <div class="description">
+                Multi-agent harness that runs Claude Code and Codex together as one system
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A harness wraps a model. A rig wraps your harnesses. Define your agent team in YAML, boot it with one command. Claude Code and Codex in the same rig, managed as one system. OpenRig turns AI coding agents from a pile of terminal sessions into a persistent, organized team. Talk to a lead agent about the outcome you want; it can coordinate specialists across teams and bring you results and decisions 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenRig turns AI coding agents from a pile of terminal sessions into a persistent, organized team. Talk to a lead agent about the outcome you want; it can coordinate specialists across teams and bring you results and decisions that need your attention. Start with a repository and one useful change, …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-harness</span><span class="topic-badge">agent-orchestration</span><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-coding</span><span class="topic-badge">claude-code</span><span class="topic-badge">cli</span><span class="topic-badge">codex-cli</span><span class="topic-badge">multi-agent</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,183</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +624 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 219</span>
+                <span class="stat"><span class="stat-icon">📋</span> 89 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openrig.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/harry0703/MoneyPrinterTurbo">harry0703 / MoneyPrinterTurbo</a></div>
+            </div>
+            <div class="description">
+                利用 AI 大模型和自动化工作流，根据主题或关键词一键生成高清短视频。Generate HD short videos from a topic or keyword with an automated AI workflow.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：只需提供视频主题或关键词，即可自动生成视频脚本、匹配素材、生成字幕和背景音乐，并合成高清短视频。 简体中文 | English | 日本語 | 版本发布 | 问题反馈 感谢 Kimi 赞助本项目！Kimi K3 是 Moonshot AI 迄今能力最强的模型，也是全球首个开源 3T 级模型，拥有原生视觉能力与 100 万 Token 上下文，在知识工作、推理和长周期任务中展现前沿性能。在 MoneyPrinterTurbo 中，K3 能直接驱动视频创作，不仅撰写视频文案，还会提炼素材搜索关键词、决定成片画面；对内容理解越准确，匹配到的素材就越贴题。 MoneyPrinterTurbo 用户专属优惠：新用户通过专属链接注册，首次成功充值可获充值金额 10% 的 API 额度，最高赠送 ¥1000。活动截至 2026 年 12 月 31 日。前往 Kimi 开放平台（中文站｜Global）体验
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">首次启动时，项目会根据 config.example.toml 自动创建 config.toml，无需手动创建配置文件。使用云端大模型、在线素材或 AI 视频等服务前，请在 WebUI 的基础设置中填写对应的 API Key。 如果尚未安装 Docker，请先下载并安装 Docker Desktop。 Windows 用户可以参考微软的文档： 1. 安装 WSL 首次启动前，请将 config.example.toml 复制为 config.toml，供容器挂载使用。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai-video-generator</span><span class="topic-badge">content-creation</span><span class="topic-badge">ffmpeg</span><span class="topic-badge">instagram-reels</span><span class="topic-badge">llm</span><span class="topic-badge">python</span><span class="topic-badge">short-video</span><span class="topic-badge">subtitles</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 127,675</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +431 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 19,971</span>
+                <span class="stat"><span class="stat-icon">📋</span> 40 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/heygen-com/hyperframes">heygen-com / hyperframes</a></div>
+            </div>
+            <div class="description">
+                Write HTML. Render video. Built for agents.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Quickstart Showcase Playground Catalog
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">HyperFrames ships 21 skills agents load on demand. Read /hyperframes first — it's the router and capability map; it picks a workflow for any "make me a…" request — video, deck, or composition port — and points to the domain skills below. For standalone installation, default to the core set — the rou…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">animation</span><span class="topic-badge">ffmpeg</span><span class="topic-badge">framework</span><span class="topic-badge">gsap</span><span class="topic-badge">html</span><span class="topic-badge">mcp</span><span class="topic-badge">puppeteer</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 54,880</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +349 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,988</span>
+                <span class="stat"><span class="stat-icon">📋</span> 218 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/NawfalMotii79/PLFM_RADAR">NawfalMotii79 / PLFM_RADAR</a></div>
+            </div>
+            <div class="description">
+                Open-source, low-cost 10.5 GHz PLFM phased array RADAR system
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：AERIS-10 is an open-source, low-cost 10.5 GHz phased array radar system featuring Pulse Linear Frequency Modulated (LFM) modulation. Available in two versions (3km and 20km range), it's designed for researchers, drone developers, and serious SDR enthusiasts who want to explore and experiment with phased array radar technology. The AERIS-10 project aims to democratize radar technology by providing 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Example: docs/AERIS_Simulation_Report_v2.pdf Simulation-generated outputs (local, gitignored): 5_Simulations/generated/ Plots, scenario outputs, temporary analysis directories FPGA/Vivado generated artifacts (local, gitignored): 9_Firmware/9_2_FPGA/reports/</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>PLSQL</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 26,472</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +263 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,980</span>
+                <span class="stat"><span class="stat-icon">📋</span> 19 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3个月前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/openclaw/openclaw">openclaw / openclaw</a></div>
+            </div>
+            <div class="description">
+                The AI that really does things. Any OS. Any Platform. The lobster way. 🦞
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：OpenClaw is an open-source AI assistant that runs on your own computer and meets you in the channels you already use: Discord, iMessage, Slack, Teams, Telegram, WhatsApp, and 20+ more, plus native apps for macOS, iOS, Android, Windows, and Linux. One Gateway runs it as a personal assistant on a laptop or as a shared team deployment; configuration is the only difference. Yours, with no catch. State
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Yours, with no catch. State, memory, and credentials live on your hardware. Models and agent harnesses (Claude, Codex, local models) are plugins you can swap without changing anything else. Your prompts go to the model provider and chat platforms you configure, plus any diagnostics export you enable…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">assistant</span><span class="topic-badge">crustacean</span><span class="topic-badge">molty</span><span class="topic-badge">openclaw</span><span class="topic-badge">own-your-data</span><span class="topic-badge">personal</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 391,053</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +136 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 82,229</span>
+                <span class="stat"><span class="stat-icon">📋</span> 9155 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openclaw.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/ComposioHQ/awesome-claude-skills">ComposioHQ / awesome-claude-skills</a></div>
+            </div>
+            <div class="description">
+                A curated list of awesome Claude Skills, resources, and tools for customizing Claude AI workflows
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A comprehensive and curated list of 1000+ production ready and practical Claude Skills and Plugins for enhancing productivity across usecases on not just Claude.ai, Claude Code, but also across coding agents like Codex, Cursor, Gemini CLI, Antigravity and more. Skills tell your agent how to work. An MCP Gateway gives it secure access to the tools it needs. Composio MCP Gateway provides a single MC
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A comprehensive and curated list of 1000+ production ready and practical Claude Skills and Plugins for enhancing productivity across usecases on not just Claude.ai, Claude Code, but also across coding agents like Codex, Cursor, Gemini CLI, Antigravity and more. Skills tell your agent how to work. An…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-agents</span><span class="topic-badge">antigravity</span><span class="topic-badge">automation</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">composio</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 76,212</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +123 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,883</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1586 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于12天前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/colbymchenry/codegraph">colbymchenry / codegraph</a></div>
+            </div>
+            <div class="description">
+                Pre-indexed code knowledge graph, auto syncs on code changes, for Claude Code, Codex, Gemini, Cursor, OpenCode, AntiGravity, Kiro, CoPilot, and Hermes Agent — fewer tokens, fewer tool calls, 100% local
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Already installed? Run codegraph upgrade Follow @getcodegraph on X for updates. The fastest complete code graph · surgical context · built for how agents actually work · 100% local   Kernel powered by Rust
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Why CodeGraph? Key Features Framework-aware Routes Mixed iOS / React Native / Expo bridging Key Features Framework-aware Routes Mixed iOS / React Native / Expo bridging Quick Start Library Usage Configuration Telemetry Verified releases A note on context: the numbers above measure throughput — token…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 72,666</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +118 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,665</span>
+                <span class="stat"><span class="stat-icon">📋</span> 515 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://colbymchenry.github.io/codegraph/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/mksglu/context-mode">mksglu / context-mode</a></div>
+            </div>
+            <div class="description">
+                Context window optimization for AI coding agents. Sandboxes tool output (98% reduction), persists session memory, and enforces routing across 17 platforms via MCP + hooks.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The other half of the context problem. Every MCP tool call dumps raw data into your context window. A Playwright snapshot costs 56 KB. Twenty GitHub issues cost 59 KB. One access log — 45 KB. After 30 minutes, 40% of your context is gone. And when the agent compacts the conversation to free space, it forgets which files it was editing, what tasks are in progress, and what you last asked for. On to
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The other half of the context problem. Every MCP tool call dumps raw data into your context window. A Playwright snapshot costs 56 KB. Twenty GitHub issues cost 59 KB. One access log — 45 KB. After 30 minutes, 40% of your context is gone. And when the agent compacts the conversation to free space, i…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">antigravity</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-hooks</span><span class="topic-badge">claude-code-plugins</span><span class="topic-badge">claude-code-skill</span><span class="topic-badge">codex</span><span class="topic-badge">codex-cli</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 24,557</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +90 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,771</span>
+                <span class="stat"><span class="stat-icon">📋</span> 303 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://context-mode.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/modelcontextprotocol/servers">modelcontextprotocol / servers</a></div>
+            </div>
+            <div class="description">
+                Model Context Protocol Servers
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：This repository is a collection of reference implementations for the Model Context Protocol (MCP), as well as references to community-built servers and additional resources. [!IMPORTANT] If you are looking for a list of MCP servers, you can browse published servers on the MCP Registry. The repository served by this README is dedicated to housing just the small number of reference servers maintaine
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The servers in this repository are intended as reference implementations to demonstrate MCP features and SDK usage. They are meant to serve as educational examples for developers building their own MCP servers, not as production-ready solutions. Developers should evaluate their own security requirem…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 90,860</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +50 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 11,732</span>
+                <span class="stat"><span class="stat-icon">📋</span> 571 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://modelcontextprotocol.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">17</div>
+                <div class="card-title"><a href="https://github.com/firebase/firebase-ios-sdk">firebase / firebase-ios-sdk</a></div>
+            </div>
+            <div class="description">
+                Firebase SDK for Apple App Development
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!WARNING] CocoaPods: New versions of the Firebase Apple SDK will no longer be published to CocoaPods after October 2026. Existing CocoaPods versions will remain available and installations will remain functional. See the
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">help you build, grow, and monetize your app. Learn more about Firebase at the official Firebase website. The following products are open-source and included in this repository: *   Firebase AI Logic (FirebaseAI) See the subsections below for details about the different installation methods. Where av…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">analytics</span><span class="topic-badge">authentication</span><span class="topic-badge">crash-reporting</span><span class="topic-badge">database</span><span class="topic-badge">database-as-a-service</span><span class="topic-badge">firebase</span><span class="topic-badge">firebase-auth</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f34b7d"></span>C++</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,787</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +8 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,800</span>
+                <span class="stat"><span class="stat-icon">📋</span> 440 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://firebase.google.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
