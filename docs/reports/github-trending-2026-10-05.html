@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-10-05</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-10-05 · 共 16 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">16</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">5</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">7,625</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/DietrichGebert/ponytail">DietrichGebert / ponytail</a></div>
+            </div>
+            <div class="description">
+                Makes your AI agent think like the laziest senior dev in the room. The best code is the code you never wrote.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：You know him. Long ponytail. Oval glasses. Has been at the company longer than the version control. You show him fifty lines; he looks at them, says nothing, and replaces them with one. Ponytail puts him inside your AI agent. Ponytail is one prompt: skills/ponytail/SKILL.md. The compact version, for agents that read a rules file, is AGENTS.md. Everything else in this repo loads that prompt into di
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">You ask for a date picker. Your agent installs flatpickr, writes a wrapper component, adds a stylesheet, and starts a discussion about timezones. With ponytail: `html More survivors in examples/. More survivors in examples/. Before writing code, the agent stops at the first rung that holds: 1. Does …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-agents</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-plugin</span><span class="topic-badge">cursor-rules</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 155,174</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,894 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,342</span>
+                <span class="stat"><span class="stat-icon">📋</span> 84 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ponytail.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/pbakaus/impeccable">pbakaus / impeccable</a></div>
+            </div>
+            <div class="description">
+                The design language that makes your AI harness better at design.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Design guidance for AI coding agents. 1 skill, 24 commands, live browser iteration, and 61 deterministic detector rules for AI-generated frontend design. Quick start: From your project root, run npx impeccable install, then run /impeccable init inside your AI coding tool. Full docs: impeccable.style. Anthropic's frontend-design was the first widely-used design skill for Claude. Impeccable started 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">This shows the harness folders or installed CLIs it detected (for example ~/.claude, ~/.codex, ~/.grok, ~/.hermes, ~/.veto, or project-local .cursor), lets you keep the detected set or customize providers, then asks whether to install into the current project or globally. Use --providers=claude,code…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 76,496</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,171 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,563</span>
+                <span class="stat"><span class="stat-icon">📋</span> 60 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://impeccable.style" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/Panniantong/Agent-Reach">Panniantong / Agent-Reach</a></div>
+            </div>
+            <div class="description">
+                Give your AI agent eyes to see the entire internet. Read &amp; search Twitter, Reddit, YouTube, GitHub, Bilibili, XiaoHongShu — one CLI, zero API fees.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：当下最稳的接入方式，替你选好、装好、体检好——接入方式会换代，你不用操心 想出现在这里？ AI Agent 已经能帮你写代码、改文档、管项目——但你让它去网上找点东西，它就抓瞎了： 📺 "帮我看看这个 YouTube 教程讲了什么" → 看不了，拿不到字幕
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Agent Reach 是一个能力层（capability layer），不是又一个工具。 它比任何具体实现高一层——负责选型、安装、体检、路由，不负责底层读取本身。读取由 Agent 直接调用上游工具完成，没有包装层。 你给一个新 Agent 装环境的时候，总要花时间去找工具、装依赖、调配置——Twitter 用什么读？Reddit 怎么登录？小红书的 CLI 停更了换什么？每次都要重新踩一遍。Agent Reach 做的事情很简单：当下最稳的接入方式，我们替你选好、装好、体检好。接入方式会换代（2026 年 3 月一批单平台 CLI 集体停更，我们换了路由），你不用操心。 换接入方式 = …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲</div>
+            <div class="topics"><span class="topic-badge">agent-infrastructure</span><span class="topic-badge">ai-agent</span><span class="topic-badge">ai-search</span><span class="topic-badge">automation</span><span class="topic-badge">bilibili</span><span class="topic-badge">claude-code</span><span class="topic-badge">cli</span><span class="topic-badge">cursor</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 91,152</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +980 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,007</span>
+                <span class="stat"><span class="stat-icon">📋</span> 210 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于19天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/thedotmack/claude-mem">thedotmack / claude-mem</a></div>
+            </div>
+            <div class="description">
+                Persistent Context Across Sessions for Every Agent – Captures everything your agent does during sessions, compresses it with AI, and injects relevant context back into future sessions. Works with Claude Code, OpenClaw, Codex, Gemini, Hermes, Copilot, OpenCode + More
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🇨🇳 中文 • 🇹🇼 繁體中文 • 🇯🇵 日本語 • 🇵🇹 Português •
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Claude-Mem seamlessly preserves context across sessions by automatically capturing tool usage observations, generating semantic summaries, and making them available to future sessions. This enables Claude to maintain continuity of knowledge about projects even after sessions end or reconnect. Instal…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-memory</span><span class="topic-badge">anthropic</span><span class="topic-badge">artificial-intelligence</span><span class="topic-badge">chromadb</span><span class="topic-badge">claude</span><span class="topic-badge">claude-agent-sdk</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 96,255</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +628 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,497</span>
+                <span class="stat"><span class="stat-icon">📋</span> 109 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://claude-mem.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/OpenCut-app/OpenCut">OpenCut-app / OpenCut</a></div>
+            </div>
+            <div class="description">
+                The open-source CapCut alternative
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：OpenCut is being rewritten from the ground up. What's coming: An Editor API First-class third party plugins (made possible by a plugin-first architecture) Desktop, mobile, and browser from one codebase (Rust core)
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenCut is being rewritten from the ground up. What's coming: An Editor API First-class third party plugins (made possible by a plugin-first architecture)</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲</div>
+            <div class="topics"><span class="topic-badge">editor</span><span class="topic-badge">oss</span><span class="topic-badge">videoeditor</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 92,333</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +512 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,092</span>
+                <span class="stat"><span class="stat-icon">📋</span> 374 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于10天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://opencut.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/pingdotgg/t3code">pingdotgg / t3code</a></div>
+            </div>
+            <div class="description">
+                暂无描述
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：T3 Code is an "agent harness control surface". It enables control of the agents on your machine with a best-in-class mobile app (iOS, Android), web app and Electron-based desktop app. Works with your subscriptions on Claude Code, Codex, Cursor, Grok Build, OpenCode, and Google Antigravity. If they're set up on your computer, T3 Code can control them. Nothing. We built T3 Code because we wanted the
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">We are (mostly) not accepting contributions yet. Small fixes may be considered. Big features will not be. Full docs live in docs/. There's no docs site yet. Install and first run Permission modes Building from source? Start at docs/internals/overview.md. T3 Code uses Vite+ so you'll need to install …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 25,286</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +490 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,531</span>
+                <span class="stat"><span class="stat-icon">📋</span> 2272 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://t3.codes" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/tester-army/e2e">tester-army / e2e</a></div>
+            </div>
+            <div class="description">
+                Next generation e2e testing framework for web and mobile apps.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：e2e is an end-to-end testing framework for web and mobile apps. Describe a goal in natural language and an agent drives the app to reach it. Check the result with locators and assertions in the same test. // tests/checkout.e2e.ts import { test, expect } from 'e2e'; test('a member upgrades to Pro', async ({ app, agent, screen }) =&gt; {
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">config and an example test. The quickstart covers the rest. e2e.tester.army/docs. The e2e package ships every page, so coding agents can read them offline in node_modules/e2e/docs. The CLI sends anonymous usage data, such as which commands and engines run and where runs fail, but no test content, ap…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；近期新项目；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">e2e</span><span class="topic-badge">e2e-testing</span><span class="topic-badge">end-to-end-testing</span><span class="topic-badge">mobile</span><span class="topic-badge">mobile-testing</span><span class="topic-badge">playwright</span><span class="topic-badge">web</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,438</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +345 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 133</span>
+                <span class="stat"><span class="stat-icon">📋</span> 49 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tester.army/e2e" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/addyosmani/agent-skills">addyosmani / agent-skills</a></div>
+            </div>
+            <div class="description">
+                Production-grade engineering skills for AI coding agents.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP /spec          /plan          /build        /test 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           B…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">antigravity</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">cursor</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 101,286</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +336 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,623</span>
+                <span class="stat"><span class="stat-icon">📋</span> 119 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://skills.addy.ie" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/calesthio/OpenMontage">calesthio / OpenMontage</a></div>
+            </div>
+            <div class="description">
+                World's first open-source, agentic video production system. 12 production pipelines, 100+ tools, 700+ agent skill and production-knowledge files. Turn your AI coding assistant into a full video production studio.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Paste A Video  ·  Quick Start  ·  Try These Prompts  ·  Pipelines  · 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">"THE LAST BANANA" — a 60-second Pixar-style animated short about a lonely banana who finds friendship with a kiwi. 6 Kling v3-generated motion clips (via fal.ai), Google Chirp3-HD narration, royalty-free piano music, TikTok-style word-level captions, and Remotion composition. Total cost: $1.33. "OBJ…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agentic-ai</span><span class="topic-badge">ai</span><span class="topic-badge">claude</span><span class="topic-badge">copilot</span><span class="topic-badge">cursor</span><span class="topic-badge">elevenlabs</span><span class="topic-badge">ffmpeg</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 63,373</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +245 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,073</span>
+                <span class="stat"><span class="stat-icon">📋</span> 352 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.openmontage.video/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/michael-denyer/pstack-claude">michael-denyer / pstack-claude</a></div>
+            </div>
+            <div class="description">
+                Claude Code, Codex, Pi, OpenCode, Gemini, and Prime Agent versions of Poteto's pstack. Rigorous agent workflows with Cursor primitives translated for other harnesses.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Lauren Tan's pstack is an opinionated Cursor skill stack that improves agent outcomes. This is a port for Claude Code, Codex, Pi and other agent harnesses. It tracks upstream and also carries named policy forks, each declared in tools/forks.json. Tell poteto-mode your goal and it will invoke the correct workflow for the task. It keeps your code concise, simple and verified. For concurrency bugs an
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Run setup-pstack to change model defaults, set a reasoning effort per role (for example arena runners: opus @xhigh, fable @max, which Claude Code dispatches through the plugin's pstack:effort- or pstack:poteto-agent- agents; roles without a level keep the session's effort unless the sheet's default …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-plugin</span><span class="topic-badge">agent-skills</span><span class="topic-badge">agentic-ai</span><span class="topic-badge">anthropic</span><span class="topic-badge">chatgpt</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-plugin</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 1,211</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +232 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 137</span>
+                <span class="stat"><span class="stat-icon">📋</span> 10 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/antirez/ds4">antirez / ds4</a></div>
+            </div>
+            <div class="description">
+                DeepSeek 4 Flash and PRO local inference engine for Metal, CUDA and ROCm
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：DwarfStar aims to be the best way to run a few excellent large language models on consumer hardware (that is, hardware that people can actually own). To reach this goal, we are building a small native inference engine optimized first for
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">* You can run a very capable models in your consumer hardware, a MacBook, a DGX Spark, or a Strix Halo for example. Even if you have not enough RAM, with SSD streaming, you can run it at a decent speed. * You can use multiple CUDA cards as a multi-user LLM server. Ada Lovelace, including L40S, is su…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 23,491</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +211 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,255</span>
+                <span class="stat"><span class="stat-icon">📋</span> 755 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于14天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/coreyhaines31/marketingskills">coreyhaines31 / marketingskills</a></div>
+            </div>
+            <div class="description">
+                Marketing skills for Claude Code and AI agents. CRO, copywriting, SEO, analytics, and growth engineering.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A collection of AI agent skills focused on marketing tasks. Built for technical marketers and founders who want AI coding agents to help with conversion optimization, copywriting, SEO, analytics, and growth engineering. Works with Claude Code, OpenAI Codex, Cursor, Windsurf, and any agent that supports the Agent Skills spec. Built by Corey Haines. Need hands-on help? Check out Conversion Factory —
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Built by Corey Haines. Need hands-on help? Check out Conversion Factory — Corey's agency for conversion optimization, landing pages, and growth strategy. Want to learn more about marketing? Subscribe to Swipe Files. Want to get dangerously good at using AI for marketing? Check out AI Marketing Train…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">claude</span><span class="topic-badge">codex</span><span class="topic-badge">marketing</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 53,188</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +197 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 7,923</span>
+                <span class="stat"><span class="stat-icon">📋</span> 116 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://marketing-skills.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/getsentry/sentry">getsentry / sentry</a></div>
+            </div>
+            <div class="description">
+                Developer-first error tracking and performance monitoring
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Users and logs provide clues. Sentry provides answers. Sentry is the debugging platform that helps every developer detect, trace, and fix issues. Code breaks, fix it faster. JavaScript Electron
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Discussions (Bugs, feature requests, general questions) Discord Contributing</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">apm</span><span class="topic-badge">crash-reporting</span><span class="topic-badge">crash-reports</span><span class="topic-badge">csp-report</span><span class="topic-badge">devops</span><span class="topic-badge">django</span><span class="topic-badge">error-logging</span><span class="topic-badge">error-monitoring</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 45,435</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +152 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,906</span>
+                <span class="stat"><span class="stat-icon">📋</span> 2292 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://sentry.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/garrytan/gstack">garrytan / gstack</a></div>
+            </div>
+            <div class="description">
+                Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve as CEO, Designer, Eng Manager, Release Manager, Doc Engineer, and QA
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>："I don't think I've typed like a line of code probably since December, basically, which is an extremely large change." — Andrej Karpathy, No Priors podcast, March 2026 When I heard Karpathy say this, I wanted to find out how. How does one person ship like a team of twenty? Peter Steinberger built OpenClaw — 247K GitHub stars — essentially solo with AI agents. The revolution is here. A single build
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">gstack is my answer. I've been building products for twenty years, and right now I'm shipping more products than I ever have. In the last 60 days: 3 production services, 40+ shipped features, part-time, while running YC full-time. On logical code change — not raw LOC, which AI inflates — my 2026 run…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 135,226</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +125 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 20,095</span>
+                <span class="stat"><span class="stat-icon">📋</span> 450 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/earthtojake/text-to-cad">earthtojake / text-to-cad</a></div>
+            </div>
+            <div class="description">
+                Give your agent CAD superpowers.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Give your agent CAD superpowers. The text-to-cad plugin gives your agent local workflows for generating 3D models as STEP, GLB, STL or 3MF files. It also does design for manufacturing checks, generates engineering drawings, and connects to popular 3D printing, sheet metal
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Give your agent CAD superpowers. The text-to-cad plugin gives your agent local workflows for generating 3D models as STEP, GLB, STL or 3MF files. It also does design for manufacturing checks,</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">ai-agents</span><span class="topic-badge">cad</span><span class="topic-badge">mechanical-engineering</span><span class="topic-badge">robotics</span><span class="topic-badge">step</span><span class="topic-badge">stl</span><span class="topic-badge">stp</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 16,984</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +83 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,750</span>
+                <span class="stat"><span class="stat-icon">📋</span> 34 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.texttocad.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/caddyserver/caddy">caddyserver / caddy</a></div>
+            </div>
+            <div class="description">
+                Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Releases · Documentation · Available for MacOS, Linux, &amp; Windows Features
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Features Install Build from source For development Overview Full documentation Getting help About About Easy configuration with the Caddyfile Powerful configuration with its native JSON config Dynamic configuration with the JSON API If you don't want to type your password for setcap, use sudo visudo…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">acme</span><span class="topic-badge">automatic-https</span><span class="topic-badge">caddy</span><span class="topic-badge">caddyfile</span><span class="topic-badge">go</span><span class="topic-badge">golang</span><span class="topic-badge">http</span><span class="topic-badge">http-server</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 76,668</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +24 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,049</span>
+                <span class="stat"><span class="stat-icon">📋</span> 278 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://caddyserver.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
