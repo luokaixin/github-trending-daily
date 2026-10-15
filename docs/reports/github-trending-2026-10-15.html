@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-10-15</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-10-15 · 共 12 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">12</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">51,827</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/morluto/rea">morluto / rea</a></div>
+            </div>
+            <div class="description">
+                Reverse engineer anything with agents, from app behavior down to native binaries.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English · 简体中文 · 繁體中文 · 日本語 · 한국어 · Türkçe · Русский · Tiếng Việt · ไทย · Deutsch · Español · Français · Українська · Polski · Português (Brasil) · العربية · فارسی · Bahasa Indonesia · Italiano · Ελληνικά See a feature you like. Understand how it works, down to the binary level. Website · Guides · Showcases
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">See a feature you like. Understand how it works, down to the binary level. Website · Guides · Showcases Quick start · How REA works · What you can analyze · Showcases · FAQ · Documentation [!IMPORTANT] See a feature in an app that you want in your own product? Ask your agent to investigate it with R…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-agents</span><span class="topic-badge">binary-analysis</span><span class="topic-badge">claude-code</span><span class="topic-badge">cli</span><span class="topic-badge">codex</span><span class="topic-badge">cordis</span><span class="topic-badge">decompiler</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 248,937</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +41,034 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 62,487</span>
+                <span class="stat"><span class="stat-icon">📋</span> 815 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://rea.tools" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/debpalash/VoiceStudio">debpalash / VoiceStudio</a></div>
+            </div>
+            <div class="description">
+                VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription &amp; audiobook creation in 646 languages.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Website · Download · Get started · Docs ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Start with VoiceStudio (default, powered by k2-fsa/OmniVoice), or choose another engine. Features &amp; engine catalog. Local workflows run on your hardware. Remote services are optional; usage analytics requires consent. curl -fsSL https://voicestudio.sh/install | sh curl -fsSL https://voicestudio.sh/i…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">audiobook</span><span class="topic-badge">cuda</span><span class="topic-badge">dubbing</span><span class="topic-badge">elevenlabs-alternative</span><span class="topic-badge">huggingface</span><span class="topic-badge">local-first</span><span class="topic-badge">mlx</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 66,980</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +3,538 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 7,368</span>
+                <span class="stat"><span class="stat-icon">📋</span> 197 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://voicestudio.sh" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/ifixai-ai/iFixAi">ifixai-ai / iFixAi</a></div>
+            </div>
+            <div class="description">
+                Independent Auditing of AI Agents. Run by human or the agent itself, to answer the most crucial question in the AI Agent Economy. Is the agent doing what is supposed to do? With iFixAi you can have this answer in less than 120 seconds.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Quick start • Three ways to run • Test your agent • Scoring •
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The existing Eval, Red-teaming, and Observability Tools are evaluating the agent mainly based on tech capability (token efficiency, latency, prompt injections). They cannot answer the most crucial question. Is the agent doing the job it is supposed to do based on the business KPIs and Organizational…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-evaluation</span><span class="topic-badge">ai</span><span class="topic-badge">ai-alignment</span><span class="topic-badge">ai-evaluation</span><span class="topic-badge">ai-governance</span><span class="topic-badge">ai-safety</span><span class="topic-badge">cli</span><span class="topic-badge">diagnostic-tool</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 27,723</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,109 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,515</span>
+                <span class="stat"><span class="stat-icon">📋</span> 8 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.ifixai.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/xtool-org/xtool">xtool-org / xtool</a></div>
+            </div>
+            <div class="description">
+                Cross-platform Xcode replacement. Build and deploy iOS apps with SwiftPM on Linux, Windows, macOS.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Cross-platform Xcode replacement. Build and deploy iOS apps with SwiftPM on Linux, Windows, and macOS. xtool is a cross-platform (Linux/WSL/macOS) tool that replicates Xcode functionality with open standards. ✅ Build a SwiftPM package into an iOS app ✅ Sign and install iOS apps
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OVERVIEW: Cross-platform Xcode replacement USAGE: xtool OPTIONS: h, --help              Show help information. USAGE: xtool OPTIONS: h, --help              Show help information. CONFIGURATION SUBCOMMANDS:</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ios</span><span class="topic-badge">linux</span><span class="topic-badge">swift</span><span class="topic-badge">swift-package-manager</span><span class="topic-badge">windows</span><span class="topic-badge">xcode</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#F05138"></span>Swift</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,087</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,502 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 506</span>
+                <span class="stat"><span class="stat-icon">📋</span> 105 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://xtool.sh" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/vxcontrol/pentagi">vxcontrol / pentagi</a></div>
+            </div>
+            <div class="description">
+                Fully autonomous AI Agents system capable of performing complex penetration testing tasks
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Penetration testing Artificial General Intelligence Join the Community! Connect with security researchers, AI enthusiasts, and fellow ethical hackers. Get support, share insights, and stay updated with the latest PentAGI developments. Overview Features
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Overview Features Architecture Agent Supervision Features Architecture Agent Supervision Quick Start You can watch the video PentAGI overview: Secure &amp; Isolated. All operations are performed in a sandboxed Docker environment with complete isolation. Fully Autonomous. AI-powered agent that automatica…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；本周有更新</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-security-tool</span><span class="topic-badge">anthropic</span><span class="topic-badge">autonomous-agents</span><span class="topic-badge">golang</span><span class="topic-badge">gpt</span><span class="topic-badge">graphql</span><span class="topic-badge">multi-agent-system</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 29,819</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,025 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,474</span>
+                <span class="stat"><span class="stat-icon">📋</span> 30 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://pentagi.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/NationalSecurityAgency/ghidra">NationalSecurityAgency / ghidra</a></div>
+            </div>
+            <div class="description">
+                Ghidra is a software reverse engineering (SRE) framework
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Ghidra is a software reverse engineering (SRE) framework created and maintained by the National Security Agency Research Directorate. This framework includes a suite of full-featured, high-end software analysis tools that enable users to analyze compiled code on a variety of platforms including Windows, macOS, and Linux. Capabilities include disassembly,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">full-featured, high-end software analysis tools that enable users to analyze compiled code on a variety of platforms including Windows, macOS, and Linux. Capabilities include disassembly, assembly, decompilation, graphing, and scripting, along with hundreds of other features. Ghidra supports a wide …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">disassembler</span><span class="topic-badge">reverse-engineering</span><span class="topic-badge">software-analysis</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#b07219"></span>Java</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 87,790</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,008 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,794</span>
+                <span class="stat"><span class="stat-icon">📋</span> 2113 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/mksglu/context-mode">mksglu / context-mode</a></div>
+            </div>
+            <div class="description">
+                Context window optimization for AI coding agents. Sandboxes tool output (98% reduction), persists session memory, and enforces routing across 17 platforms via MCP + hooks.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The other half of the context problem. Every MCP tool call dumps raw data into your context window. A Playwright snapshot costs 56 KB. Twenty GitHub issues cost 59 KB. One access log — 45 KB. After 30 minutes, 40% of your context is gone. And when the agent compacts the conversation to free space, it forgets which files it was editing, what tasks are in progress, and what you last asked for. On to
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The other half of the context problem. Every MCP tool call dumps raw data into your context window. A Playwright snapshot costs 56 KB. Twenty GitHub issues cost 59 KB. One access log — 45 KB. After 30 minutes, 40% of your context is gone. And when the agent compacts the conversation to free space, i…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">antigravity</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-hooks</span><span class="topic-badge">claude-code-plugins</span><span class="topic-badge">claude-code-skill</span><span class="topic-badge">codex</span><span class="topic-badge">codex-cli</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 29,300</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +947 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,055</span>
+                <span class="stat"><span class="stat-icon">📋</span> 359 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://context-mode.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/rust-lang/rust">rust-lang / rust</a></div>
+            </div>
+            <div class="description">
+                Empowering everyone to build reliable and efficient software.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：src="https://raw.githubusercontent.com/rust-lang/www.rust-lang.org/master/static/images/rust-social-wide-light.svg" width="50%" Website | [Getting started] | [Learn] | [Documentation] | [Contributing] This is the main source code repository for [Rust]. It contains the compiler,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">src="https://raw.githubusercontent.com/rust-lang/www.rust-lang.org/master/static/images/rust-social-wide-light.svg" width="50%" Website | [Getting started] | [Learn] | [Documentation] | [Contributing]</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">compiler</span><span class="topic-badge">language</span><span class="topic-badge">rust</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 120,144</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +207 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 18,707</span>
+                <span class="stat"><span class="stat-icon">📋</span> 12558 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.rust-lang.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/K-Dense-AI/scientific-agent-skills">K-Dense-AI / scientific-agent-skills</a></div>
+            </div>
+            <div class="description">
+                Turn any AI agent into an AI Scientist. The #1 Agent Skills library for science, used by 250,000+ scientists worldwide. 177 ready-to-use validated skills plus 100+ scientific databases covering biology, chemistry, medicine, and drug discovery. Compatible with Cursor, Claude Code, Codex, Pi, Antigravity, and the open Agent Skills standard.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🔔 Claude Scientific Skills is now Scientific Agent Skills. Same skills, broader compatibility — now works with any AI agent that supports the open Agent Skills standard, not just Claude. New: K-Dense BYOK — A free, open-source AI co-scientist that runs on your desktop, powered by Scientific Agent Skills. Bring your own API keys, pick from 40+ models, and get a full research workspace with web sear
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Stay up to date: Follow K-Dense on X, LinkedIn, YouTube, and Reddit for new skills, release announcements, walkthroughs, research workflow demos, and examples you can use with your own AI agent. 📄 Paper: Scientific Agent Skills is described in Scientific Agent Skills: A Library of Procedural Knowled…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-scientist</span><span class="topic-badge">bioinformatics</span><span class="topic-badge">chemoinformatics</span><span class="topic-badge">claude</span><span class="topic-badge">claude-skills</span><span class="topic-badge">claudecode</span><span class="topic-badge">clinical-research</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 49,584</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +163 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,436</span>
+                <span class="stat"><span class="stat-icon">📋</span> 31 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://arxiv.org/abs/2609.00065" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/ntdevlabs/tiny11builder">ntdevlabs / tiny11builder</a></div>
+            </div>
+            <div class="description">
+                WinUI app for building smaller, customized Windows 11 images.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Build a smaller Windows 11 ISO with a native WinUI app. Download an official Windows image or use your own, choose what to remove, and create your ISO. Get the latest version Choose x64 for Intel/AMD PCs or ARM64 for Windows on ARM. Extract the
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Usage, compatibility and build instructions · Attribution and distribution notes The original PowerShell builders remain in this repository. GitHub Sponsors ·</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#178600"></span>C#</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 20,337</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +139 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,559</span>
+                <span class="stat"><span class="stat-icon">📋</span> 37 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/HKUDS/CLI-Anything">HKUDS / CLI-Anything</a></div>
+            </div>
+            <div class="description">
+                "CLI-Anything: Making ALL Software Agent-Native" -- CLI-Hub:https://clianything.cc/
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：CLI-Anything: Bridging the Gap Between AI Agents and the World's Software 🌐 CLI-Hub: pip install cli-anything-hub then cli-hub install  — browse, install, and manage all community-built CLIs. Want to add your own? Open a PR — the hub updates instantly. 🎬 See Demos: Watch AI agents use generated CLIs plus preview, live preview, and trajectory loops to produce real artifacts — CAD builds, 3D scenes,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">2026-05-30 🧭 Hermes skill proposed (#320), adding a CLI-Anything orchestration skill with installer scripts and HARNESS fallback guidance. 🗺️ ArcGIS Pro was proposed for the public registry (#318) as a Windows/ArcPy CLI for cartography, geoprocessing, feature editing, and live-Pro MCP workflows. 202…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 52,678</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +103 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,780</span>
+                <span class="stat"><span class="stat-icon">📋</span> 169 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于23天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://clianything.cc/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/nvm-sh/nvm">nvm-sh / nvm</a></div>
+            </div>
+            <div class="description">
+                Node Version Manager - POSIX-compliant bash script to manage multiple active node.js versions.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Intro About Installing and Updating Install &amp; Update Script
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">About Installing and Updating Install &amp; Update Script Additional Notes Usage Long-term Support Migrating Global Packages While Installing Migrating Global Packages Between Installed Versions Usage Compatibility Issues Installing nvm on Alpine Linux Alpine Linux 3.13+ Problems macOS Troubleshooting W…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；本周有更新；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">bash</span><span class="topic-badge">install</span><span class="topic-badge">lts</span><span class="topic-badge">node</span><span class="topic-badge">node-js</span><span class="topic-badge">nodejs</span><span class="topic-badge">nvm</span><span class="topic-badge">nvmrc</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 95,494</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +52 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,522</span>
+                <span class="stat"><span class="stat-icon">📋</span> 382 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
