@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-10-25</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-10-25 · 共 10 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">10</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">5</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">5,706</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/cloudflare/security-audit-skill">cloudflare / security-audit-skill</a></div>
+            </div>
+            <div class="description">
+                A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting. This is the skill that seeded Cloudflare's vulnerability discovery harness, described in Build your own vulnerability harness. The harness grew into a
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting. This is the skill that seeded Cloudflare's vulnera…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 45,040</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,264 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,795</span>
+                <span class="stat"><span class="stat-icon">📋</span> 90 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1个月前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/NVIDIA/OpenShell">NVIDIA / OpenShell</a></div>
+            </div>
+            <div class="description">
+                OpenShell is the safe, private runtime for autonomous AI agents.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!IMPORTANT] New in OpenShell 0.1.x: a stable release cadence, new isolation primitives, an expanded extension surface, and new APIs. Read the 0.1.0 upgrade guide. OpenShell is the safe, private runtime for fleets of autonomous AI agents. Agents are most useful when they can read files, install packages, call APIs, and use credentials. OpenShell gives them that capability without giving them unres
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenShell is the safe, private runtime for fleets of autonomous AI agents. Agents are most useful when they can read files, install packages, call APIs, and use credentials. OpenShell gives them that capability without giving them unrestricted access to your data, secrets, or network. You declare wh…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 19,589</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +896 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,939</span>
+                <span class="stat"><span class="stat-icon">📋</span> 579 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于5小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.nvidia.com/openshell/latest/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/pbakaus/impeccable">pbakaus / impeccable</a></div>
+            </div>
+            <div class="description">
+                The design language that makes your AI harness better at design.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Design guidance for AI coding agents. 1 skill, 24 commands, live browser iteration, and 62 deterministic detector rules for AI-generated frontend design. Quick start: From your project root, run npx impeccable install, then run /impeccable init inside your AI coding tool. Full docs: impeccable.style. Anthropic's frontend-design was the first widely-used design skill for Claude. Impeccable started 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">This shows the harness folders or installed CLIs it detected (for example ~/.claude, ~/.codex, ~/.grok, ~/.hermes, ~/.veto, or project-local .cursor), lets you keep the detected set or customize providers, then asks whether to install into the current project or globally. Use --providers=claude,code…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 86,591</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +619 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,169</span>
+                <span class="stat"><span class="stat-icon">📋</span> 39 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于22小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://impeccable.style" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/makecindy/cindy">makecindy / cindy</a></div>
+            </div>
+            <div class="description">
+                Consider it done. The open-source AI agent that works out of the box · 想到，就能做到。开源、开箱即用的 AI Agent。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🌐 cindy.app  ·  ⬇️ Download Cindy is an open-source AI agent that works out of the box. She brings multiple harnesses, models and tools into one agent that finishes real work in your projects and apps. Ready from day one, yours to shape over time.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">models your way: sign in to the official Cindy service (usage deducted transparently), authorize the Claude Code / Codex Coding Plan you already pay for and keep using it inside Cindy — no duplicate bill — connect your own API keys, or use local models. Plugins — reshape features, UI and interaction…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">ai-agent</span><span class="topic-badge">ai-assistant</span><span class="topic-badge">android</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">electron</span><span class="topic-badge">ios</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 4,217</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +477 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 605</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1895 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://cindy.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/Nutlope/hallmark">Nutlope / hallmark</a></div>
+            </div>
+            <div class="description">
+                Anti-AI-slop design skill for Claude Code, Cursor, and Codex.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A design skill for Claude Code, Codex, Cursor and OpenCode that refuses to look AI-generated. usehallmark.com  ·  forty-eight themes  ·  custom on request  ·  redesign and audit by name Made by Together AI. Hallmark holds a hard floor and then gets out of the way. It deals three themes from a catalog of forty-eight materials, builds the page around what the visitor came to do, and lints the result
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A design skill for Claude Code, Codex, Cursor and OpenCode that refuses to look AI-generated. usehallmark.com  ·  forty-eight themes  ·  custom on request  ·  redesign and audit by name Made by Together AI.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#563d7c"></span>CSS</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 32,389</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +455 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,663</span>
+                <span class="stat"><span class="stat-icon">📋</span> 49 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.usehallmark.com/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/luongnv89/claude-howto">luongnv89 / claude-howto</a></div>
+            </div>
+            <div class="description">
+                A visual, example-driven guide to Claude Code — from basic concepts to advanced agents, with copy-paste templates that bring immediate value.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🌐 Language / Ngôn ngữ / 语言 / Мова: English | Tiếng Việt | 中文 | Українська | 日本語 Go from typing claude to orchestrating agents, hooks, skills, and MCP servers — with visual tutorials, copy-paste templates, and a guided learning path. Get Started in 15 Minutes | Find Your Level | Browse the Feature Catalog The Problem
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Get Started in 15 Minutes | Find Your Level | Browse the Feature Catalog The Problem How Claude How To Fixes This How It Works The Problem How Claude How To Fixes This How It Works Not Sure Where to Start? The official docs describe features — but don't show you how to combine them. You know slash c…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；本周有更新</div>
+            <div class="topics"><span class="topic-badge">claude-code</span><span class="topic-badge">guide</span><span class="topic-badge">tutorial</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 44,689</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +392 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,499</span>
+                <span class="stat"><span class="stat-icon">📋</span> 40 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="http://luongnv.com/claude-howto/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/pollen-robotics/microduck">pollen-robotics / microduck</a></div>
+            </div>
+            <div class="description">
+                A Tiny biped duck robot 🦆
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Get yours here · Cheat sheet · Training the policies · How it works ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">This repo is the duck's brain. About 25 cm and 800 g of robot, run by a handful of daemons on a Rockchip RK3566: a 50 Hz control loop driving fifteen servos from neural policies, the radios and the camera, and the update machinery that gets new software onto a robot without bricking it. Everything y…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,108</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +319 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,419</span>
+                <span class="stat"><span class="stat-icon">📋</span> 62 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于19小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://pollen-robotics.com/microduck" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/jbiaojerry/ebook-treasure-chest">jbiaojerry / ebook-treasure-chest</a></div>
+            </div>
+            <div class="description">
+                欢迎来到电子书下载宝库，一个汇聚了各类电子书下载链接的地方。无论你是喜欢阅读经典文学、经管励志、终身学习、职场创业、技术手册还是其他类型的书籍，这里都能满足你的需求。 该库涵盖了帆书app(原樊登读书)、微信读书、京东读书、喜马拉雅等读书app的大部分电子书。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🌐 在线访问 GitHub Pages - 体验强大的实时搜索功能和多关键字搜索，快速找到你想要的电子书！ 欢迎来到电子书下载宝库，一个汇聚了各类电子书下载链接的地方。无论你是喜欢阅读经典文学、经管励志、终身学习、职场创业、技术手册还是其他类型的书籍，这里都能满足你的需求。 该库涵盖了帆书app(原樊登读书)、微信读书、京东读书、喜马拉雅等读书app的大部分电子书。 我们从各个电子书网站上精心收集了各种电子书下载链接，并根据常用的标签对它们进行了简单分类。每本书都包括了三种常见格式文件：epub、mobi 和 azw3，以满足不同阅读设备和喜好的需求。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">🌐 在线访问 GitHub Pages - 体验强大的实时搜索功能和多关键字搜索，快速找到你想要的电子书！ 欢迎来到电子书下载宝库，一个汇聚了各类电子书下载链接的地方。无论你是喜欢阅读经典文学、经管励志、终身学习、职场创业、技术手册还是其他类型的书籍，这里都能满足你的需求。 该库涵盖了帆书app(原樊登读书)、微信读书、京东读书、喜马拉雅等读书app的大部分电子书。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 22,798</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +227 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,198</span>
+                <span class="stat"><span class="stat-icon">📋</span> 6 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9个月前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/google-gemini/gemini-cli">google-gemini / gemini-cli</a></div>
+            </div>
+            <div class="description">
+                An open-source AI agent that brings the power of Gemini directly into your terminal.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!NOTE] Unpaid tier and Google One users: Gemini CLI was replaced by Antigravity CLI on June 18th, 2026. To learn more, see our blog post.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Learn all about Gemini CLI in our documentation. Gemini CLI installation, execution, and releases for recommended system specifications and a detailed installation guide. `bash Generate new apps from PDFs, images, or sketches using multimodal capabilities Debug issues and troubleshoot with natural l…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-agents</span><span class="topic-badge">cli</span><span class="topic-badge">gemini</span><span class="topic-badge">gemini-api</span><span class="topic-badge">mcp-client</span><span class="topic-badge">mcp-server</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 108,192</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +44 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 14,819</span>
+                <span class="stat"><span class="stat-icon">📋</span> 763 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://geminicli.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/aws/agent-toolkit-for-aws">aws / agent-toolkit-for-aws</a></div>
+            </div>
+            <div class="description">
+                Official, AWS-supported MCP servers, skills, and plugins to help AI agents build on AWS
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Help AI coding agents build, deploy, and manage applications on AWS. The Agent Toolkit for AWS gives AI coding agents the tools, knowledge, and guardrails they need to work with AWS services. It works with the coding agents developers already use — including Claude Code, Codex, Cursor, Devin, Kiro, and fx. Use the Agent Toolkit directly from your terminal with the AWS CLI: aws configure agent-tool
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">See the AWS CLI integration guide for setup, configuration, and usage instructions. The plugins are available on the official Anthropic marketplace (claude-plugins-official) which is added to your Claude Code installation by default. Use the following commands to install supported plugins from the t…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,189</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +13 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 403</span>
+                <span class="stat"><span class="stat-icon">📋</span> 63 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
