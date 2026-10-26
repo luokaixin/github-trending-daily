@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-10-26</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-10-26 · 共 11 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">11</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">6</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">9,181</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/cloudflare/security-audit-skill">cloudflare / security-audit-skill</a></div>
+            </div>
+            <div class="description">
+                A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting. This is the skill that seeded Cloudflare's vulnerability discovery harness, described in Build your own vulnerability harness. The harness grew into a
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting. This is the skill that seeded Cloudflare's vulnera…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 47,270</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,878 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,936</span>
+                <span class="stat"><span class="stat-icon">📋</span> 97 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1个月前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/debpalash/VoiceStudio">debpalash / VoiceStudio</a></div>
+            </div>
+            <div class="description">
+                VoiceStudio is the open-source, fully-local ElevenLabs alternative — voice cloning, voice design, video dubbing, dictation, transcription &amp; audiobook creation in 646 languages.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Website · Download · Get started · Docs ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Start with VoiceStudio (default, powered by k2-fsa/OmniVoice), or choose another engine. Features &amp; engine catalog. Local workflows run on your hardware. Remote services are optional; usage analytics requires consent. OmniVoice GGUF source builds can optionally use Vulkan on Windows and Linux; see t…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">audiobook</span><span class="topic-badge">cuda</span><span class="topic-badge">dubbing</span><span class="topic-badge">elevenlabs-alternative</span><span class="topic-badge">huggingface</span><span class="topic-badge">local-first</span><span class="topic-badge">mlx</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 87,252</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,592 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,650</span>
+                <span class="stat"><span class="stat-icon">📋</span> 193 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://voicestudio.sh" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/Nutlope/hallmark">Nutlope / hallmark</a></div>
+            </div>
+            <div class="description">
+                Anti-AI-slop design skill for Claude Code, Cursor, and Codex.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A design skill for Claude Code, Codex, Cursor and OpenCode that refuses to look AI-generated. usehallmark.com  ·  forty-eight themes  ·  custom on request  ·  redesign and audit by name Made by Together AI. Hallmark holds a hard floor and then gets out of the way. It deals three themes from a catalog of forty-eight materials, builds the page around what the visitor came to do, and lints the result
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A design skill for Claude Code, Codex, Cursor and OpenCode that refuses to look AI-generated. usehallmark.com  ·  forty-eight themes  ·  custom on request  ·  redesign and audit by name Made by Together AI.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#563d7c"></span>CSS</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 34,314</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,317 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,785</span>
+                <span class="stat"><span class="stat-icon">📋</span> 59 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.usehallmark.com/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/pbakaus/impeccable">pbakaus / impeccable</a></div>
+            </div>
+            <div class="description">
+                The design language that makes your AI harness better at design.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Design guidance for AI coding agents. 1 skill, 24 commands, live browser iteration, and 62 deterministic detector rules for AI-generated frontend design. Quick start: From your project root, run npx impeccable install, then run /impeccable init inside your AI coding tool. Full docs: impeccable.style. Anthropic's frontend-design was the first widely-used design skill for Claude. Impeccable started 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">This shows the harness folders or installed CLIs it detected (for example ~/.claude, ~/.codex, ~/.grok, ~/.hermes, ~/.veto, or project-local .cursor), lets you keep the detected set or customize providers, then asks whether to install into the current project or globally. Use --providers=claude,code…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 87,989</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,092 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,256</span>
+                <span class="stat"><span class="stat-icon">📋</span> 41 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://impeccable.style" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/makecindy/cindy">makecindy / cindy</a></div>
+            </div>
+            <div class="description">
+                Consider it done. The open-source AI agent that works out of the box · 想到，就能做到。开源、开箱即用的 AI Agent。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🌐 cindy.app  ·  ⬇️ Download Cindy is an open-source AI agent that works out of the box. She brings multiple harnesses, models and tools into one agent that finishes real work in your projects and apps. Ready from day one, yours to shape over time.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">models your way: sign in to the official Cindy service (usage deducted transparently), authorize the Claude Code / Codex Coding Plan you already pay for and keep using it inside Cindy — no duplicate bill — connect your own API keys, or use local models. Plugins — reshape features, UI and interaction…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">ai-agent</span><span class="topic-badge">ai-assistant</span><span class="topic-badge">android</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">electron</span><span class="topic-badge">ios</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,198</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +675 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 692</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1932 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://cindy.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/pollen-robotics/microduck">pollen-robotics / microduck</a></div>
+            </div>
+            <div class="description">
+                A Tiny biped duck robot 🦆
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Get yours here · Cheat sheet · Training the policies · How it works ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">This repo is the duck's brain. About 25 cm and 800 g of robot, run by a handful of daemons on a Rockchip RK3566: a 50 Hz control loop driving fifteen servos from neural policies, the radios and the camera, and the update machinery that gets new software onto a robot without bricking it. Everything y…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,853</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +647 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,501</span>
+                <span class="stat"><span class="stat-icon">📋</span> 79 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于16小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://pollen-robotics.com/microduck" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/TauricResearch/TradingAgents">TauricResearch / TradingAgents</a></div>
+            </div>
+            <div class="description">
+                TradingAgents: Multi-Agents LLM Financial Trading Framework
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Deutsch Español français Português
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">🚀 TradingAgents | ⚡ Installation &amp; CLI | 🎬 Demo | 📦 Package Usage | 🤝 Contributing | 📄 Citation 🎉 TradingAgents officially released! We have received numerous inquiries about the work, and we would like to express our thanks for the enthusiasm in our community. So we decided to fully open-source the…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">finance</span><span class="topic-badge">llm</span><span class="topic-badge">multiagent</span><span class="topic-badge">trading</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 114,871</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +381 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 22,154</span>
+                <span class="stat"><span class="stat-icon">📋</span> 151 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://arxiv.org/pdf/2412.20138" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/Renhuai123/ziwei-doushu">Renhuai123 / ziwei-doushu</a></div>
+            </div>
+            <div class="description">
+                紫微斗数开源排盘引擎 — 基于倪海厦《天纪》体系，含完整排盘算法、四化系统、格局知识库、古籍原文数据
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：中文 · English 一、项目理念：紫微斗数是中国传统命理学的瑰宝，倪海厦老师在《天纪》中系统梳理了正宗的紫微斗数体系。我们希望通过技术手段让更多人接触和学习这门学问。 开源排盘算法和知识库，是因为我们相信：算法是公开的传统智慧，不应该被锁在围墙里。真正的价值在于解读的深度、用户体验的打磨、以及持续运营的积累。 二、项目信息：基于倪海厦《天纪》教学体系的紫微斗数排盘系统，包含完整排盘算法、四化系统、格局知识库、古籍原文数据，以及一套完整开源的紫微斗数解读数据：v4.0 解读数据集——67.5 万张命盘 × 13 维 = 877 万段解读，正文约 204 亿字，解压后 56.6 GB（2026-10-15 发布）。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">网页 / 产品：About 页 / 关于我们 / 数据来源 / 页脚，写一行链接即可 AI 模型：模型卡（Model Card）或数据集卡（Dataset Card）的 "Training Data" 字段 学术论文：参考文献或致谢章节 二次发布的数据集：README 或 metadata 文件里注明上游来源 cp .env.example .env.local npm run dev 本地验证： `bash</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">bazi</span><span class="topic-badge">chinese-astrology</span><span class="topic-badge">divination</span><span class="topic-badge">fortune-telling</span><span class="topic-badge">nextjs</span><span class="topic-badge">open-source</span><span class="topic-badge">purple-star-astrology</span><span class="topic-badge">typescript</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 7,857</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +199 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,588</span>
+                <span class="stat"><span class="stat-icon">📋</span> 8 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://metisziwei.com/?from=gh-about" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/AgriciDaniel/claude-seo">AgriciDaniel / claude-seo</a></div>
+            </div>
+            <div class="description">
+                Universal SEO skill for Claude Code. 26 sub-skills + 19 sub-agents covering technical SEO, E-E-A-T, schema, GEO/AEO, agent readiness (Lighthouse Agentic Browsing, WebMCP, llms.txt), backlinks, local SEO, e-commerce, international SEO, Google APIs, and PDF/Excel reporting. 9 optional extensions for live SEO data.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Claude SEO (claude-seo): free, open-source SEO audit plugin for Claude Code by Agrici Daniel. Technical SEO, Core Web Vitals, E-E-A-T, Schema.org, AI search (GEO), local SEO, e-commerce and international SEO. 26 sub-skills and 19 specialist agents. MIT licensed. Rank higher in Google and get cited by AI search.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">AI search (GEO). How likely Google AI Overviews, AI Mode, ChatGPT, Perplexity and Gemini are to cite your pages. Local and e-commerce SEO. Google Business Profile, reviews, map pack, product pages and international sites. Claude SEO is built from 26 sub-skills and 19 specialist agents, and up to 17 …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-seo</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-code-skill</span><span class="topic-badge">marketing-automation</span><span class="topic-badge">open-source</span><span class="topic-badge">seo</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 21,205</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +197 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,970</span>
+                <span class="stat"><span class="stat-icon">📋</span> 52 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="skool.com/ai-marketing-hub-pro" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/coollabsio/coolify">coollabsio / coolify</a></div>
+            </div>
+            <div class="description">
+                An open-source, self-hostable PaaS alternative to Vercel, Heroku &amp; Netlify that lets you easily deploy static sites, databases, full-stack applications and 360+ one-click services on your own servers.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：An open-source platform to deploy applications, databases, and services on your own servers. Open source &amp; free forever, backed by our philosophy. Website · Documentation · Cloud · Discord · Community Coolify is an open-source and self-hostable alternative to Heroku, Netlify, and Vercel. It helps you manage servers, applications, and databases on your own hardware. You only need an SSH connection.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">To stay completely free and open-source, with no feature behind the paywall and evolve the project, we need your help. If you like Coolify, please consider donating to help us fund the project's future development. coolify.io/sponsorships Thank you so much! * Context.dev - Web scraping API for AI ag…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">coolify</span><span class="topic-badge">databases</span><span class="topic-badge">deployment</span><span class="topic-badge">docker</span><span class="topic-badge">docker-compose</span><span class="topic-badge">inertiajs</span><span class="topic-badge">laravel</span><span class="topic-badge">mariadb</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#4F5D95"></span>PHP</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 64,603</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +152 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,804</span>
+                <span class="stat"><span class="stat-icon">📋</span> 363 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://coolify.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/JetBrains/thinkrail">JetBrains / thinkrail</a></div>
+            </div>
+            <div class="description">
+                Vibe code with pi in a lightweight, real IDE that customises itself around the way you work — The Vibe You Need
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：ThinkRail is the agentic IDE that gets better every time you use it — learning your project through living specs today, and building its own capabilities tomorrow. We built a rich interface around the pi coding agent, isolated work into separate workspaces, and gave the agent durable project knowledge
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">living specs today, and building its own capabilities tomorrow. We built a rich interface around the pi coding agent, isolated work into separate workspaces, and gave the agent durable project knowledge through living specs and reusable skills. Next, we're adding full extension support, so ThinkRail…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agent-skills</span><span class="topic-badge">agentic-ai</span><span class="topic-badge">agentic-workflow</span><span class="topic-badge">ai-coding</span><span class="topic-badge">ai-tools</span><span class="topic-badge">pi-agent</span><span class="topic-badge">pi-agent-extension</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,012</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +51 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 112</span>
+                <span class="stat"><span class="stat-icon">📋</span> 210 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://thinkrail.ai/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
