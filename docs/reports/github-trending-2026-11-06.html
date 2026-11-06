@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-11-06</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-11-06 · 共 15 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">15</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">13,188</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/NVIDIA/auto-ontology">NVIDIA / auto-ontology</a></div>
+            </div>
+            <div class="description">
+                Auto Ontology is a Python framework for building semantic, graph-based reasoning layers over data. It enables deterministic query generation, better context retrieval, and more explainable AI for LLM and agent workflows.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION &amp; AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0 Agents can retrieve documents and query databases, but reliability gates agentic analytics: a revenue metric answered faster is worth nothing if the number is wrong. Agents need a context layer that tells them where data lives, what it means, whether to use it, how 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Learn: fold certified corrections and usage back into the ontology, so shared context improves with every question. To run a text-to-SQL benchmark such as BIRD, refer to the ontology SQL evaluation repository. Licensing &amp; contributions. Auto Ontology is distributed under the self-hosted NIMs. The de…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 7,912</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,679 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 637</span>
+                <span class="stat"><span class="stat-icon">📋</span> 57 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/vercel-labs/agent-desktop">vercel-labs / agent-desktop</a></div>
+            </div>
+            <div class="description">
+                Computer use CLI for AI agents
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Computer use for AI agents: see and operate desktop apps on macOS, Windows, and Linux through the OS accessibility tree. agent-desktop gives an AI agent computer use without screenshots or pixel matching. It reads the accessibility tree of a desktop app and returns it as JSON, with a ref for every element the agent can act on. The agent clicks or types on a ref, reads the UI again to check the res
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Computer use for AI agents: see and operate desktop apps on macOS, Windows, and Linux through the OS accessibility tree. agent-desktop gives an AI agent computer use without screenshots or pixel matching. It reads the accessibility tree of a desktop app and returns it as JSON, with a ref for every e…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">accessibility</span><span class="topic-badge">accessibility-api</span><span class="topic-badge">ai-agents</span><span class="topic-badge">automation</span><span class="topic-badge">cli</span><span class="topic-badge">computer-use</span><span class="topic-badge">computer-use-agent</span><span class="topic-badge">computer-use-agents</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 17,362</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,173 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,236</span>
+                <span class="stat"><span class="stat-icon">📋</span> 174 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于6小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://agent-browser.dev/desktop" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/mattpocock/skills">mattpocock / skills</a></div>
+            </div>
+            <div class="description">
+                Skills for Real Engineers. Straight from my .agents directory.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：My agent skills that I use every day to do real engineering - not vibe coding. Developing real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve. These skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on d
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The Problem. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all. This is just the same in the AI age. There is a communication gap between you and the agent. Th…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 315,766</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,071 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 26,429</span>
+                <span class="stat"><span class="stat-icon">📋</span> 216 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于20小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aihero.dev/skills" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/D4Vinci/Scrapling">D4Vinci / Scrapling</a></div>
+            </div>
+            <div class="description">
+                🕷️ The BEST Web Scraping framework that handles everything from a single request to a full-scale crawl! Don't be shy, join here:https://discord.gg/EMgGbDceNQand follow here for daily tips and tricks:https://x.com/Scrapling_dev
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Scrapling is a Python Web Scraping framework that brings fast HTTP requests, stealth browsers, powerful parsing, and concurrent crawling into one library. Scrape static pages, render JavaScript, interact with websites, and extract data from the API calls behind them. Build crawlers with reusable sessions, proxy rotation, automatic retries, pause/resume, and built-in data exports. Use it from Pytho
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Scrapling is a Python Web Scraping framework that brings fast HTTP requests, stealth browsers, powerful parsing, and concurrent crawling into one library. Scrape static pages, render JavaScript, interact with websites, and extract data from the API calls behind them. Build crawlers with reusable ses…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-scraping</span><span class="topic-badge">automation</span><span class="topic-badge">crawler</span><span class="topic-badge">crawling</span><span class="topic-badge">crawling-python</span><span class="topic-badge">data</span><span class="topic-badge">data-extraction</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 98,357</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,655 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,302</span>
+                <span class="stat"><span class="stat-icon">📋</span> 14 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于13小时前</span><span class="stat"><span class="stat-icon">📄</span> BSD-3-Clause</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://scrapling.readthedocs.io/en/latest/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/JiaFeiMiao-K-Cat/DiscImageStudio">JiaFeiMiao-K-Cat / DiscImageStudio</a></div>
+            </div>
+            <div class="description">
+                暂无描述
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：简体中文 | 繁體中文 | English | 日本語 | Türkçe | Español | Čeština Disc Image Studio 是一个多平台的光盘盘面图像生成与刻录工具，帮助您使用任何刻录光驱在任何 DVD / CD / 单层蓝光 光盘上刻蚀出肉眼可见的图像。 Disc Image Studio 可将一张图片转换成符合 CD、DVD 与单层 BD-R 光盘物理层约束的数据，刻录后将使光盘盘面呈现肉眼可见的图案。 Windows 下载 win-x64.exe 后可直接运行。Linux 或 macOS 请下载与 CPU 匹配的实验性 CLI 压缩包，解压后运行 ./disc-image-studio --help。这些发布包均自带 .NET 运行时。 GitHub Releases
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">简体中文 | 繁體中文 | English | 日本語 | Türkçe | Español | Čeština Disc Image Studio 是一个多平台的光盘盘面图像生成与刻录工具，帮助您使用任何刻录光驱在任何 DVD / CD / 单层蓝光 光盘上刻蚀出肉眼可见的图像。 Disc Image Studio 可将一张图片转换成符合 CD、DVD 与单层 BD-R 光盘物理层约束的数据，刻录后将使光盘盘面呈现肉眼可见的图案。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#178600"></span>C#</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 7,479</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +984 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 267</span>
+                <span class="stat"><span class="stat-icon">📋</span> 98 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于14小时前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/floci-io/floci">floci-io / floci</a></div>
+            </div>
+            <div class="description">
+                Light, fluffy, and always free - The AWS Local Emulator alternative
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Light, fluffy, and always free No account. No auth token. No feature gates. Just docker compose up. Quick Start · Features ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">No account. No auth token. No feature gates. Just docker compose up. Quick Start · Features · Services · Features · Services · SDKs · Testcontainers · It gives you AWS-shaped services on your machine without requiring a cloud account, an auth token, or paid feature gates. Point your AWS SDK, CLI, Te…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">aws</span><span class="topic-badge">aws-emulation</span><span class="topic-badge">devops</span><span class="topic-badge">docker</span><span class="topic-badge">ec2</span><span class="topic-badge">ecs</span><span class="topic-badge">localstack</span><span class="topic-badge">s3</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#b07219"></span>Java</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 30,620</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +779 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,339</span>
+                <span class="stat"><span class="stat-icon">📋</span> 207 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于10小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://floci.io/floci/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/scenario-labs/skills">scenario-labs / skills</a></div>
+            </div>
+            <div class="description">
+                Get production-ready images, video, audio, and 3D from any AI agent: skills that pick the right model, price before spending, and keep characters and brands consistent through the Scenario MCP, plus expert teams that drive Blender, Maya, ZBrush, Unreal, and Unity.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Scenario Agent Skills Agent Skills that teach AI coding agents (Claude Code, Cursor, Codex, Copilot, and 70+ others) how to create production-ready content with Scenario through the Scenario MCP server: images, video, audio, textures, skyboxes, 3D
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Releases are how changes become visible: every feature, fix, and documentation change merged to main lands in the next release, staged by release-please as an open release PR. Merging that PR tags a version, updates CHANGELOG.md in this repository, publishes a GitHub release, and posts the notes to …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；近期新项目；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">3d-models</span><span class="topic-badge">agent-skills</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-art</span><span class="topic-badge">blender</span><span class="topic-badge">claude-code</span><span class="topic-badge">claude-skills</span><span class="topic-badge">codex</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,251</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +667 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 282</span>
+                <span class="stat"><span class="stat-icon">📋</span> 39 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.skills.sh/scenario-labs/skills" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/garrytan/gstack">garrytan / gstack</a></div>
+            </div>
+            <div class="description">
+                Use Garry Tan's exact Claude Code setup: 23 opinionated tools that serve as CEO, Designer, Eng Manager, Release Manager, Doc Engineer, and QA
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：gstack turns Claude Code (and other coding agents) into a virtual engineering team: a CEO who rethinks the product, an eng manager who locks architecture, a designer who catches AI slop, a reviewer who finds production bugs, a QA lead who opens a real browser, a security officer who runs OWASP + STRIDE audits, and a release engineer who ships the PR. All slash commands, all Markdown, all free, MIT
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">I'm Garry Tan, President &amp; CEO of Y Combinator. This is the open source software factory I use every day, and I'm sharing it because these tools should be available to everyone. The story, the productivity numbers and how I run ten sprints at once are in Why gstack. Fork it. Improve it. Make it your…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 140,167</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +612 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 20,708</span>
+                <span class="stat"><span class="stat-icon">📋</span> 73 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/max-sixty/worktrunk">max-sixty / worktrunk</a></div>
+            </div>
+            <div class="description">
+                Worktrunk is a CLI for Git worktree management, designed for parallel AI agent workflows
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：November 2026: Worktrunk was released at the start of the year, and has quickly become the most popular git worktree manager. It's built with love (there's no slop!). Please let me know any frictions at all; I'm intensely focused on continuing to make Worktrunk excellent, and the biggest help is folks posting problems they perceive. Worktrunk is a CLI for git worktree management, designed for runn
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">November 2026: Worktrunk was released at the start of the year, and has quickly become the most popular git worktree manager. It's built with love (there's no slop!). Please let me know any frictions at all; I'm intensely focused on continuing to make Worktrunk excellent, and the biggest help is fol…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">developer-tools</span><span class="topic-badge">git</span><span class="topic-badge">worktrees</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,656</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +546 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 446</span>
+                <span class="stat"><span class="stat-icon">📋</span> 49 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://worktrunk.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/Usagi-org/ai-goofish-monitor">Usagi-org / ai-goofish-monitor</a></div>
+            </div>
+            <div class="description">
+                基于 Playwright 和AI实现的闲鱼多任务实时/定时监控与智能分析系统，配备了功能完善的后台管理UI。帮助用户从闲鱼海量商品中，找到心仪产品。
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[中文] ｜ English 基于 Playwright 和 AI 的闲鱼多任务实时监控，提供完整的 Web 管理界面。 Web 可视化管理: 任务管理、账号管理、AI 标准编辑、运行日志、结果浏览 AI 驱动: 自然语言创建任务，多模态模型深度分析商品
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">cp .env.example .env vim .env # 填写相关配置项 docker compose up -d docker compose logs -f app cp .env.example .env `bash chmod +x start.sh ./start.sh 完整示例见 .env.example。 Web UI 当前使用登录页收集账号密码，并通过 POST /auth/status 校验。 登录成功后，前端会在浏览器本地保存登录状态，用于路由守卫和 WebSocket 初始化。 默认账号密码为 admin/admin123，生产环境请务必修改。</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-assistant</span><span class="topic-badge">ai-tools</span><span class="topic-badge">automation</span><span class="topic-badge">gemini</span><span class="topic-badge">goofish</span><span class="topic-badge">open-source</span><span class="topic-badge">openai</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 17,950</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +240 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,974</span>
+                <span class="stat"><span class="stat-icon">📋</span> 48 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于26天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/microsoft/VibeVoice">microsoft / VibeVoice</a></div>
+            </div>
+            <div class="description">
+                Open-Source Frontier Voice AI
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：2026-01-21: 📣 We open-sourced VibeVoice-ASR, a unified speech-to-text model designed to handle 60-minute long-form audio in a single pass, generating structured transcriptions containing Who (Speaker), When (Timestamps), and What (Content), with support for User-Customized Context. Try it in Playground. ⭐️ VibeVoice-ASR is natively multilingual, supporting over 50 languages — check the supported l
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">For more information, demos, and examples, please visit our Project Page. VibeVoice-ASR is a unified speech-to-text model designed to handle 60-minute long-form audio in a single pass, generating structured transcriptions containing Who (Speaker), When (Timestamps), and What (Content), with support …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 56,242</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +223 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,334</span>
+                <span class="stat"><span class="stat-icon">📋</span> 205 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于29天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://microsoft.github.io/VibeVoice/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/google/skills">google / skills</a></div>
+            </div>
+            <div class="description">
+                Agent Skills for Google products and technologies
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：This repository contains Agent Skills for Google products and technologies, including Google Cloud. `bash npx skills add google/skills
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">This repository contains Agent Skills for Google products and technologies, including Google Cloud. `bash</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">google</span><span class="topic-badge">googlecloud</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 22,527</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +211 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,897</span>
+                <span class="stat"><span class="stat-icon">📋</span> 25 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/ConardLi/garden-skills">ConardLi / garden-skills</a></div>
+            </div>
+            <div class="description">
+                ConardLi's open-source Skills collection, featuring web design, knowledge retrieval, image generation, and more.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A curated collection of production-ready Agent Skills for Claude Code, Cursor, Codex, and other AI coding agents. English · 中文文档 · 日本語 Category: Motion Graphics / Code Video Best for: showreels, product films, UI motion, kinetic typography, logo/title sequences, generative loops, retrospectives and narrated explainers. Short pieces typically run 5–60 s; chapter-based films support up to 20 minutes
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A curated collection of production-ready Agent Skills for Claude Code, Cursor, Codex, and other AI coding agents. English · 中文文档 · 日本語 Category: Motion Graphics / Code Video</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">claude</span><span class="topic-badge">gpt-image-2</span><span class="topic-badge">rag</span><span class="topic-badge">skills</span><span class="topic-badge">web-design</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 14,337</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +175 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,658</span>
+                <span class="stat"><span class="stat-icon">📋</span> 26 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://github.com/ConardLi/garden-skills" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/vercel-labs/agent-browser">vercel-labs / agent-browser</a></div>
+            </div>
+            <div class="description">
+                Browser automation CLI for AI agents
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Browser automation for AI agents: open pages, read them as an accessibility tree, and act on elements from the shell. agent-browser is a native Rust CLI that gives an AI agent a browser it can drive one command at a time. snapshot returns the page as compact text with a ref such as @e1 for each element. The agent acts on a ref, reads the page again to check the result, and repeats. The browser sta
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">No install: npx agent-browser open example.com. Project installs, building from source, upgrade, and doctor are covered in Installation. `bash agent-browser open example.com agent-browser open example.com agent-browser snapshot -i       # interactive elements, each with a ref agent-browser click @e1…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 46,102</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +150 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,155</span>
+                <span class="stat"><span class="stat-icon">📋</span> 492 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://agent-browser.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/lz4/lz4">lz4 / lz4</a></div>
+            </div>
+            <div class="description">
+                Extremely Fast Compression algorithm
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：LZ4 - Extremely fast compression ================================ LZ4 is a lossless compression algorithm, providing compression speed &gt; 500 MB/s per core,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">It features an extremely fast decoder, with speed in multiple GB/s per core, typically reaching RAM speed limits on multi-core systems. Compression speed can be tuned dynamically, by selecting an "acceleration" factor All versions feature the same decompression speed. LZ4 is also compatible with dic…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">c</span><span class="topic-badge">compression</span><span class="topic-badge">lz4</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 12,472</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +23 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,640</span>
+                <span class="stat"><span class="stat-icon">📋</span> 5 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="http://www.lz4.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
