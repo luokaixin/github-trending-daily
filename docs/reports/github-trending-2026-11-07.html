@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-11-07</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-11-07 · 共 18 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">18</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">9</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">9,573</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/cloudflare/security-audit-skill">cloudflare / security-audit-skill</a></div>
+            </div>
+            <div class="description">
+                A coding-agent skill for multi-phase security audits with independently verified, machine-readable findings
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting. This is the skill that seeded Cloudflare's vulnerability discovery harness, described in Build your own vulnerability harness. The harness grew into a
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A coding-agent skill that turns your agent into a security auditor. It orchestrates isolated agents through reconnaissance, coverage-led hunting, candidate validation, structured output, independent record verification, and target-neutral reporting. This is the skill that seeded Cloudflare's vulnera…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 64,440</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,548 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,176</span>
+                <span class="stat"><span class="stat-icon">📋</span> 115 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1个月前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/mattpocock/skills">mattpocock / skills</a></div>
+            </div>
+            <div class="description">
+                Skills for Real Engineers. Straight from my .agents directory.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：My agent skills that I use every day to do real engineering - not vibe coding. Developing real applications is hard. Approaches like GSD, BMAD, and Spec-Kit try to help by owning the process. But while doing so, they take away your control and make bugs in the process hard to resolve. These skills are designed to be small, easy to adapt, and composable. They work with any model. They're based on d
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The Problem. The most common failure mode in software development is misalignment. You think the dev knows what you want. Then you see what they've built - and you realize it didn't understand you at all. This is just the same in the AI age. There is a communication gap between you and the agent. Th…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 316,933</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,070 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 26,523</span>
+                <span class="stat"><span class="stat-icon">📋</span> 217 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://aihero.dev/skills" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/NVIDIA/auto-ontology">NVIDIA / auto-ontology</a></div>
+            </div>
+            <div class="description">
+                Auto Ontology is a Python framework for building semantic, graph-based reasoning layers over data. It enables deterministic query generation, better context retrieval, and more explainable AI for LLM and agent workflows.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：SPDX-FileCopyrightText: Copyright (c) 2026, NVIDIA CORPORATION &amp; AFFILIATES. All rights reserved. SPDX-License-Identifier: Apache-2.0 Agents can retrieve documents and query databases, but reliability gates agentic analytics: a revenue metric answered faster is worth nothing if the number is wrong. Agents need a context layer that tells them where data lives, what it means, whether to use it, how 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Learn: fold certified corrections and usage back into the ontology, so shared context improves with every question. To run a text-to-SQL benchmark such as BIRD, refer to the ontology SQL evaluation repository. Licensing &amp; contributions. Auto Ontology is distributed under the self-hosted NIMs. The de…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 9,331</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,015 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 739</span>
+                <span class="stat"><span class="stat-icon">📋</span> 63 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/google/skills">google / skills</a></div>
+            </div>
+            <div class="description">
+                Agent Skills for Google products and technologies
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：This repository contains Agent Skills for Google products and technologies, including Google Cloud. `bash npx skills add google/skills
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">This repository contains Agent Skills for Google products and technologies, including Google Cloud. `bash</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">google</span><span class="topic-badge">googlecloud</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 22,952</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +534 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,929</span>
+                <span class="stat"><span class="stat-icon">📋</span> 26 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/lz4/lz4">lz4 / lz4</a></div>
+            </div>
+            <div class="description">
+                Extremely Fast Compression algorithm
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：LZ4 - Extremely fast compression ================================ LZ4 is a lossless compression algorithm, providing compression speed &gt; 500 MB/s per core,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">It features an extremely fast decoder, with speed in multiple GB/s per core, typically reaching RAM speed limits on multi-core systems. Compression speed can be tuned dynamically, by selecting an "acceleration" factor All versions feature the same decompression speed. LZ4 is also compatible with dic…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">c</span><span class="topic-badge">compression</span><span class="topic-badge">lz4</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 12,648</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +315 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,644</span>
+                <span class="stat"><span class="stat-icon">📋</span> 6 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="http://www.lz4.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/zed-industries/zed">zed-industries / zed</a></div>
+            </div>
+            <div class="description">
+                Code at the speed of thought – Zed is a high-performance, multiplayer code editor from the creators of Atom and Tree-sitter.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Welcome to Zed, a high-performance, multiplayer code editor from the creators of Atom and Tree-sitter. On macOS, Linux, and Windows you can download Zed directly or install Zed via your local package manager (macOS/Linux/Windows). Other platforms are not yet available: Web (tracking discussion)
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">We use cargo-about to automatically comply with open source licenses. If CI is failing, check the following: Is it showing a no license specified error for a crate you've created? If so, add publish = false under [package] in your crate's Cargo.toml. Is the error failed to satisfy license requiremen…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">gpui</span><span class="topic-badge">rust-lang</span><span class="topic-badge">text-editor</span><span class="topic-badge">zed</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 93,830</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +306 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 11,512</span>
+                <span class="stat"><span class="stat-icon">📋</span> 3036 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://zed.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/microsoft/vscode">microsoft / vscode</a></div>
+            </div>
+            <div class="description">
+                Visual Studio Code
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：This repository ("Code - OSS") is where we (Microsoft) develop the Visual Studio Code product together with the community. Not only do we work on code and issues here, but we also publish our roadmap, monthly iteration plans, and our endgame plans. This source code is available to everyone under the standard MIT license. Visual Studio Code is a distribution of the Code - OSS repository with Micros
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Visual Studio Code is updated monthly with new features and bug fixes. You can download it for Windows, macOS, and Linux on the Visual Studio Code website. To get the latest releases every day, install the Insiders build. There are many ways in which you can participate in this project, for example:…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">editor</span><span class="topic-badge">electron</span><span class="topic-badge">microsoft</span><span class="topic-badge">typescript</span><span class="topic-badge">visual-studio-code</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 195,080</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +301 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 44,433</span>
+                <span class="stat"><span class="stat-icon">📋</span> 21854 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://code.visualstudio.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/react/react">react / react</a></div>
+            </div>
+            <div class="description">
+                The library for web and native user interfaces.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：React is a JavaScript library for building user interfaces. * Declarative: React makes it painless to create interactive UIs. Design simple views for each state in your application, and React will efficiently update and render just the right components when your data changes. Declarative views make your code more predictable, simpler to understand, and easier to debug. * Component-Based: Build enc
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">* Learn Once, Write Anywhere: We don't make assumptions about the rest of your technology stack, so you can develop new features in React without rewriting existing code. React can also render on the server using Node and power mobile apps using React Native. Learn how to use React in your project. …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">declarative</span><span class="topic-badge">frontend</span><span class="topic-badge">javascript</span><span class="topic-badge">library</span><span class="topic-badge">react</span><span class="topic-badge">ui</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 252,307</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +248 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 51,831</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1513 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://react.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/rust-lang/rust">rust-lang / rust</a></div>
+            </div>
+            <div class="description">
+                Empowering everyone to build reliable and efficient software.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：src="https://raw.githubusercontent.com/rust-lang/www.rust-lang.org/master/static/images/rust-social-wide-light.svg" width="50%" Website | [Getting started] | [Learn] | [Documentation] | [Contributing] This is the main source code repository for [Rust]. It contains the compiler,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">src="https://raw.githubusercontent.com/rust-lang/www.rust-lang.org/master/static/images/rust-social-wide-light.svg" width="50%" Website | [Getting started] | [Learn] | [Documentation] | [Contributing]</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">compiler</span><span class="topic-badge">language</span><span class="topic-badge">rust</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 121,520</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +192 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 17,369</span>
+                <span class="stat"><span class="stat-icon">📋</span> 12593 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.rust-lang.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/astral-sh/ruff">astral-sh / ruff</a></div>
+            </div>
+            <div class="description">
+                An extremely fast Python linter and code formatter, written in Rust.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Docs | Playground An extremely fast Python linter and code formatter, written in Rust. ⚡️ 10-100x faster than existing linters (like Flake8) and formatters (like Black) 🐍 Installable via pip
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Why is Ruff a gamechanger? Primarily because it is nearly 1000x faster. Literally. Not a typo. On our largest module (dagster itself, 250k LOC) pylint takes about 2.5 minutes, parallelized across 4 cores on my M1. Running ruff against our _entire_ codebase takes .4 seconds. Bryan Van de Ven, co-crea…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">linter</span><span class="topic-badge">pep8</span><span class="topic-badge">python</span><span class="topic-badge">python3</span><span class="topic-badge">ruff</span><span class="topic-badge">rust</span><span class="topic-badge">rustpython</span><span class="topic-badge">static-analysis</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 50,756</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +169 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,616</span>
+                <span class="stat"><span class="stat-icon">📋</span> 2264 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.astral.sh/ruff" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/prometheus/prometheus">prometheus / prometheus</a></div>
+            </div>
+            <div class="description">
+                The Prometheus monitoring system and time series database.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Prometheus examples and guides. Prometheus, a Cloud Native Computing Foundation project, is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">examples and guides. Prometheus, a Cloud Native Computing Foundation project, is a systems and service monitoring system. It collects metrics from configured targets at given intervals, evaluates rule expressions, displays the results, and can trigger alerts when specified conditions are observed. T…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">alerting</span><span class="topic-badge">graphing</span><span class="topic-badge">hacktoberfest</span><span class="topic-badge">metrics</span><span class="topic-badge">monitoring</span><span class="topic-badge">prometheus</span><span class="topic-badge">time-series</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 67,241</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +148 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,991</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1081 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://prometheus.io/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/rails/rails">rails / rails</a></div>
+            </div>
+            <div class="description">
+                Ruby on Rails
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Rails is a web application framework that includes everything needed to create database-backed web applications according to the Model-View-Controller (MVC) pattern.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Contributing to Ruby on Rails guide for guidelines about how to proceed. Join us! Trying to report a possible security vulnerability in Rails? Please check out our security policy for guidelines about how to proceed. guidelines about how to proceed. Everyone interacting in Rails and its sub-projects…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">activejob</span><span class="topic-badge">activerecord</span><span class="topic-badge">framework</span><span class="topic-badge">html</span><span class="topic-badge">mvc</span><span class="topic-badge">rails</span><span class="topic-badge">ruby</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#701516"></span>Ruby</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 59,058</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +142 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 23,833</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1762 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://rubyonrails.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/angular/angular">angular / angular</a></div>
+            </div>
+            <div class="description">
+                Deliver web apps with confidence 🚀
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Angular is a development platform for building mobile and desktop web applications Get started with Angular, learn the fundamentals and explore advanced topics on our documentation website. Getting Started Architecture
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Learn about the latest improvements. Check out our upgrade guide to find out the best way to upgrade your project. Read through our contributing guidelines to learn about our submission process, coding rules, and more. Want to report a bug, contribute some code, or improve the documentation? Excelle…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">angular</span><span class="topic-badge">javascript</span><span class="topic-badge">pwa</span><span class="topic-badge">typescript</span><span class="topic-badge">web</span><span class="topic-badge">web-framework</span><span class="topic-badge">web-performance</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 101,422</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +135 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 28,914</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1034 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://angular.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/nushell/nushell">nushell / nushell</a></div>
+            </div>
+            <div class="description">
+                A new type of shell
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A new type of shell. Status Learning About Nu Installation
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Learning About Nu Installation Configuration Philosophy The Nushell book is the primary source of Nushell documentation. You can find a full list of Nu commands in the book, and we have many examples of using Nu in our cookbook. We're also active on Discord; come and chat with us! To quickly install…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">nushell</span><span class="topic-badge">rust</span><span class="topic-badge">shell</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 41,022</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +131 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,344</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1457 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于18小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://www.nushell.sh/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/symfony/symfony">symfony / symfony</a></div>
+            </div>
+            <div class="description">
+                The Symfony PHP framework
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Symfony is a PHP framework for web and console applications and a set of reusable PHP components. Symfony is used by thousands of web applications and most of the popular PHP projects. Installation
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">About Us ------- Symfony development is led by the Symfony Core Team and supported by Symfony contributors.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">bundle</span><span class="topic-badge">framework</span><span class="topic-badge">hacktoberfest</span><span class="topic-badge">php</span><span class="topic-badge">php-framework</span><span class="topic-badge">symfony</span><span class="topic-badge">symfony-bundle</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#4F5D95"></span>PHP</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 31,478</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +128 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 9,950</span>
+                <span class="stat"><span class="stat-icon">📋</span> 268 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://symfony.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/etcd-io/etcd">etcd-io / etcd</a></div>
+            </div>
+            <div class="description">
+                Distributed reliable key-value store for the most critical data of a distributed system
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Note: The main branch may be in an unstable or even broken state during development. For stable versions, see releases. etcd is a distributed reliable key-value store for the most critical data of a distributed system, with a focus on being: Simple*: well-defined, user-facing API (gRPC) Secure*: automatic TLS with optional client cert authentication
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Maintainers strive to shape an inclusive open source project culture where users are heard and contributors feel respected and empowered. Maintainers aim to build productive relationships across different companies and disciplines. Read more about Maintainers role and responsibilities. The easiest w…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">cncf</span><span class="topic-badge">consensus</span><span class="topic-badge">database</span><span class="topic-badge">distributed-database</span><span class="topic-badge">distributed-systems</span><span class="topic-badge">etcd</span><span class="topic-badge">go</span><span class="topic-badge">key-value</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 52,642</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +128 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,590</span>
+                <span class="stat"><span class="stat-icon">📋</span> 425 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于18小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://etcd.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">17</div>
+                <div class="card-title"><a href="https://github.com/mpv-player/mpv">mpv-player / mpv</a></div>
+            </div>
+            <div class="description">
+                🎥 Command line media player
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：* External links * Overview * System requirements * Downloads
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">* Overview * System requirements * Downloads * Changelog embedded or integrated GPUs (for example, hardware decoding is not even enabled by default). Low power GPUs may cause issues like tearing, stutter, etc. On such GPUs, it's recommended to use --profile=fast for smooth playback. The main video o…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">audio</span><span class="topic-badge">c</span><span class="topic-badge">ffmpeg</span><span class="topic-badge">mplayer</span><span class="topic-badge">mpv</span><span class="topic-badge">multimedia</span><span class="topic-badge">video</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 37,934</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +37 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,635</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1161 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://mpv.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">18</div>
+                <div class="card-title"><a href="https://github.com/openssl/openssl">openssl / openssl</a></div>
+            </div>
+            <div class="description">
+                General purpose TLS and crypto library
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Welcome to the OpenSSL Project ============================== OpenSSL is a robust, commercial-grade, full-featured Open Source Toolkit for the Transport Layer Security (TLS, formerly SSL), Datagram TLS (DTLS), and QUIC protocols.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">OpenSSL is a robust, commercial-grade, full-featured Open Source Toolkit for the Transport Layer Security (TLS, formerly SSL), Datagram TLS (DTLS), and QUIC protocols. The protocol implementations are based on a full-strength general purpose cryptographic library, which can also be used stand-alone.…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">cryptography</span><span class="topic-badge">decryption</span><span class="topic-badge">encryption</span><span class="topic-badge">openssl</span><span class="topic-badge">ssl</span><span class="topic-badge">tls</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#555555"></span>C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 31,333</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +26 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 11,583</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1644 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://openssl-library.org/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
