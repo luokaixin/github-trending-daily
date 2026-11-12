@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-11-12</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-11-12 · 共 10 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">10</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">6</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">6,895</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/meta/astryx">meta / astryx</a></div>
+            </div>
+            <div class="description">
+                An open source design system that's fully customizable and agent ready
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：An open source design system that's fully customizable and built for how we build now:  by people and the agents working alongside them. Currently in Beta · Built on React 19+ and StyleX Docs · Storybook · Sandbox · Contributing · Discord Astryx is an open source design system that grew inside Meta over the last eight years, where it became the most-used and largest design system in the company — 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Guidance over enforcement. Components give you capability rather than guardrails that fight you. Design opinions live in docs and examples — if you pass a value, the component renders it. Strong, documented conventions. Every component follows the same naming, prop, and composition rules, and every …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 25,597</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +2,776 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,992</span>
+                <span class="stat"><span class="stat-icon">📋</span> 662 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="http://astryx.atmeta.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/we-promise/sure">we-promise / sure</a></div>
+            </div>
+            <div class="description">
+                The personal finance app for everyone (by everyone)
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Deutsch Español Français Português
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The Maybe Finance (archived/abandoned repo) team spent most of 2021–2022 building a full-featured personal finance and wealth management app. It even included an “Ask an Advisor” feature that connected users with a real CFP/CFA — all included with your subscription. The business end of things didn't…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#701516"></span>Ruby</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 13,239</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,078 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 977</span>
+                <span class="stat"><span class="stat-icon">📋</span> 889 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://sure.am" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/addyosmani/agent-skills">addyosmani / agent-skills</a></div>
+            </div>
+            <div class="description">
+                Production-grade engineering skills for AI coding agents.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP /spec          /plan          /build        /test 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           B…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">antigravity</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">cursor</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 116,178</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +787 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 12,174</span>
+                <span class="stat"><span class="stat-icon">📋</span> 136 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于10天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://skills.addy.ie" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/vercel-labs/agent-browser">vercel-labs / agent-browser</a></div>
+            </div>
+            <div class="description">
+                Browser automation CLI for AI agents
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Browser automation for AI agents: open pages, read them as an accessibility tree, and act on elements from the shell. agent-browser is a native Rust CLI that gives an AI agent a browser it can drive one command at a time. snapshot returns the page as compact text with a ref such as @e1 for each element. The agent acts on a ref, reads the page again to check the result, and repeats. The browser sta
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">No install: npx agent-browser open example.com. Project installs, building from source, upgrade, and doctor are covered in Installation. `bash agent-browser open example.com agent-browser open example.com agent-browser snapshot -i       # interactive elements, each with a ref agent-browser click @e1…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 50,064</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +708 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,494</span>
+                <span class="stat"><span class="stat-icon">📋</span> 583 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://agent-browser.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/homeassistant-ai/ha-mcp">homeassistant-ai / ha-mcp</a></div>
+            </div>
+            <div class="description">
+                Configure and automate Home Assistant with Claude, ChatGPT, and other AI assistants.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Breaking change (v7.3.0): ha_config_set_yaml has been moved to beta. The recommended way to run ha-mcp is the HA-MCP integration. It installs into Home Assistant through HACS (the built-in Marketplace on Home Assistant 2026.11+), runs the full server in-process, and works on every Home Assistant installation type — Home Assistant OS, Supervised, Container, and Core — with full feature parity. It i
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The recommended way to run ha-mcp is the HA-MCP integration. It installs into Home Assistant through HACS (the built-in Marketplace on Home Assistant 2026.11+), runs the full server in-process, and works on every Home Assistant installation type — Home Assistant OS, Supervised, Container, and Core —…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">claude</span><span class="topic-badge">hacs</span><span class="topic-badge">home-assistant</span><span class="topic-badge">home-automation</span><span class="topic-badge">llm</span><span class="topic-badge">mcp</span><span class="topic-badge">model-context-protocol</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 7,559</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +645 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 459</span>
+                <span class="stat"><span class="stat-icon">📋</span> 20 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://homeassistant-ai.github.io/ha-mcp/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/shadcn/improve">shadcn / improve</a></div>
+            </div>
+            <div class="description">
+                Use your most capable model to audit your codebase and write plans for cheaper models to execute.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：An agent skill that audits any codebase and writes implementation plans for other agents to execute. The idea: use your most capable model for the part where intelligence compounds — understanding the codebase, judging what's worth doing, writing the spec — and hand execution to cheaper models. The skill never implements anything itself. The plan is the product. you          →  /improve           
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">/improve next                   feature suggestions — where to take the project /improve plan      skip the audit, spec one thing /improve review-plan      critique and tighten an existing plan /improve execute          dispatch a cheaper executor, review its work Audit. Fans out parallel subagents …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>未指定</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,198</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +361 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 454</span>
+                <span class="stat"><span class="stat-icon">📋</span> 18 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2个月前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/ZhuLinsen/daily_stock_analysis">ZhuLinsen / daily_stock_analysis</a></div>
+            </div>
+            <div class="description">
+                LLM 驱动的多市场股票智能分析系统：多源行情、实时新闻、决策看板与自动推送，支持零成本定时运行。 LLM-powered multi-market stock analysis system with multi-source market data, real-time news, decision dashboard, automated notifications, and cost-free scheduled runs.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：🤖 基于 AI 大模型的 A股/港股/美股/日股/韩股/台股自选股智能分析系统，每日自动分析并推送「决策仪表盘」到企业微信/飞书/Telegram/Discord/Slack/邮箱 产品预览 · 功能特性 · 快速开始 · 推送效果 · 文档中心 · 完整指南 简体中文 | English | 繁體中文 功能细节、字段契约、基本面 P0 超时语义、交易纪律、数据源优先级、Web/API 行为请看 完整配置与部署指南。
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">cp .env.example .env &amp;&amp; vim .env python main.py 常用命令： `bash</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">a-stock</span><span class="topic-badge">ai-agent</span><span class="topic-badge">aigc</span><span class="topic-badge">llm</span><span class="topic-badge">quant</span><span class="topic-badge">quantitative-finance</span><span class="topic-badge">quantitative-trading</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 70,754</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +278 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 57,009</span>
+                <span class="stat"><span class="stat-icon">📋</span> 52 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://dsa.zhulinsen.tech" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/GoogleChrome/modern-web-guidance-src">GoogleChrome / modern-web-guidance-src</a></div>
+            </div>
+            <div class="description">
+                暂无描述
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：This repo is the source repository for GoogleChrome/modern-web-guidance and includes the code and documentation for authoring, calibrating, and evaluating its contents. Modern Web Guidance is a set of skills that embed web platform expertise, best practices, and browser compatibility data directly into your coding agents. It helps to steer your coding agents away from legacy patterns, and instead 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Modern Web Guidance is a set of skills that embed web platform expertise, best practices, and browser compatibility data directly into your coding agents. It helps to steer your coding agents away from legacy patterns, and instead toward solutions that harness the power and capabilities of the moder…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,035</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +159 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 151</span>
+                <span class="stat"><span class="stat-icon">📋</span> 372 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://goo.gle/modern-web-guidance" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/openai/codex-security">openai / codex-security</a></div>
+            </div>
+            <div class="description">
+                OpenAI's Codex Security CLI and TypeScript SDK for finding, validating, and fixing security vulnerabilities. npm:https://www.npmjs.com/package/@openai/codex-security
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Codex Security helps you find, investigate, and fix vulnerabilities in your code. Use its security workflows in Codex, or automate them with the @openai/codex-security CLI and TypeScript SDK. In Codex: choose a security workflow.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">for authentication requirements and a read-only example. Use policy to draft a new SECURITY.md or update an existing one. Use --path to select a component: `bash</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai-security</span><span class="topic-badge">application-security</span><span class="topic-badge">cli</span><span class="topic-badge">code-scanning</span><span class="topic-badge">codex</span><span class="topic-badge">codex-security</span><span class="topic-badge">cybersecurity</span><span class="topic-badge">devsecops</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,951</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +52 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 952</span>
+                <span class="stat"><span class="stat-icon">📋</span> 139 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://developers.openai.com/codex/security" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/TheAlgorithms/Java">TheAlgorithms / Java</a></div>
+            </div>
+            <div class="description">
+                All Algorithms implemented in Java
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：You can run and edit the algorithms, or contribute to them using Gitpod.io (a free online development environment) with a single click. These implementations are intended for learning purposes. As such, they may be less efficient than the Java standard library. Please read our Contribution Guidelines before you contribute to this project. Our directory contains the full list of algorithms implemen
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">You can run and edit the algorithms, or contribute to them using Gitpod.io (a free online development environment) with a single click. These implementations are intended for learning purposes. As such, they may be less efficient than the Java standard library. Please read our Contribution Guideline…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">algorithm</span><span class="topic-badge">algorithm-challenges</span><span class="topic-badge">algorithms</span><span class="topic-badge">algorithms-datastructures</span><span class="topic-badge">data-structures</span><span class="topic-badge">hacktoberfest</span><span class="topic-badge">java</span><span class="topic-badge">search</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#b07219"></span>Java</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 67,158</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +51 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 21,519</span>
+                <span class="stat"><span class="stat-icon">📋</span> 31 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于9小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
