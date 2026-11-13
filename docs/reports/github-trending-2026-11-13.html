@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-11-13</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-11-13 · 共 13 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">13</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">6,432</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/meta/astryx">meta / astryx</a></div>
+            </div>
+            <div class="description">
+                An open source design system that's fully customizable and agent ready
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：An open source design system that's fully customizable and built for how we build now:  by people and the agents working alongside them. Currently in Beta · Built on React 19+ and StyleX Docs · Storybook · Sandbox · Contributing · Discord Astryx is an open source design system that grew inside Meta over the last eight years, where it became the most-used and largest design system in the company — 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Guidance over enforcement. Components give you capability rather than guardrails that fight you. Design opinions live in docs and examples — if you pass a value, the component renders it. Strong, documented conventions. Every component follows the same naming, prop, and composition rules, and every …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 26,901</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,830 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,086</span>
+                <span class="stat"><span class="stat-icon">📋</span> 618 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="http://astryx.atmeta.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/we-promise/sure">we-promise / sure</a></div>
+            </div>
+            <div class="description">
+                The personal finance app for everyone (by everyone)
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Deutsch Español Français Português
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The Maybe Finance (archived/abandoned repo) team spent most of 2021–2022 building a full-featured personal finance and wealth management app. It even included an “Ask an Advisor” feature that connected users with a real CFP/CFA — all included with your subscription. The business end of things didn't…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#701516"></span>Ruby</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 14,189</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +967 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,068</span>
+                <span class="stat"><span class="stat-icon">📋</span> 902 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://sure.am" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/addyosmani/agent-skills">addyosmani / agent-skills</a></div>
+            </div>
+            <div class="description">
+                Production-grade engineering skills for AI coding agents.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           BUILD          VERIFY         REVIEW          SHIP /spec          /plan          /build        /test 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Production-grade engineering skills for AI coding agents. Skills encode the workflows, quality gates, and best practices that senior engineers use when building software. These ones are packaged so AI agents follow them consistently across every phase of development. DEFINE          PLAN           B…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">agent-skills</span><span class="topic-badge">antigravity</span><span class="topic-badge">claude-code</span><span class="topic-badge">codex</span><span class="topic-badge">cursor</span><span class="topic-badge">skills</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 116,859</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +816 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 12,220</span>
+                <span class="stat"><span class="stat-icon">📋</span> 137 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://skills.addy.ie" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/GoogleChrome/modern-web-guidance-src">GoogleChrome / modern-web-guidance-src</a></div>
+            </div>
+            <div class="description">
+                Keep your coding agent up to date with the latest web best practices
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：This repo is the source repository for GoogleChrome/modern-web-guidance and includes the code and documentation for authoring, calibrating, and evaluating its contents. Modern Web Guidance is a set of skills that embed web platform expertise, best practices, and browser compatibility data directly into your coding agents. It helps to steer your coding agents away from legacy patterns, and instead 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Modern Web Guidance is a set of skills that embed web platform expertise, best practices, and browser compatibility data directly into your coding agents. It helps to steer your coding agents away from legacy patterns, and instead toward solutions that harness the power and capabilities of the moder…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,662</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +739 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 225</span>
+                <span class="stat"><span class="stat-icon">📋</span> 385 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://goo.gle/modern-web-guidance" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/openai/codex-security">openai / codex-security</a></div>
+            </div>
+            <div class="description">
+                OpenAI's Codex Security CLI and TypeScript SDK for finding, validating, and fixing security vulnerabilities. npm:https://www.npmjs.com/package/@openai/codex-security
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Codex Security helps you find, investigate, and fix vulnerabilities in your code. Use its security workflows in Codex, or automate them with the @openai/codex-security CLI and TypeScript SDK. In Codex: choose a security workflow.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">for authentication requirements and a read-only example. Use policy to draft a new SECURITY.md or update an existing one. Use --path to select a component: `bash</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai-security</span><span class="topic-badge">application-security</span><span class="topic-badge">cli</span><span class="topic-badge">code-scanning</span><span class="topic-badge">codex</span><span class="topic-badge">codex-security</span><span class="topic-badge">cybersecurity</span><span class="topic-badge">devsecops</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 12,668</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +643 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 991</span>
+                <span class="stat"><span class="stat-icon">📋</span> 146 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://developers.openai.com/codex/security" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/Alishahryar1/free-claude-code">Alishahryar1 / free-claude-code</a></div>
+            </div>
+            <div class="description">
+                Use Claude Code, Codex, Antigravity, VSCode, Pi, and OpenCode (and 6 other harnesses) for free (1.3B+ free tokens) from your terminal, app, IDE, or phone, and now from the browser with native browser sessions (multi-harness + multi-model) like OpenClaw (voice supported + ToS friendly)
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Quick Start · Providers · Clients · Integrations · Manage Route any supported harness to models from any supported provider. 12 supported harnesses: Claude Code, Codex, Pi, OpenCode, Cline, Hermes, DeepSeek Harness, Grok Build, Muse Code, Aider, Antigravity CLI, or VS Code Chat. Preserved native streaming, tool use, and interleaved thinking for maximum performance.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Up to 90% lower token usage using RTK and Headroom. State-of-the-art reliability features so you can keep coding through provider outages: Automatic retries. Configurable rate limits. State-of-the-art reliability features so you can keep coding through provider outages: Automatic retries. Configurab…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 69,559</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +415 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,799</span>
+                <span class="stat"><span class="stat-icon">📋</span> 399 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于11小时前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/CopilotKit/OpenBot">CopilotKit / OpenBot</a></div>
+            </div>
+            <div class="description">
+                Open-source AI coworkers that each get a computer of their own: a browser, files and tools, with every action decided before it happens and recorded after. Bring any AG-UI agent.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A modular, self-hostable workspace for AI coworkers. Choose your models. Bring your agents. Own your infrastructure. open.bot · Docs · Deploy on Kubernetes · Run from source https://github.com/user-attachments/assets/c60f07da-8b6d-46eb-a573-17fc1e65a644
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">A modular, self-hostable workspace for AI coworkers. Choose your models. Bring your agents. Own your infrastructure. open.bot · Docs · Deploy on Kubernetes · Run from source</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；近期新项目；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ag-ui</span><span class="topic-badge">agent-governance</span><span class="topic-badge">ai-agents</span><span class="topic-badge">browser-automation</span><span class="topic-badge">copilotkit</span><span class="topic-badge">generative-ui</span><span class="topic-badge">mcp</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,861</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +298 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,457</span>
+                <span class="stat"><span class="stat-icon">📋</span> 92 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="open.bot" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/pookjw/HermesEnabler">pookjw / HermesEnabler</a></div>
+            </div>
+            <div class="description">
+                Enable Hermès Watch Faces on any Apple Watch devices
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English · Tiếng Việt · 한국어 · 简体中文 · 繁體中文 · 日本語 · Español · Français · Deutsch · Português Supported only on watchOS 27.0 through 27.3 beta 1. On macOS you can install the prebuilt IPA with Sideloadly or build the app directly with Xcode. Either way, the iPhone must be paired with the target Apple Watch, and the Watch must run a supported watchOS version. Known issue with Sideloadly 0.72: Issue #43
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">English · Tiếng Việt · 한국어 · 简体中文 · 繁體中文 · 日本語 · Español · Français · Deutsch · Português Supported only on watchOS 27.0 through 27.3 beta 1. On macOS you can install the prebuilt IPA with Sideloadly or build the app directly with Xcode. Either way, the iPhone must be paired with the target Apple Wa…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#438eff"></span>Objective-C</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 1,653</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +218 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 145</span>
+                <span class="stat"><span class="stat-icon">📋</span> 59 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/ggml-org/llama.cpp">ggml-org / llama.cpp</a></div>
+            </div>
+            <div class="description">
+                LLM inference in C/C++
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：ggml / ops / maintainer PRs%20sort%3Aupdated-desc) / dev stats / lib llama API / llama-server REST API A few options to get llama.cpp installed on your machine: `bash curl -LsSf https://llama.app/install.sh | sh
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Multi-GPU usage Performance troubleshooting GGML tips &amp; tricks XCFramework nlohmann/json - Single-header JSON library, used by various tools/examples - MIT License mackron/miniaudio - Single-header audio format decoder, used by multimodal subsystem - Public domain sheredom/subprocess.h - Single-head…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ggml</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f34b7d"></span>C++</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 134,725</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +176 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 25,527</span>
+                <span class="stat"><span class="stat-icon">📋</span> 2588 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://llama.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/QwenLM/qwen-code">QwenLM / qwen-code</a></div>
+            </div>
+            <div class="description">
+                An open-source AI coding agent that lives in your terminal.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The open-source AI coding agent for your terminal, editor, desktop, browser, and chat. Deutsch français Русский
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">If you know Claude Code, you already know Qwen Code — and then some. We've put significant effort into bringing Qwen Code to feature parity with Claude Code, improving both breadth and reliability across the board. On SWE-bench Verified, seven Qwen Code versions scored 76.40%–77.80% on average using…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agentic</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agent</span><span class="topic-badge">ai-coding</span><span class="topic-badge">cli</span><span class="topic-badge">coding-agent</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 29,988</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +151 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,410</span>
+                <span class="stat"><span class="stat-icon">📋</span> 2252 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://qwenlm.github.io/qwen-code-docs/en/users/overview" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/nvm-sh/nvm">nvm-sh / nvm</a></div>
+            </div>
+            <div class="description">
+                Node Version Manager - POSIX-compliant bash script to manage multiple active node.js versions.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Intro About Installing and Updating Install &amp; Update Script
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">About Installing and Updating Install &amp; Update Script Additional Notes Usage Long-term Support Version Categories Migrating Global Packages While Installing Usage Compatibility Issues Installing nvm on Alpine Linux Alpine Linux 3.13+ Problems macOS Troubleshooting WSL Troubleshooting Maintainers Exa…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">bash</span><span class="topic-badge">install</span><span class="topic-badge">lts</span><span class="topic-badge">node</span><span class="topic-badge">node-js</span><span class="topic-badge">nodejs</span><span class="topic-badge">nvm</span><span class="topic-badge">nvmrc</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 96,065</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +63 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,761</span>
+                <span class="stat"><span class="stat-icon">📋</span> 374 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/nodejs/node">nodejs / node</a></div>
+            </div>
+            <div class="description">
+                Node.js JavaScript runtime ✨🐢🚀✨
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Node.js is an open-source, cross-platform JavaScript runtime environment. For information on using Node.js, see the Node.js website. The Node.js project uses an open governance model. The OpenJS Foundation provides support for the project.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Each October, a new release line (for example, Node.js 27) branches off main and receives Alpha releases (for example, 27.0.0-alpha.0.0.0) for 6 months, then are promoted to Current (see below) each April. Alpha releases are signed, tagged, and tested through CITGM, but their and receives Alpha rele…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">javascript</span><span class="topic-badge">js</span><span class="topic-badge">linux</span><span class="topic-badge">macos</span><span class="topic-badge">mit</span><span class="topic-badge">node</span><span class="topic-badge">nodejs</span><span class="topic-badge">runtime</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 123,657</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +62 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 38,060</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1338 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://nodejs.org" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/ashhart/TensorFold">ashhart / TensorFold</a></div>
+            </div>
+            <div class="description">
+                LLM Inference Engine for Metal, CUDA and Vulkan.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：TensorFold serves language models from a Zig binary on Apple Silicon and NVIDIA GPUs. The engine reads checkpoints, tokenizes requests and runs Metal or CUDA kernels directly. Serving needs no Python or MLX installation. Building with a coding agent? Have it load the contributor skill before it writes any code.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Use tensorfold --help, tensorfold capabilities --json and tensorfold serve REPO --help to inspect your binary. You can also serve a complete local checkpoint directory or an existing Hugging Face cache. tensorfold web [ARGS...] opens TensorFold Web, a small local web app for picking, running and cha…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-tools</span><span class="topic-badge">llm</span><span class="topic-badge">llm-inference</span><span class="topic-badge">llm-tools</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#ec915c"></span>Zig</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,021</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +54 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 397</span>
+                <span class="stat"><span class="stat-icon">📋</span> 569 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tensorfold.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
