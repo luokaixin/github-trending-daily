@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-11-15</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-11-15 · 共 15 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">15</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">6,393</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/GoogleChrome/modern-web-guidance-src">GoogleChrome / modern-web-guidance-src</a></div>
+            </div>
+            <div class="description">
+                Keep your coding agent up to date with the latest web best practices
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：This repo is the source repository for GoogleChrome/modern-web-guidance and includes the code and documentation for authoring, calibrating, and evaluating its contents. Modern Web Guidance is a set of skills that embed web platform expertise, best practices, and browser compatibility data directly into your coding agents. It helps to steer your coding agents away from legacy patterns, and instead 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Modern Web Guidance is a set of skills that embed web platform expertise, best practices, and browser compatibility data directly into your coding agents. It helps to steer your coding agents away from legacy patterns, and instead toward solutions that harness the power and capabilities of the moder…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日爆发式增长；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,316</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,231 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 475</span>
+                <span class="stat"><span class="stat-icon">📋</span> 393 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于16小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://goo.gle/modern-web-guidance" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/alibaba/open-code-review">alibaba / open-code-review</a></div>
+            </div>
+            <div class="description">
+                Secure, fast, efficient, battle-tested at Alibaba's scale. Hybrid architecture code review tool: deterministic pipelines + LLM Agent, precise line-level comments, built-in multi-language ruleset (NPE, thread-safety, XSS, SQL injection), OpenAI &amp; Anthropic compatible.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 简体中文 | 日本語 | 한국어 | Русский Open Code Review is an AI-powered code review CLI tool. It originated as Alibaba Group's internal official AI code review assistant — over the past two years, it has served tens of thousands of developers and identified millions of code defects. After thorough validation at massive scale, we incubated it into an open source project for the community. Simply con
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">It reads Git diffs, sends changed files to a configurable LLM via an agent with tool-use capabilities, and generates structured review comments with line-level precision. The agent can read full file contents, search the codebase, inspect other changed files for context, and produce deep reviews — n…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent</span><span class="topic-badge">agent-skills</span><span class="topic-badge">code-review</span><span class="topic-badge">code-review-assistant</span><span class="topic-badge">harness</span><span class="topic-badge">repository-level-context</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 51,577</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +893 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,983</span>
+                <span class="stat"><span class="stat-icon">📋</span> 341 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://open-codereview.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/ChromeDevTools/chrome-devtools-mcp">ChromeDevTools / chrome-devtools-mcp</a></div>
+            </div>
+            <div class="description">
+                Chrome DevTools for coding agents
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Chrome DevTools for agents (chrome-devtools-mcp) lets your coding agent (such as Antigravity, Claude, Cursor or Copilot) control and inspect a live Chrome browser. It is available as a Model-Context-Protocol (MCP) server and as a CLI. Both give your AI coding assistant access to the full power of Chrome DevTools for reliable
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Google collects usage statistics (such as tool invocation success rates, latency, and environment information) to improve the reliability and performance of Chrome DevTools MCP. Data collection is enabled by default. You can opt-out by passing the --no-usage-statistics flag when starting the server:…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">browser</span><span class="topic-badge">chrome</span><span class="topic-badge">chrome-devtools</span><span class="topic-badge">debugging</span><span class="topic-badge">devtools</span><span class="topic-badge">mcp</span><span class="topic-badge">mcp-server</span><span class="topic-badge">puppeteer</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 56,470</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +664 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 4,782</span>
+                <span class="stat"><span class="stat-icon">📋</span> 131 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://developer.chrome.com/docs/devtools/agents" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/we-promise/sure">we-promise / sure</a></div>
+            </div>
+            <div class="description">
+                The personal finance app for everyone (by everyone)
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Deutsch Español Français Português
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The Maybe Finance (archived/abandoned repo) team spent most of 2021–2022 building a full-featured personal finance and wealth management app. It even included an “Ask an Advisor” feature that connected users with a real CFP/CFA — all included with your subscription. The business end of things didn't…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#701516"></span>Ruby</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 15,439</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +659 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,319</span>
+                <span class="stat"><span class="stat-icon">📋</span> 944 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> AGPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://sure.am" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/tradermonty/claude-trading-skills">tradermonty / claude-trading-skills</a></div>
+            </div>
+            <div class="description">
+                Claude Code skills for equity investors and traders — market analysis, technical charting, economic calendars, screeners, and trading strategy development.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Claude Trading Skills started as a personal project to use AI to improve my own trading process. Claude Trading Skills is a Claude Skills-based trading workflow toolkit for time-constrained individual investors. It is designed for investors who use long-term investing, ETFs, and dividend stocks as their core, while using disciplined swing trading as a satellite strategy when market conditions are 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">This repository is for educational, research, and process-improvement purposes only. It is not financial advice, investment advisory service, tax advice, legal advice, a signal service, or a broker execution platform. Trading and investing involve risk, including loss of principal. Past performance,…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 5,009</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +553 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,049</span>
+                <span class="stat"><span class="stat-icon">📋</span> 75 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tradermonty.github.io/claude-trading-skills/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/dream-num/univer">dream-num / univer</a></div>
+            </div>
+            <div class="description">
+                Build your own AI office with Univer Office SDK. Bring editing, calculation, collaboration, and file processing into your product for people and AI agents. Built on an extensible open-source core.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：💡 What is Univer? Open-source capabilities 🚀 Build on the open-source foundation Quick start: an open-source spreadsheet editor
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Open-source capabilities 🚀 Build on the open-source foundation Quick start: an open-source spreadsheet editor Connect your application to editable content Give custom features clear boundaries Compose cross-feature edits and undo/redo Connect applications and agents through Facade APIs and events 🧩 …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">board</span><span class="topic-badge">collaboration</span><span class="topic-badge">doc</span><span class="topic-badge">docx</span><span class="topic-badge">excel</span><span class="topic-badge">offce365</span><span class="topic-badge">office</span><span class="topic-badge">pdf</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 25,101</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +495 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 2,296</span>
+                <span class="stat"><span class="stat-icon">📋</span> 166 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://univer.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/louislam/uptime-kuma">louislam / uptime-kuma</a></div>
+            </div>
+            <div class="description">
+                A fancy self-hosted monitoring tool
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Uptime Kuma is an easy-to-use self-hosted monitoring tool. Try it! Demo Server (Location: Frankfurt - Germany): It is a temporary live demo, all data will be deleted after 10 minutes. Sponsored by Uptime Kuma Sponsors.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">If you want to report a bug or request a new feature, feel free to open a new issue. If you want to translate Uptime Kuma into your language, please visit Weblate Readme. Feel free to correct the grammar in the documentation or code. My mother language is not English and my grammar is not that great…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">docker</span><span class="topic-badge">monitor</span><span class="topic-badge">monitoring</span><span class="topic-badge">responsive</span><span class="topic-badge">self-hosted</span><span class="topic-badge">selfhosted</span><span class="topic-badge">single-page-app</span><span class="topic-badge">socket-io</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 94,326</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +430 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 8,836</span>
+                <span class="stat"><span class="stat-icon">📋</span> 855 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://uptime.kuma.pet" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/Likely7/Veyra-NRVideo">Likely7 / Veyra-NRVideo</a></div>
+            </div>
+            <div class="description">
+                Bring PS5 GTA6 to 120FPS with DLSS 5. An advanced Windows video player and capture enhancement tool featuring real-time preview for videos, images, and capture card sources. Combine AI-powered Super Resolution, DLSS5 image enhancement, and Frame Generation to deliver a next-generation visual experience.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Super Resolution · Denoising · HDR · Frame Generation · Capture · PS5 / Xbox / PC Streaming Turn local video, capture cards and game streaming into one real-time GPU enhancement pipeline. 79K+ cumulative Veyra portable-package downloads (79,332 as of 2026-11-08) · 103K+ downloads across all GitHub Release assets (103,337 including source archives, checksums and images). GitHub Releases · Counts ar
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">New-effect cost examples: RTX5070 standard4K anti-aliasing fixtures: FXAA~0.15ms, SMAA/MLAA~0.30ms. Final single-face mesh beauty:1080p~0.93ms,4K~1.42ms. Costs vary with content/hardware; no local AMD speedup percentage was measured. Conditions and limits. 📖 English User Guide / GitHub Wiki — instal…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；近期新项目；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f34b7d"></span>C++</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,424</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +420 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 204</span>
+                <span class="stat"><span class="stat-icon">📋</span> 71 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2小时前</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/backnotprop/plannotator">backnotprop / plannotator</a></div>
+            </div>
+            <div class="description">
+                The workspace to stay in the loop and on top of agents - shape, decide, plan, annotate, review code, share with team, and send all feedback to agents with one click.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：⭐️ NEW: Plannotator Inbox is the missing review layer between you and multi-agent work. It surfaces decisions, prototypes, variations, plans, and everything you need to stay in the loop. Works with all coding agents and personal assistants. Plannotator is a local, browser-based review surface for AI coding agents: Claude Code, Codex, Copilot CLI, Gemini CLI, OpenCode, Kiro, Droid, Amp, DeepSeek Ha
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Need a realistic document to try? Copy the product requirements document template and filled example as Markdown. /plannotator-review                    # Review uncommitted changes /plannotator-review     # Review a GitHub pull request /plannotator-review     # Review a GitLab merge request Plannot…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agents</span><span class="topic-badge">claude-code</span><span class="topic-badge">code-review</span><span class="topic-badge">codex</span><span class="topic-badge">obsidian</span><span class="topic-badge">opencode</span><span class="topic-badge">pi-mono</span><span class="topic-badge">plan-mode</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,371</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +408 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 978</span>
+                <span class="stat"><span class="stat-icon">📋</span> 226 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://plannotator.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/martin-olivier/airgorah">martin-olivier / airgorah</a></div>
+            </div>
+            <div class="description">
+                A WiFi security auditing software
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Airgorah    |       |    Airgorah is a WiFi security auditing software that can capture nearby WiFi traffic, discover clients connected to access points, perform deauthentication attacks, capture handshakes and PMKIDs, and crack the password of access points.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The documentation about the usage of the application is available here. This project is released under MIT license. If you have any question about the usage of the application, do not hesitate to open a discussion If you want to report a bug or provide a feature, do not hesitate to open an issue or …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）</div>
+            <div class="topics"><span class="topic-badge">gui</span><span class="topic-badge">kali</span><span class="topic-badge">linux-app</span><span class="topic-badge">security</span><span class="topic-badge">security-audit</span><span class="topic-badge">wifi</span><span class="topic-badge">wifi-security</span><span class="topic-badge">wireless</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 6,034</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +270 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,043</span>
+                <span class="stat"><span class="stat-icon">📋</span> 16 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于8天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://crates.io/crates/airgorah" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/JuliusBrussee/caveman">JuliusBrussee / caveman</a></div>
+            </div>
+            <div class="description">
+                🪨 why use many token when few token do trick. Viral skill + proxy for coding agents that cuts 65% of tokens by talking like a caveman.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The most efficient coding agent. Same model, same work, smaller bill. Every coding agent in one window. Free on the subscriptions and keys you already have. Download Caveman Code for Mac · Read the launch post Caveman make your AI agent say less and read less. Code stay exact. Brain still big.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">"Be concise" is the real baseline; new models already know it. On top of it, /caveman cuts 3% more at the median and /ultracave 35% more. Measured on the 3.1.0 rules, not yet re-run. The rules cost about 1,160 tokens of input, and if you pay per request (GitHub Copilot), shorter answers save nothing…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">anthropic</span><span class="topic-badge">caveman</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">llm</span><span class="topic-badge">meme</span><span class="topic-badge">prompt-engineering</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 120,187</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +227 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 7,006</span>
+                <span class="stat"><span class="stat-icon">📋</span> 88 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于23小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.caveman.so/caveman" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/QwenLM/qwen-code">QwenLM / qwen-code</a></div>
+            </div>
+            <div class="description">
+                An open-source AI coding agent that lives in your terminal.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：The open-source AI coding agent for your terminal, editor, desktop, browser, and chat. Deutsch français Русский
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Agentic out of the box — Auto-Memory, Skills, SubAgents, and MCP work from the first session. Agent Teams, Agent Arena, and Dynamic Workflows are built in too — experimental or opt-in, as noted in Capabilities. Open-source, inside and out — The framework and the Qwen models are open-source. They evo…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agentic</span><span class="topic-badge">ai</span><span class="topic-badge">ai-agent</span><span class="topic-badge">ai-coding</span><span class="topic-badge">cli</span><span class="topic-badge">coding-agent</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 30,425</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +64 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,523</span>
+                <span class="stat"><span class="stat-icon">📋</span> 2296 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://qwenlm.github.io/qwen-code-docs/en/users/overview" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/ashhart/TensorFold">ashhart / TensorFold</a></div>
+            </div>
+            <div class="description">
+                LLM Inference Engine for Metal, CUDA and Vulkan.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：TensorFold serves language models from a Zig binary on Apple Silicon and NVIDIA GPUs. The engine reads checkpoints, tokenizes requests and runs Metal or CUDA kernels directly. Serving needs no Python or MLX installation. Building with a coding agent? Have it load the contributor skill before it writes any code.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Use tensorfold --help, tensorfold capabilities --json and tensorfold serve REPO --help to inspect your binary. You can also serve a complete local checkpoint directory or an existing Hugging Face cache. tensorfold web [ARGS...] opens TensorFold Web, a small local web app for picking, running and cha…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">ai-tools</span><span class="topic-badge">llm</span><span class="topic-badge">llm-inference</span><span class="topic-badge">llm-tools</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#ec915c"></span>Zig</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 2,206</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +37 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 517</span>
+                <span class="stat"><span class="stat-icon">📋</span> 602 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://tensorfold.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/Tencent/LoopForge">Tencent / LoopForge</a></div>
+            </div>
+            <div class="description">
+                Self-hosted workflows for coding-agent delivery. Orchestrate CodeBuddy, Codex and Claude Code with scripts and human approval gates. Includes Local workflows for coding assistants.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Two ways to work · Quick start · SOPs · Features ·
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Features · Local · FAQ · https://github.com/user-attachments/assets/8af401d9-1aae-427c-b4bc-455c12d17beb</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-orchestration</span><span class="topic-badge">agentic-workflow</span><span class="topic-badge">ai-agents</span><span class="topic-badge">ai-coding</span><span class="topic-badge">claude-code</span><span class="topic-badge">code-review</span><span class="topic-badge">codebuddy</span><span class="topic-badge">codex</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 1,020</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +33 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 232</span>
+                <span class="stat"><span class="stat-icon">📋</span> 68 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://loopforge.cn" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/ag-ui-protocol/ag-ui">ag-ui-protocol / ag-ui</a></div>
+            </div>
+            <div class="description">
+                AG-UI: the Agent-User Interaction Protocol. Bring Agents into Frontend Applications.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：AG-UI is an open, lightweight, event-based protocol that standardizes how AI agents connect to user-facing applications. Built for simplicity and flexibility, it enables seamless integration between AI agents, real time user context, and user interfaces. Create a new AG-UI application in seconds: `bash
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Learn more about the specs → AG-UI was developed based on real-world requirements and practical experience building in-app agent interactions. AG-UI is complementary to the other 2 top agentic protocols MCP gives agents tools The AG-UI Dojo demonstrates AG-UI's core building blocks through simple, f…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ag-ui-protocol</span><span class="topic-badge">agent-frontend</span><span class="topic-badge">agent-ui</span><span class="topic-badge">agentic-workflow</span><span class="topic-badge">ai-agents</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 17,470</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +9 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,718</span>
+                <span class="stat"><span class="stat-icon">📋</span> 591 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于4小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ag-ui.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
