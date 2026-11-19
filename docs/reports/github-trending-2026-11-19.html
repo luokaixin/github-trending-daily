@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub 趋势项目日报 - 2026-11-19</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: system-ui, -apple-system, "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+            background: #f6f8fa; color: #1f2328; line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #6e40c9 0%, #2563eb 100%);
+            color: white; padding: 48px 20px 40px; text-align: center;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 8px; font-weight: 700; }
+        .header h1 a { color: white; text-decoration: none; }
+        .header .meta { font-size: 14px; opacity: 0.9; }
+        .container { max-width: 960px; margin: -20px auto 0; padding: 0 16px 48px; position: relative; }
+        .summary {
+            background: white; border-radius: 12px; padding: 24px; margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex; gap: 16px; justify-content: space-around; flex-wrap: wrap;
+        }
+        .summary-item { text-align: center; min-width: 100px; }
+        .summary-item .value { font-size: 28px; font-weight: 700; color: #6e40c9; }
+        .summary-item .label { font-size: 12px; color: #848d97; margin-top: 4px; }
+        .card {
+            background: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+            border: 1px solid #e9ecef;
+        }
+        .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .card-top { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .rank {
+            font-size: 13px; color: #848d97; font-weight: 700;
+            background: #f6f8fa; border-radius: 8px; min-width: 28px; height: 28px;
+            display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+        .rank.top3 { background: linear-gradient(135deg, #6e40c9, #2563eb); color: white; }
+        .card-title { font-size: 17px; font-weight: 600; }
+        .card-title a { color: #0969da; text-decoration: none; }
+        .card-title a:hover { text-decoration: underline; }
+        .description { color: #59636e; font-size: 14px; margin-bottom: 8px; padding-left: 40px; }
+        .readme-summary {
+            background: #f6f8fa; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #59636e;
+            border-left: 3px solid #d0d7de; line-height: 1.7;
+        }
+        .readme-summary .label { font-weight: 600; color: #656d76; }
+        .scenarios {
+            background: #fff8e1; border-radius: 8px; padding: 10px 14px;
+            margin: 6px 0 6px 40px; font-size: 13px; color: #5d4037;
+            border-left: 3px solid #ffa000; line-height: 1.8;
+        }
+        .scenarios .label { font-weight: 600; color: #e65100; display: block; margin-bottom: 4px; }
+        .scenarios .scenario-item { display: block; padding-left: 8px; }
+        .recommendation {
+            margin: 6px 0 8px 40px; font-size: 13px; color: #1a7f37; font-weight: 500;
+        }
+        .topics { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 10px 40px; }
+        .topic-badge {
+            background: #ddf4ff; color: #0969da; padding: 2px 10px;
+            border-radius: 20px; font-size: 11px; font-weight: 500;
+        }
+        .card-footer {
+            display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+            font-size: 12px; color: #59636e; padding-left: 40px;
+        }
+        .lang-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 3px 10px; border-radius: 20px; font-size: 11px;
+            font-weight: 500; background: #f6f8fa;
+        }
+        .lang-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        .stat { display: inline-flex; align-items: center; gap: 3px; }
+        .stat-icon { font-size: 13px; }
+        .stars-today { color: #1a7f37; font-weight: 600; }
+        .footer-note { text-align: center; color: #848d97; font-size: 12px; margin-top: 32px; }
+        .footer-note a { color: #0969da; text-decoration: none; }
+        .report-list { list-style: none; }
+        .report-item {
+            background: white; border-radius: 12px; padding: 16px 24px; margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease, transform 0.2s ease;
+        }
+        .report-item:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.10); transform: translateY(-2px); }
+        .report-item a { color: #0969da; text-decoration: none; font-size: 16px; font-weight: 600; }
+        .report-item a:hover { text-decoration: underline; }
+        .report-item .date { color: #848d97; font-size: 13px; margin-top: 4px; }
+        @media (max-width: 600px) {
+            .card-footer { gap: 10px; } .summary { gap: 12px; }
+            .summary-item .value { font-size: 22px; }
+            .description, .readme-summary, .scenarios, .recommendation, .topics, .card-footer { padding-left: 0; margin-left: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="../index.html">🔥 GitHub 趋势项目日报</a></h1>
+        <div class="meta">2026-11-19 · 共 19 个项目</div>
+    </div>
+    <div class="container">
+        <div class="summary">
+            <div class="summary-item">
+                <div class="value">19</div>
+                <div class="label">趋势项目</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">7</div>
+                <div class="label">编程语言</div>
+            </div>
+            <div class="summary-item">
+                <div class="value">8,785</div>
+                <div class="label">今日新增 Star 总数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">1</div>
+                <div class="card-title"><a href="https://github.com/google-research/paper-orchestra">google-research / paper-orchestra</a></div>
+            </div>
+            <div class="description">
+                PaperOrchestra is a multi-agent framework for automated AI research paper writing.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：PaperOrchestra is a multi-agent framework for automated AI research paper writing. It flexibly transforms unconstrained pre-writing materials (ideas and experimental logs) into submission-ready LaTeX manuscripts, including comprehensive literature synthesis and generated visuals, such as plots and conceptual diagrams. Acting like an orchestrated team of specialized agents, it handles outline gener
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">PaperOrchestra is a multi-agent framework for automated AI research paper writing. It flexibly transforms unconstrained pre-writing materials (ideas and experimental logs) into submission-ready LaTeX manuscripts, including comprehensive literature synthesis and generated visuals, such as plots and c…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai-research-assistant</span><span class="topic-badge">multi-agent-systems</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 4,620</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,524 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 571</span>
+                <span class="stat"><span class="stat-icon">📋</span> 43 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://yiwen-song.github.io/paper_orchestra/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">2</div>
+                <div class="card-title"><a href="https://github.com/affaan-m/ECC">affaan-m / ECC</a></div>
+            </div>
+            <div class="description">
+                The agent harness performance optimization system. Skills, instincts, memory, security, and research-first development for Claude Code, Codex, Opencode, Cursor and beyond.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English العربية Português (Brasil) Türkçe
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">ECC is MIT-licensed open source. It works best with Claude Code today, has native Codex and Qoder plugin paths, and provides capability-limited adapters for Cursor, OpenCode, Gemini, Zed, GitHub Copilot, Antigravity, Qwen, and other harnesses. See the support status matrix before assuming feature pa…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日爆发式增长；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai-agents</span><span class="topic-badge">anthropic</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">developer-tools</span><span class="topic-badge">llm</span><span class="topic-badge">mcp</span><span class="topic-badge">productivity</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 306,802</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,108 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 45,161</span>
+                <span class="stat"><span class="stat-icon">📋</span> 179 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://ecc.tools" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank top3">3</div>
+                <div class="card-title"><a href="https://github.com/mvanhorn/last30days-skill">mvanhorn / last30days-skill</a></div>
+            </div>
+            <div class="description">
+                AI agent skill that researches any topic across Reddit, X, YouTube, HN, Polymarket, and the web - then synthesizes a grounded summary
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | Français | Deutsch | Español | Português (Brasil) | 日本語 | 简体中文 | العربية | فارسی | Türkçe An AI agent-led search engine scored by upvotes, likes, and real money - not editors. This README tracks the current v4 pipeline. The runtime skill spec lives in skills/last30days/SKILL.md, which is the source of truth for the latest command and setup behavior. Claude Code (recommended — auto-update
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">But it turned into something bigger. Now I run it before a sales call to know the last 30 days truth about a business. Before a meeting to read someone's recent tweets and podcast transcripts. Before a Disney World trip to know which rides are closed and what the community says about Genie+. Before …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日爆发式增长；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai-prompts</span><span class="topic-badge">ai-skill</span><span class="topic-badge">bluesky</span><span class="topic-badge">claude</span><span class="topic-badge">claude-code</span><span class="topic-badge">clawhub</span><span class="topic-badge">deep-research</span><span class="topic-badge">hackernews</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 70,330</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +1,059 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,265</span>
+                <span class="stat"><span class="stat-icon">📋</span> 24 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">4</div>
+                <div class="card-title"><a href="https://github.com/obra/superpowers">obra / superpowers</a></div>
+            </div>
+            <div class="description">
+                An agentic skills framework &amp; software development methodology that works.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them. How it works Commercial Services Getting Started
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them. How it works Commercial Services</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；今日增长强劲；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">brainstorming</span><span class="topic-badge">coding</span><span class="topic-badge">obra</span><span class="topic-badge">sdlc</span><span class="topic-badge">skills</span><span class="topic-badge">subagent-driven-development</span><span class="topic-badge">superpowers</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 321,526</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +822 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 28,578</span>
+                <span class="stat"><span class="stat-icon">📋</span> 360 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于15天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">5</div>
+                <div class="card-title"><a href="https://github.com/sveltejs/svelte">sveltejs / svelte</a></div>
+            </div>
+            <div class="description">
+                web development for the rest of us
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Svelte is a new way to build web applications. It's a compiler that takes your declarative components and converts them into efficient JavaScript that surgically updates the DOM. Learn more at the Svelte website, or stop by the Discord chatroom. Svelte is an MIT-licensed open source project with its ongoing development made possible entirely by fantastic volunteers. If you'd like to support their 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Svelte is a new way to build web applications. It's a compiler that takes your declarative components and converts them into efficient JavaScript that surgically updates the DOM. Learn more at the Svelte website, or stop by the Discord chatroom. Svelte is an MIT-licensed open source project with its…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">compiler</span><span class="topic-badge">template</span><span class="topic-badge">ui</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 89,714</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +692 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 6,222</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1312 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://svelte.dev" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">6</div>
+                <div class="card-title"><a href="https://github.com/getarcaneapp/arcane">getarcaneapp / arcane</a></div>
+            </div>
+            <div class="description">
+                Modern Docker Management, Designed for Everyone
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!NOTE] The main branch is the v3 version of Arcane See the release/2.x.x branch for the last 2.x release. [!IMPORTANT] Feature requests have moved to Discussions. Open new requests and upvote existing ones there; issues are only used for Bug reports now to help maintain priority on those issues.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Feature requests have moved to Discussions. Open new requests and upvote existing ones there; issues are only used for Bug reports now to help maintain priority on those issues. For setup instructions, configuration details, and development guides, visit the official documentation site. This project…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；今日增长强劲；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">compose</span><span class="topic-badge">container-management</span><span class="topic-badge">containers</span><span class="topic-badge">docker</span><span class="topic-badge">docker-compose</span><span class="topic-badge">docker-management</span><span class="topic-badge">go</span><span class="topic-badge">self-hosted</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#00ADD8"></span>Go</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 9,971</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +547 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 570</span>
+                <span class="stat"><span class="stat-icon">📋</span> 16 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于3小时前</span><span class="stat"><span class="stat-icon">📄</span> BSD-3-Clause</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://getarcane.app" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">7</div>
+                <div class="card-title"><a href="https://github.com/HKUDS/CLI-Anything">HKUDS / CLI-Anything</a></div>
+            </div>
+            <div class="description">
+                "CLI-Anything: Making ALL Software Agent-Native" -- CLI-Hub:https://clianything.cc/
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：CLI-Anything: Bridging the Gap Between AI Agents and the World's Software 🌐 CLI-Hub: pip install cli-anything-hub then cli-hub install  — browse, install, and manage all community-built CLIs. Want to add your own? Open a PR — the hub updates instantly. 🎬 See Demos: Watch AI agents use generated CLIs plus preview, live preview, and trajectory loops to produce real artifacts — CAD builds, 3D scenes,
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">2026-05-30 🧭 Hermes skill proposed (#320), adding a CLI-Anything orchestration skill with installer scripts and HARNESS fallback guidance. 🗺️ ArcGIS Pro was proposed for the public registry (#318) as a Windows/ArcPy CLI for cartography, geoprocessing, feature editing, and live-Pro MCP workflows. 202…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 60,058</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +389 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,453</span>
+                <span class="stat"><span class="stat-icon">📋</span> 248 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1个月前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://clianything.cc/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">8</div>
+                <div class="card-title"><a href="https://github.com/google-labs-code/stitch-skills">google-labs-code / stitch-skills</a></div>
+            </div>
+            <div class="description">
+                A library of Agent Skills designed to work with the Stitch MCP server. Each skill follows the Agent Skills open standard, for compatibility with coding agents such as Antigravity, Gemini CLI, Claude Code, Cursor.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：A collection of agent skills and plugins for Google Stitch, following the Agent Skills open standard. Compatible with coding agents such as Codex, Antigravity, Gemini CLI, Claude Code, Cursor, and OpenCode (manual install). The fastest way to set up the full Stitch plugin suite globally. Add the Stitch Skills marketplace, then install the plugins you need. `bash
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">└── examples/          — The "Gold Standard" syntactically valid references All new skills need to follow the file structure above to implement the Agent Skills open standard. * Validation: Skills that convert Stitch HTML to other UI frameworks and validate the syntax. * Decoupling Data: Skills that…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 10,524</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +365 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,372</span>
+                <span class="stat"><span class="stat-icon">📋</span> 21 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://stitch.withgoogle.com/docs/mcp/setup" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">9</div>
+                <div class="card-title"><a href="https://github.com/n8n-io/n8n">n8n-io / n8n</a></div>
+            </div>
+            <div class="description">
+                Fair-code workflow automation platform with native AI capabilities. Combine visual building with custom code, self-host or cloud, 400+ integrations.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Fair-code platform to build and deploy AI agents and workflows. Combine a visual canvas with custom code, run it self-hosted or in the cloud, and connect to 1500+ integrations. AI automation you can trust with real work, from prototype to production. AI-Native Automation Platform: Build and operationalize AI workflows and multi-step agents using your own data, models, and tools Model Flexibility, 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">💡 Example Workflows 🤖 AI &amp; LangChain Guide 👥 Community Forum 📖 Community Tutorials Enterprise Licenses available for additional features and support. Additional information about the license model can be found in the docs. Found a bug 🐛 or have a feature idea ✨? Check our Contributing Guide for a se…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：社区庞大（10万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">apis</span><span class="topic-badge">automation</span><span class="topic-badge">cli</span><span class="topic-badge">data-flow</span><span class="topic-badge">development</span><span class="topic-badge">integration-framework</span><span class="topic-badge">integrations</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 211,282</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +325 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 61,578</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1247 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://n8n.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">10</div>
+                <div class="card-title"><a href="https://github.com/cursor/plugins">cursor / plugins</a></div>
+            </div>
+            <div class="description">
+                Cursor plugin specification and official plugins
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Official Cursor plugins for popular developer tools, frameworks, and SaaS products. Each plugin is a standalone directory at the repository root with its own .cursor-plugin/plugin.json manifest. Author values match each plugin’s plugin.json author.name (Cursor lists plugins@cursor.com in the manifest). This is a multi-plugin marketplace repository. The root .cursor-plugin/marketplace.json lists al
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Official Cursor plugins for popular developer tools, frameworks, and SaaS products. Each plugin is a standalone directory at the repository root with its own .cursor-plugin/plugin.json manifest. Author values match each plugin’s plugin.json author.name (Cursor lists plugins@cursor.com in the manifes…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 17,354</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +314 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,914</span>
+                <span class="stat"><span class="stat-icon">📋</span> 681 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">11</div>
+                <div class="card-title"><a href="https://github.com/NVIDIA/SkillEvaluator">NVIDIA / SkillEvaluator</a></div>
+            </div>
+            <div class="description">
+                Multi-tier framework for evaluating AI agent skills and plugins with quality gates, security scanning, harness compatibility checks, semantic overlap detection, synthetic evaluation dataset generation, and live agent evaluation that measures how skills affect agent behavior. Ships reusable CI templates that bring every check to any repository.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：📺 Livestream: Ask the Experts: Evaluating Agent Skills SkillEvaluator checks AI agent skills and plugins, and measures a skill's effect on task results: start with quality checks, then compare runs with and without a skill. Catch skill issues before merge. Connect your repository to SkillEvaluator with a
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">template reference and report examples. Each tier is independent. Use the all-tier installation for all three: Prepare scanners for your installed release; Semgrep is optional.</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">agent-evaluation</span><span class="topic-badge">agent-plugins</span><span class="topic-badge">agent-security</span><span class="topic-badge">agent-skills</span><span class="topic-badge">agentic-ai</span><span class="topic-badge">benchmark</span><span class="topic-badge">ci-templates</span><span class="topic-badge">claude-code</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3572A5"></span>Python</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 3,914</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +312 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 532</span>
+                <span class="stat"><span class="stat-icon">📋</span> 63 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.nvidia.com/skills/skillevaluator/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">12</div>
+                <div class="card-title"><a href="https://github.com/jquery/jquery">jquery / jquery</a></div>
+            </div>
+            <div class="description">
+                jQuery JavaScript Library
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Meetings are currently held on the matrix.org platform. Meeting minutes can be found at meetings.jquery.org. The latest version of jQuery is available at https://jquery.com/download/. jQuery 4.0.0 has been released!
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The 3.x branch will now only receive critical updates. The 2.x and 1.x branches are no longer supported. We recommend that all users upgrade to the latest version of jQuery to ensure that they have the best performance, security, and features. Commercial support for previous versions is available fr…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">jquery</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 60,075</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +266 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 20,713</span>
+                <span class="stat"><span class="stat-icon">📋</span> 95 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://jquery.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">13</div>
+                <div class="card-title"><a href="https://github.com/astral-sh/uv">astral-sh / uv</a></div>
+            </div>
+            <div class="description">
+                An extremely fast Python package and project manager, written in Rust.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：An extremely fast Python package and project manager, written in Rust. A single tool to replace pip, pip-tools, pipx, poetry, pyenv, twine, virtualenv, and more. 10-100x faster than pip.
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">$ uv init example Initialized project example at /home/user/example $ cd example $ uv add ruff Initialized project example at /home/user/example $ cd example $ uv add ruff Creating virtual environment at: .venv $ cd example $ uv add ruff Creating virtual environment at: .venv Resolved 2 packages in …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">packaging</span><span class="topic-badge">python</span><span class="topic-badge">resolver</span><span class="topic-badge">uv</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#dea584"></span>Rust</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 92,337</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +258 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,930</span>
+                <span class="stat"><span class="stat-icon">📋</span> 3081 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于7小时前</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.astral.sh/uv" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">14</div>
+                <div class="card-title"><a href="https://github.com/nvm-sh/nvm">nvm-sh / nvm</a></div>
+            </div>
+            <div class="description">
+                Node Version Manager - POSIX-compliant bash script to manage multiple active node.js versions.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Intro About Installing and Updating Install &amp; Update Script
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">About Installing and Updating Install &amp; Update Script Additional Notes Usage Long-term Support Version Categories Migrating Global Packages While Installing Usage Compatibility Issues Installing nvm on Alpine Linux Alpine Linux 3.13+ Problems macOS Troubleshooting WSL Troubleshooting Maintainers Exa…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">bash</span><span class="topic-badge">install</span><span class="topic-badge">lts</span><span class="topic-badge">node</span><span class="topic-badge">node-js</span><span class="topic-badge">nodejs</span><span class="topic-badge">nvm</span><span class="topic-badge">nvmrc</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#89e051"></span>Shell</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 96,201</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +237 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 10,793</span>
+                <span class="stat"><span class="stat-icon">📋</span> 367 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">15</div>
+                <div class="card-title"><a href="https://github.com/appwrite/appwrite">appwrite / appwrite</a></div>
+            </div>
+            <div class="description">
+                The open-source cloud for agents &amp; devs. Including Auth, Databases, Storage, Functions, Messaging, Hosting, Realtime, WAF and more
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：English | 简体中文 Appwrite is an MCP and agent-first, open-source platform for building and scaling apps. MCP is included, so coding agents can operate on a live Appwrite project. Appwrite is available as a managed cloud platform and can also be self-hosted on infrastructure you control. It is designed for the AI agents in your workflow as well as for developers. Connect Cursor, Claude Code, Codex, a
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Appwrite Databases - Model, query, and scale with Appwrite databases or managed PostgreSQL and MySQL, so you can match your use case and team needs. Appwrite Storage - Store files with compression, encryption, image transformations, and access control. Appwrite Functions - Deploy serverless function…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">android</span><span class="topic-badge">appwrite</span><span class="topic-badge">backend</span><span class="topic-badge">backend-as-a-service</span><span class="topic-badge">docker</span><span class="topic-badge">firebase</span><span class="topic-badge">firewall</span><span class="topic-badge">flutter</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 58,336</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +232 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 5,889</span>
+                <span class="stat"><span class="stat-icon">📋</span> 738 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> BSD-3-Clause</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://appwrite.io" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">16</div>
+                <div class="card-title"><a href="https://github.com/DeanChensj/jiangshan-map">DeanChensj / jiangshan-map</a></div>
+            </div>
+            <div class="description">
+                江山时序 · 中国历史交互地图时间轴 (403 BCE – Present) | Interactive Historical Atlas of China across 18 dynasties, 198 territory snapshots, ancient-to-modern place genealogy &amp; classical poetry routes
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：An Interactive Historical Atlas of China from the Warring States (403 BCE) to the Present — Scrub Through Time, Trace Ancient Cities, and Walk in the Footsteps of History Play Live Demo (English UI) → https://deanchen.me/jiangshan-map/?lang=en The story behind it (in Chinese): From textbook maps to 1k GitHub stars Have you ever wondered while reading Chinese history or classical poetry:
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Zoomable Timeline: Drag the handles at either end of the timeline inward to zoom into one stretch of history (handy for short eras such as Qin, the Three Kingdoms, or the Five Dynasties); double-click the timeline to return to the full overview. Voice Narration: Turn on the narration toggle next to …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：稳步增长中（千级 Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ancient-china</span><span class="topic-badge">cartography</span><span class="topic-badge">china-map</span><span class="topic-badge">chinese-history</span><span class="topic-badge">classical-chinese-poetry</span><span class="topic-badge">digital-humanities</span><span class="topic-badge">gis</span><span class="topic-badge">historical-atlas</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f1e05a"></span>JavaScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 8,272</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +218 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,012</span>
+                <span class="stat"><span class="stat-icon">📋</span> 11 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> GPL-3.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://deanchen.me/jiangshan-map/" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">17</div>
+                <div class="card-title"><a href="https://github.com/punkpeye/awesome-mcp-servers">punkpeye / awesome-mcp-servers</a></div>
+            </div>
+            <div class="description">
+                A collection of MCP servers.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：[!IMPORTANT] ray.run – from idea to a production-grade MCP server in under a minute! 🦜 A curated list of awesome Model Context Protocol (MCP) servers. * What is MCP?
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">MCP is an open protocol that enables AI models to securely interact with local and remote resources through standardized server implementations. This list focuses on production-ready and experimental MCP servers that extend AI capabilities through file access, database connections, API integrations,…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：高人气项目（5万+ Star）；活跃维护中；社区贡献活跃</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">mcp</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#848d97"></span>未指定</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 98,160</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +53 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 20,381</span>
+                <span class="stat"><span class="stat-icon">📋</span> 4788 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于2天前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://glama.ai/mcp/servers" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">18</div>
+                <div class="card-title"><a href="https://github.com/solidjs/solid">solidjs / solid</a></div>
+            </div>
+            <div class="description">
+                A declarative, efficient, and flexible JavaScript library for building user interfaces.
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Website • Docs • Tutorial • Playground • Discord Solid is a declarative JavaScript library for building user interfaces. Instead of a Virtual DOM, it compiles templates to real DOM nodes and updates them with fine-grained reactivity. Declare your state and use it throughout your app — when a piece of state changes, only the code that depends on it re-runs. import { createSignal } from "solid-js"; 
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">The public API differs from any Solid examples that predate 2.0. Before generating Solid 2.0 code, read: packages/solid/skills/solid-2.0/SKILL.md — the primer: the three rules that matter most, the 1.x → 2.0 corrections, and the primitives to reach for, in under 8 KB. packages/solid/CHEATSHEET.md — …</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">declarative</span><span class="topic-badge">fine-grained</span><span class="topic-badge">javascript</span><span class="topic-badge">jsx</span><span class="topic-badge">performance</span><span class="topic-badge">proxies</span><span class="topic-badge">reactive</span><span class="topic-badge">solid</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#3178c6"></span>TypeScript</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 36,702</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +40 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 1,191</span>
+                <span class="stat"><span class="stat-icon">📋</span> 16 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于1小时前</span><span class="stat"><span class="stat-icon">📄</span> MIT</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://solidjs.com" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-top">
+                <div class="rank">19</div>
+                <div class="card-title"><a href="https://github.com/openvinotoolkit/openvino">openvinotoolkit / openvino</a></div>
+            </div>
+            <div class="description">
+                OpenVINO™ is an open source toolkit for optimizing and deploying AI inference
+            </div>
+            <div class="readme-summary">
+                <span class="label">📖 项目简介</span>：Open-source software toolkit for optimizing and deploying deep learning models. Inference Optimization: Boost deep learning performance in computer vision, automatic speech recognition, generative AI, natural language processing with large and small language models, and many other common tasks. Flexible Model Support: Use models trained with popular frameworks such as PyTorch, TensorFlow, ONNX, Ke
+            </div>
+            <div class="scenarios">
+                <span class="label">🎯 核心解决的问题场景</span>
+                <span class="scenario-item">Check out the OpenVINO Cheat Sheet and Key Features for a quick reference. Get your preferred distribution of OpenVINO or use this command for quick installation: pip install -U openvino After installation, you can verify OpenVINO is installed correctly by running: OpenVINO Quickstart example will w…</span>
+            </div>
+            <div class="recommendation">💡 推荐理由：热门项目（1万+ Star）；活跃维护中</div>
+            <div class="topics"><span class="topic-badge">ai</span><span class="topic-badge">computer-vision</span><span class="topic-badge">deep-learning</span><span class="topic-badge">deploy-ai</span><span class="topic-badge">diffusion-models</span><span class="topic-badge">generative-ai</span><span class="topic-badge">good-first-issue</span><span class="topic-badge">inference</span></div>
+            <div class="card-footer">
+                <span class="lang-badge"><span class="lang-dot" style="background:#f34b7d"></span>C++</span>
+                <span class="stat"><span class="stat-icon">⭐</span> 11,416</span>
+                <span class="stat stars-today"><span class="stat-icon">📈</span> +24 今日</span>
+                <span class="stat"><span class="stat-icon">🍴</span> 3,609</span>
+                <span class="stat"><span class="stat-icon">📋</span> 1153 issues</span><span class="stat"><span class="stat-icon">📅</span> 更新于刚刚</span><span class="stat"><span class="stat-icon">📄</span> Apache-2.0</span><span class="stat"><span class="stat-icon">🏠</span> <a href="https://docs.openvino.ai" style="color:#0969da;text-decoration:none;">主页</a></span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            数据来源：<a href="https://github.com/trending">GitHub Trending</a> · 每日 09:00（北京时间）自动生成
+        </div>
+    </div>
+</body>
+</html>
